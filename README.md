@@ -1,4 +1,4 @@
-# CyberRange Documentation
+# Prototype CyberRange Project Documentation
 
 *"Veni, vidi, vici."* - Cyber Range team 12/05/24
 
