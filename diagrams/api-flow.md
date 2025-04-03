@@ -16,8 +16,7 @@ This document stipulates the workflow responsibilities taken at each step at a h
 1. Web server API communicates with a backend API that will tell our buildserver to launch the required lab via terraform
 1. This includes setting up internal authentication using Vault for system Proxmox API secrets
 1. Proxmox API communicates with Web Application API showing progress deploy meter (metrics can be gathered internally from Promox API and shared via API)
-1. Buildserver API will issue a terraform apply command
-1. This requires individual directories per user  and sub-directories per each lab to be created We would pre-create this upon account creation. 
+1. Buildserver API will issue a terraform apply command. This requires individual directories per user  and sub-directories per each lab to be created We would pre-create this upon account creation. 
 1.	Once application is deployed tutorial steps and screen will come up
   i. Session is logged in the database
 1.	Upon completion of the lab (submit button is hit) and grading script grades the lab – value stored in
@@ -35,16 +34,16 @@ sequenceDiagram
     WebApp ->> Database: Does User exist?
     
     alt Account not found
-        Database->>WebApp: User Account does not exist
+        Database->>WebApp: User Account does not exist, creating account. 
+        Note right of Database: Buildserver copying Terraform <br /> lab templates to user account directory
     else Account found
         Database->>WebApp: User Account exists
      
-        Buildserver-->>Database: How about you Database?
-        Buildserver--x WebApp: I am good thanks!
-        Buildserver-x Database: I am good thanks!
-        Note right of Database: Buildserver thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+        WebApp-->>Buildserver: Launch Selected Lab
+        Buildserver-->>WebApp: Selected Lab launched via: terraform apply command
+        Buildserver-->>Vault: Retrieve API credentials from Vault
+        Buildserver-->>WebApp: Send updates of lab deployment
+        Buildserver-->>WebApp: Send update that deployment of lab is complete
 
-        Buildserver-->WebApp: Checking with Database...
-        WebApp->Database: Yes... Database, how are you?
 end
 ```
