@@ -41,7 +41,7 @@ sequenceDiagram
         Buildserver-->>Vault: Retrieve API credentials from Vault     
         WebApp-->>Buildserver: Launch Selected Lab
         Buildserver-->>WebApp: Selected Lab launched via: terraform apply command
-        Buildserver-->>WebApp: Send updates of lab deployment
+        Buildserver-->>WebApp: Send status updates to Web APP of lab deployment
         Buildserver-->>WebApp: Send update that deployment of lab is complete
 
 end
