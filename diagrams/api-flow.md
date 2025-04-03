@@ -38,9 +38,8 @@ sequenceDiagram
         Note right of Database: Buildserver copying Terraform <br /> lab templates to user account directory
     else Account found
         Database->>WebApp: User Account exists
-     
+        Buildserver-->>Vault: Retrieve API credentials from Vault     
         WebApp-->>Buildserver: Launch Selected Lab
-        Buildserver-->>Vault: Retrieve API credentials from Vault
         Buildserver-->>WebApp: Selected Lab launched via: terraform apply command
         Buildserver-->>WebApp: Send updates of lab deployment
         Buildserver-->>WebApp: Send update that deployment of lab is complete
