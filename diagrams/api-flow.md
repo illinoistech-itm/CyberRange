@@ -40,8 +40,8 @@ sequenceDiagram
         Database->>WebApp: User Account exists
      
         WebApp-->>Buildserver: Launch Selected Lab
-        Buildserver-->>WebApp: Selected Lab launched via: terraform apply command
         Buildserver-->>Vault: Retrieve API credentials from Vault
+        Buildserver-->>WebApp: Selected Lab launched via: terraform apply command
         Buildserver-->>WebApp: Send updates of lab deployment
         Buildserver-->>WebApp: Send update that deployment of lab is complete
 
