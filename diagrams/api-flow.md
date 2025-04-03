@@ -33,7 +33,7 @@ sequenceDiagram
     GoogleAuthentication ->> WebApp: Authentication returns Oauth Token
     WebApp ->> Database: Does User exist?
     
-    alt Account not found
+    loop Account not found
         Database->>WebApp: User Account does not exist, creating account. 
         Note right of Database: Buildserver copying Terraform <br /> lab templates to user account directory
     else Account found
