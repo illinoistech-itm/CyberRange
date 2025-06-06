@@ -1,0 +1,7 @@
+flask
+flask-oauthlib
+flask-login 
+requests-oauthlib
+python-dotenv
+flask-socketio
+paramiko
