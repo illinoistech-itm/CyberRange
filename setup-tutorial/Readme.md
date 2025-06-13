@@ -23,6 +23,8 @@ Authenticate using your Portal username and password
 
 Watch out! The two-factor message triggers quickly and doesn't have much patience, make sure to have your phone ready to approve the connection.
 
+If you have more than one MFA set up besides your phone, it could give you a tricky time. If it is not prompting you to input one of your MFA, then close it, reconnect, and try putting ",SMS" directly after your password (no spaces or quotations!). For example: password,SMS
+
 ## SSH Connection
 
 Now we will test your SSH connection to the `buildserver`. From the terminal on your computer run the follwing command, replacing values of mine with yours:
