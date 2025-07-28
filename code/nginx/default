@@ -47,22 +47,7 @@ server {
                         proxy_set_header Host $host;
                         proxy_set_header X-Real-IP $remote_addr;
                         proxy_ssl_server_name on;
+
         }		
         
-        # https://serverfault.com/questions/932628/how-to-handle-relative-urls-correctly-with-a-nginx-reverse-proxy
-        location /static/ {
-             proxy_pass http://backend/static/;
-        }
-        location /about/ {
-             proxy_pass http://backend/about/;
-        }
-        location /user/ {
-             proxy_pass http://backend/user/;
-        }
-        location /questions/ {
-             proxy_pass http://backend/questions/;
-        }
-        location /db/ {
-             proxy_pass http://backend/db/;
-        }
 }
