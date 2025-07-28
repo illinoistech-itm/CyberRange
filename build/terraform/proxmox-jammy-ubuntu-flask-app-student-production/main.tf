@@ -111,6 +111,7 @@ resource "proxmox_vm_qemu" "load-balancer" {
     # instance and configure the system to register the FQDN with the Consul DNS system
     inline = [
       "sudo hostnamectl set-hostname ${var.lb-yourinitials}-vm${count.index}",
+      "exec bash",
       "sudo sed -i 's/changeme/${random_id.id.dec}${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/replace-name/${var.lb-yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.lb-yourinitials}-vm${count.index}/' /etc/hosts",
@@ -209,6 +210,7 @@ resource "proxmox_vm_qemu" "frontend-webserver" {
     # instance and configure the system to register the FQDN with the Consul DNS system
     inline = [
       "sudo hostnamectl set-hostname ${var.frontend-yourinitials}-vm${count.index}",
+      "exec bash",
       "sudo sed -i 's/changeme/${random_id.id.dec}${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/replace-name/${var.frontend-yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.frontend-yourinitials}-vm${count.index}/' /etc/hosts",
@@ -306,6 +308,7 @@ resource "proxmox_vm_qemu" "backend-database" {
     # instance and configure the system to register the FQDN with the Consul DNS system
     inline = [
       "sudo hostnamectl set-hostname ${var.backend-yourinitials}-vm${count.index}",
+      "exec bash",
       "sudo sed -i 's/changeme/${random_id.id.dec}${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/replace-name/${var.backend-yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.backend-yourinitials}-vm${count.index}/' /etc/hosts",
