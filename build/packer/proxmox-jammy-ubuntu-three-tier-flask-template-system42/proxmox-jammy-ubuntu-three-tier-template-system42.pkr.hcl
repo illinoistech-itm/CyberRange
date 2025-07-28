@@ -333,6 +333,17 @@ build {
     scripts         = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_install-prometheus-node-exporter.sh"]
   }
 
+  #############################################################################
+  # Uncomment this block to add your own custom bash install scripts
+  # This block you can add your own shell scripts to customize the image you 
+  # are creating
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/three-tier/clone-team-repo.sh"]
+  }
+
   ########################################################################################################################
   # Copying the Flask App service file into the VM
   ########################################################################################################################
