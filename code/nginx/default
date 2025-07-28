@@ -43,6 +43,7 @@ server {
                 try_files $uri $uri/ =404;
 
                         # Added by JRH
+                        # https://flask.palletsprojects.com/en/stable/deploying/nginx/
                         proxy_pass http://backend;
                         proxy_set_header Host $host;
                         proxy_set_header X-Real-IP $remote_addr;
