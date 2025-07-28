@@ -352,7 +352,7 @@ build {
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}"]
-    only             = ["proxmox-iso.frontend-webserver41"]
+    only             = ["proxmox-iso.frontend-webserver42"]
   }
 
   provisioner "shell" {
@@ -360,7 +360,7 @@ build {
     scripts = ["../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-firewall-open-ports.sh",
     "../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-database.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "IPRANGE=${local.CONNECTIONFROMIPRANGE}", "DBPASS=${local.DBPASS}"]
-    only             = ["proxmox-iso.backend-database41"]
+    only             = ["proxmox-iso.backend-database42"]
   }
 
   provisioner "shell" {
@@ -368,7 +368,7 @@ build {
     scripts = ["../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load-balancer-firewall-open-ports.sh",
       "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load_balancer.sh",
     "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh"]
-    only = ["proxmox-iso.load-balancer41"]
+    only = ["proxmox-iso.load-balancer42"]
   }
 
   provisioner "shell" {
