@@ -1,13 +1,13 @@
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
-packer {
-  required_plugins {
-    virtualbox = {
-      version = ">= 1.2.0"
-      source  = "github.com/hashicorp/proxmox"
-    }
-  }
-}
+#packer {
+#  required_plugins {
+#    virtualbox = {
+#      version = ">= 1.2.0"
+#      source  = "github.com/hashicorp/proxmox"
+#    }
+#  }
+#}
 
 # source blocks are generated from your builders; a source can be referenced in
 # build blocks. A build block runs provisioner and post-processors on a
