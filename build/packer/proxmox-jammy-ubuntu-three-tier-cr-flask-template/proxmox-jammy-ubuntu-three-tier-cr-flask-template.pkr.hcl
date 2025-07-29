@@ -4,8 +4,7 @@ packer {
   required_plugins {
     virtualbox = {
       version = ">= 1.2.0"
-      #source  = "github.com/hashicorp/proxmox"
-      source  = "github.com/itsmeowForks/proxmox"
+      source  = "github.com/hashicorp/proxmox"
     }
   }
 }
