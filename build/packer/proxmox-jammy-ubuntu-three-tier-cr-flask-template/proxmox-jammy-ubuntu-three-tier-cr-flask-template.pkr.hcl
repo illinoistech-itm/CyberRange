@@ -162,7 +162,7 @@ source "proxmox-iso" "load-balancer41" {
     unmount=true
     iso_checksum="${var.iso_checksum}"
   }
-  boot_wait = "5s"
+  boot_wait = "8s"
   cores     = "${var.NUMBEROFCORES}"
   node      = "${local.NODENAME}"
   username  = "${local.USERNAME}"
@@ -227,7 +227,7 @@ source "proxmox-iso" "backend-database42" {
     unmount=true
     iso_checksum="${var.iso_checksum}"
   }
-  boot_wait = "5s"
+  boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
   node      = "${local.NODENAME2}"
   username  = "${local.USERNAME}"
@@ -292,7 +292,7 @@ source "proxmox-iso" "frontend-webserver42" {
     unmount=true
     iso_checksum="${var.iso_checksum}"
   }
-  boot_wait = "5s"
+  boot_wait = "15s"
   cores     = "${var.NUMBEROFCORES}"
   node      = "${local.NODENAME2}"
   username  = "${local.USERNAME}"
@@ -357,7 +357,7 @@ source "proxmox-iso" "load-balancer42" {
     unmount=true
     iso_checksum="${var.iso_checksum}"
   }
-  boot_wait = "5s"
+  boot_wait = "10s"
   cores     = "${var.NUMBEROFCORES}"
   node      = "${local.NODENAME2}"
   username  = "${local.USERNAME}"
