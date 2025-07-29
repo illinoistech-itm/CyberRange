@@ -406,7 +406,7 @@ source "proxmox-iso" "load-balancer42" {
 }
 
 build {
-  sources = ["source.proxmox-iso.frontend-webserver41","source.proxmox-iso.backend-database41","source.proxmox-iso.load-balancer41","source.proxmox-iso.frontend-webserver42","source.proxmox-iso.backend-database42","source.proxmox-iso.load-balancer42"]
+  sources = ["source.proxmox-iso.frontend-webserver42","source.proxmox-iso.backend-database42","source.proxmox-iso.load-balancer42","source.proxmox-iso.frontend-webserver41","source.proxmox-iso.backend-database41","source.proxmox-iso.load-balancer41"]
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
