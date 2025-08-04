@@ -14,6 +14,9 @@ sudo apt install -y python3-setuptools python3-pip python3-dev
 # Install Gunicorn and Flask not via Pip but via Ubuntu apt packages
 sudo apt install -y gunicorn python3-flask
 
+# Requirements for Flask app functionality
+sudo apt install -y python3-flask-socketio python3-flask-login python3-requests python3-requests-oauthlib python3-hvac python3-dotenv
+
+
 # Enable Flask App from /etc/systemd/system/flask-app.service
 sudo mv /home/vagrant/flask-app.service /etc/systemd/system/flask-app.service
-sudo systemctl enable flask-app.service

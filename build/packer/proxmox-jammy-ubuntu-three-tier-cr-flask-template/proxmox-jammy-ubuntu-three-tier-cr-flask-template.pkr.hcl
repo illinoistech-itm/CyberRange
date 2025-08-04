@@ -539,9 +539,20 @@ build {
     scripts         = ["../scripts/proxmox/three-tier/clone-team-repo.sh"]
   }
 
+
+  ###########################################################################################################################
+  # Generate SS Certificate for the Flask App
+  ##########################################################################################################################
+   provider "shell" {
+  execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+  scripts = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ss_cert.sh"]
+  only = ["proxmox-iso.load-balancer41","proxmox-iso.load-balancer42"]
+  }
+
   ########################################################################################################################
   # Copying the Flask App service file into the VM
   ########################################################################################################################
+ 
 
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/flask-app.service"
@@ -557,8 +568,8 @@ build {
     scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}"]
-    only             = ["proxmox-iso.frontend-webserver41"]
+    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APPVAULT_TOKEN}"]
+    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
   }
 
   provisioner "shell" {
@@ -566,7 +577,7 @@ build {
     scripts = ["../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-firewall-open-ports.sh",
     "../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-database.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "IPRANGE=${local.CONNECTIONFROMIPRANGE}", "DBPASS=${local.DBPASS}"]
-    only             = ["proxmox-iso.backend-database41"]
+    only             = ["proxmox-iso.backend-database41", "proxmox-iso.backend-database42"]
   }
 
   provisioner "shell" {
@@ -574,41 +585,14 @@ build {
     scripts = ["../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load-balancer-firewall-open-ports.sh",
       "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load_balancer.sh",
     "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh"]
-    only = ["proxmox-iso.load-balancer41"]
+    only = ["proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
   }
 
-  provisioner "shell" {
+
+
+   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../scripts/proxmox/three-tier/cleanup.sh"]
-  }
-
-  ########################################################################################################################
-  # This block executes two scripts to open firewall ports and install Python Flask
-  ########################################################################################################################
-  
-    provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}"]
-    only             = ["proxmox-iso.frontend-webserver42"]
-  }
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts = ["../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-firewall-open-ports.sh",
-    "../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-database.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "IPRANGE=${local.CONNECTIONFROMIPRANGE}", "DBPASS=${local.DBPASS}"]
-    only             = ["proxmox-iso.backend-database42"]
-  }
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts = ["../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load-balancer-firewall-open-ports.sh",
-      "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load_balancer.sh",
-    "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh"]
-    only = ["proxmox-iso.load-balancer42"]
   }
 
 }

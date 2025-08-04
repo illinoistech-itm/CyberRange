@@ -42,6 +42,10 @@ locals {
   DBPASS = vault("/secret/data/DB","DBPASS")
 }
 
+locals {
+  APPVAULT_TOKEN = vault("/secret/data/CR","APPVAULT_TOKEN")
+}
+
 # This variable is the IP address range to allow your connections
 # The SQL wildcard is the %
 # 10.110.%.%  could also be a FQDN 
