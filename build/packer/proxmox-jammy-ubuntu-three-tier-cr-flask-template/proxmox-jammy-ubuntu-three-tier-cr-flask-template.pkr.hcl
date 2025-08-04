@@ -543,7 +543,7 @@ build {
   ###########################################################################################################################
   # Generate SS Certificate for the Flask App
   ##########################################################################################################################
-   provider "shell" {
+   provisioner "shell" {
   execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
   scripts = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ss_cert.sh"]
   only = ["proxmox-iso.load-balancer41","proxmox-iso.load-balancer42"]
