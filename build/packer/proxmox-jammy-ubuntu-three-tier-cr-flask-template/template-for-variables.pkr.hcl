@@ -43,7 +43,7 @@ locals {
 }
 
 locals {
-  APPVAULT_TOKEN = vault("/secret/data/CR","APPVAULT_TOKEN")
+  APPVAULT_TOKEN = vault("/secret/data/CR","APP_VAULTTOKEN")
 }
 
 # This variable is the IP address range to allow your connections
