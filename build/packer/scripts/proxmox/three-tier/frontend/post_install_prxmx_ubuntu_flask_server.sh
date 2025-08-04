@@ -17,6 +17,9 @@ sudo apt install -y gunicorn python3-flask
 # Requirements for Flask app functionality
 sudo apt install -y python3-flask-socketio python3-flask-login python3-requests python3-requests-oauthlib python3-hvac python3-dotenv
 
-
-# Enable Flask App from /etc/systemd/system/flask-app.service
+# Move the service file into /etc/systemd/system which is where user created
+# service files are placed by convention
+# Enable Flask App service to boot at start 
+# from /etc/systemd/system/flask-app.service
 sudo mv /home/vagrant/flask-app.service /etc/systemd/system/flask-app.service
+sudo systemctl enable flask-app.service
