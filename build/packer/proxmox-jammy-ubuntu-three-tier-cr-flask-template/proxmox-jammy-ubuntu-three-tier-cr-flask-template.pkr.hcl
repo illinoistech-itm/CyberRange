@@ -549,7 +549,7 @@ build {
   }
 
   ########################################################################################################################
-  # This block executes two scripts to open firewall ports and install Python Flask
+  # This block executes scripts to open firewall ports, create self-signed certs, and install Python Flask
   ########################################################################################################################
   
     provisioner "shell" {
@@ -562,6 +562,10 @@ build {
     only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
   }
 
+  ########################################################################################################################
+  # This block executes scripts to open firewall ports, install the mysql database server, and create the tables and users
+  ########################################################################################################################
+
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts = ["../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-firewall-open-ports.sh",
@@ -569,6 +573,10 @@ build {
     environment_vars = ["DBUSER=${local.DBUSER}", "IPRANGE=${local.CONNECTIONFROMIPRANGE}", "DBPASS=${local.DBPASS}"]
     only             = ["proxmox-iso.backend-database41", "proxmox-iso.backend-database42"]
   }
+
+  ########################################################################################################################
+  # This block executes scripts to open firewall ports, install nginx, and configure the reverse proxy (load-balancer)
+  ########################################################################################################################
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
