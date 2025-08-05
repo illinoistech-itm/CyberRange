@@ -13,5 +13,5 @@ sudo mv /home/vagrant/CyberRange/code/python-flask/app.py /home/flaskuser/app.py
 sudo mv /home/vagrant/CyberRange/code/python-flask/.env /home/flaskuser/.env
 # How to use an ENV variable in a sed command
 # https://askubuntu.com/questions/76808/how-do-i-use-variables-in-a-sed-command
-sed -i "1,$s/REPLACE/$APP_VAULTTOKEN/g" /home/flaskuser/.env
+sed -i "s/REPLACE/$APP_VAULTTOKEN/g" /home/flaskuser/.env
 sudo chown -R flaskuser:flaskuser /home/flaskuser/app.py
