@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Install and prepare backend database
-
-sudo apt update
-sudo apt-get install -y nginx
+# Generate a self-signed Certificate
 
 # https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
 # https://ethitter.com/2016/05/generating-a-csr-with-san-at-the-command-line/
