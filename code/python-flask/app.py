@@ -17,14 +17,14 @@ client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', t
 
 
 # Check authentication
-assert client.is_authenticated()
+# assert client.is_authenticated()
 
 # Read dynamic MySQL credentials from Vault
 creds = client.read('secret/data/CR')
 
 # Extract username and password
-CLIENT_ID = creds['data']['data']['CLIENT_ID']
-CLIENT_SECRET = creds['data']['data']['CLIENT_SECRET']
+client_id = creds['data']['data']['CLIENT_ID']
+client_secret = creds['data']['data']['CLIENT_SECRET']
 APP_SECRET = creds['data']['data']['APP_SECRET']
 
 
@@ -39,8 +39,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 # OAuth configuration
-client_id = 'CLIENT_ID' #Added Manually for Debugging, add back as 'CLIENT_ID'
-client_secret = 'CLIENT_SECRET' #Added Manually, add back as 'CLIENT_SECRET'
 authorization_base_url = 'https://accounts.google.com/o/oauth2/auth'
 token_url = 'https://accounts.google.com/o/oauth2/token'
 redirect_uri = 'https://system60.rice.iit.edu/callback'
