@@ -53,27 +53,30 @@ server {
         }
         # Added to match the routes in the app.py -- also remove the trailing '/' from the location for Python Flask
         location /login {
-             proxy_pass https://backend/login;
+          proxy_pass https://backend/login;
         }
-
         location /test {
-             proxy_pass https://backend/test;
+          proxy_pass https://backend/test;
         }
-
         location /callback {
-             proxy_pass https://backend/callback;
+          proxy_pass https://backend/callback;
         }
-
         location /logout {
-             proxy_pass https://backend/logout;
+          proxy_pass https://backend/logout;
         }
         location /static {
-             proxy_pass https://backend/static;
+          proxy_pass https://backend/static;
         }
         location /templates {
-             proxy_pass https://backend/templates;
+          proxy_pass https://backend/templates;
         }
-        location /media {
-             proxy_pass https://backend/media;
+        location /lab-one {
+          proxy_pass https://backend/lab-one;
+        }        
+        location /lab-two {
+          proxy_pass https://backend/lab-two;
+        }        
+        location /lab-three {
+          proxy_pass https://backend/lab-three;
         }        
 }		
