@@ -73,4 +73,7 @@ server {
         location /templates {
              proxy_pass https://backend/templates;
         }
+        location /media {
+             proxy_pass https://backend/media;
+        }        
 }		

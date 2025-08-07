@@ -74,7 +74,8 @@ def index():
                 # username = str(user_info["email"])
                 # username = username.split('@', 1)[0]
 
-                return f'Logged in as {user_info["email"]}<br><a href="/launch">Go to Launch Page</a><br><a href="/logout">Logout</a>'
+                #return f'Logged in as {user_info["email"]}<br><a href="/launch">Go to Launch Page</a><br><a href="/logout">Logout</a>'
+                return render_template('dashboard.html', email=user_info["email"])
             else:
                 return 'Error: Email not found in user info.<br><a href="/logout">Logout</a>'
         except TokenExpiredError:
@@ -91,8 +92,8 @@ def index():
             else:
                 # Session expired
                 return redirect(url_for('.login'))
-    return 'You are not logged in<br><a href="/login">Login</a>'
-
+    #return 'You are not logged in<br><a href="/login">Login</a>'
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
