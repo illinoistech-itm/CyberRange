@@ -22,15 +22,15 @@ cd /home/vagrant/CyberRange/code/db-samples
 # Inline MySQL code that uses the secrets passed via the ENVIRONMENT VARIABLES to create a non-root user
 # IPRANGE is "10.110.%.%"
 echo "Executing inline mysql -e to create user..."
-sudo mysql -e "GRANT SELECT,INSERT,CREATE TEMPORARY TABLES ON posts.* TO '${DBUSER}'@'${IPRANGE}' IDENTIFIED BY '${DBPASS}';"
+sudo mysql -e "GRANT SELECT,INSERT,UPDATE, CREATE TEMPORARY TABLES ON posts.* TO '${DBUSER}'@'${IPRANGE}' IDENTIFIED BY '${DBPASS}';"
 
-# Inlein mysql to allow the USERNAME you passed in via the variables.pkr.hcl file to access the Mariadb/MySQL commandline 
+# Inline mysql to allow the USERNAME you passed in via the variables.pkr.hcl file to access the Mariadb/MySQL commandline 
 # for debugging purposes only to connect via localhost (or the mysql CLI)
 
-sudo mysql -e "GRANT SELECT,INSERT,CREATE TEMPORARY TABLES ON posts.* TO '${DBUSER}'@'localhost' IDENTIFIED BY '${DBPASS}';"
+sudo mysql -e "GRANT SELECT,INSERT,UPDATE, CREATE TEMPORARY TABLES ON cyberrange.* TO '${DBUSER}'@'localhost' IDENTIFIED BY '${DBPASS}';"
 
 # These sample files are located in the mysql directory but need to be part of 
 # your private team repo
 sudo mysql < ./create-database.sql
 sudo mysql < ./create-table.sql
-sudo mysql < ./insert-records.sql
+#sudo mysql < ./insert-records.sql

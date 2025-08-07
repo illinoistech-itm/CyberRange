@@ -118,7 +118,6 @@ def logout():
     return redirect(url_for('.index'))
 
 @app.route("/test")
+@login_required
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
-
-
