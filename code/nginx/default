@@ -67,4 +67,10 @@ server {
         location /logout {
              proxy_pass https://backend/logout;
         }
+        location /static {
+             proxy_pass https://backend/static;
+        }
+        location /templates {
+             proxy_pass https://backend/templates;
+        }
 }		
