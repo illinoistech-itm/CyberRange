@@ -93,7 +93,7 @@ def index():
                 # Session expired
                 return redirect(url_for('.login'))
     #return 'You are not logged in<br><a href="/login">Login</a>'
-    return render_template('index.html')
+    return render_template('index.html', NEEDTOLOGIN='You are not logged in...<br /><a href="/login">Login</a>')
 
 @app.route('/login')
 def login():
