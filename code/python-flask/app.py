@@ -77,7 +77,7 @@ def index():
                 #return f'Logged in as {user_info["email"]}<br><a href="/launch">Go to Launch Page</a><br><a href="/logout">Logout</a>'
                 return render_template('dashboard.html', email=user_info["email"])
             else:
-                return 'Error: Email not found in user info.<br><a href="/logout">Logout</a>'
+                return redirect(url_for('.index'))
         except TokenExpiredError:
             if 'refresh_token' in session['google_token']:
                 # Refresh expired token
@@ -93,7 +93,7 @@ def index():
                 # Session expired
                 return redirect(url_for('.login'))
     #return 'You are not logged in<br><a href="/login">Login</a>'
-    return render_template('index.html', NEEDTOLOGIN='You are not logged in...<br /><a href="/login">Login</a>')
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
@@ -118,6 +118,21 @@ def logout():
     return redirect(url_for('.index'))
 
 @app.route("/test")
+@login_required
+def hello_world():
+    return "<p>Hello, Cyber Range!</p>"
+
+@app.route("/lab-one")
+@login_required
+def hello_world():
+    return "<p>Hello, Cyber Range!</p>"
+
+@app.route("/lab-two")
+@login_required
+def hello_world():
+    return "<p>Hello, Cyber Range!</p>"
+
+@app.route("/lab-three")
 @login_required
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
