@@ -124,15 +124,15 @@ def hello_world():
 
 @app.route("/lab-one")
 @login_required
-def hello_world():
+def lab_one():
     return '<p>Lab one goes here...</p><a href="/dashboard">Back to dashboard</a>'
 
 @app.route("/lab-two")
 @login_required
-def hello_world():
+def lab_two():
     return '<p>Lab two goes here...</p><a href="/dashboard">Back to dashboard</a>'
 
 @app.route("/lab-three")
 @login_required
-def hello_world():
+def lab_three():
     return '<p>Lab three goes here...</p><a href="/dashboard">Back to dashboard</a>'
