@@ -287,3 +287,16 @@ body.lab-page {
 .terminal-container {
   border: 2px solid #D98845;
 }
+
+.lab-toolbar {
+  background-color: #D98845; 
+  color: #994040; 
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 2px solid #F2EBEB; 
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
