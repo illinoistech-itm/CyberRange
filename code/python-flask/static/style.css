@@ -194,7 +194,7 @@ body.dashboard-bkgrd {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   /* width: fit-content; */
-  margin 0 auto;
+  margin: 0 auto;
   justify-items: center;
   align-items: center;
   padding-top: 0; 
@@ -202,7 +202,7 @@ body.dashboard-bkgrd {
 }
 
 .lab-link {
-  display: grid:
+  display: grid;
   justify-items: center;
   align-items: center;
   text-decoration: none;
@@ -254,7 +254,7 @@ body.dashboard-bkgrd {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  width: 100%
+  width: 100%;
   padding-top: 50px;
 }
 
