@@ -125,7 +125,7 @@ def hello_world():
 @app.route("/lab_one")
 @login_required
 def lab_one():
-    return '<p>Lab one goes here...</p><a href="/dashboard">Back to dashboard</a>'
+    return render_template('lab_one.html', email=user_info["email"])
 
 @app.route("/lab_two")
 @login_required
