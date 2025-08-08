@@ -130,11 +130,6 @@ def launch():
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
 
-#@app.route("/lab_one")
-#@login_required
-#def lab_one():
-#    return render_template('lab_one.html', email=user_info["email"])
-
 @app.route('/lab_one')
 @login_required
 def lab_one():
@@ -147,7 +142,7 @@ def lab_one():
     username = username.split('@', 1)[0]
     username = re.sub('[^A-Za-z0-9]+', '', username)
     #lab_control(UUID, username)
-    return render_template('shelly.html', qa=questions)
+    return render_template('shelly.html', qa=questions, email=user_info["email"])
     # Redirect to shelly
     #return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))  
