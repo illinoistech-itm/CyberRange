@@ -5,7 +5,8 @@ from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 import hvac
 from dotenv import load_dotenv
-import os
+import os, paramiko, threading, re, time
+from proxmoxer import ProxmoxAPI
 
 load_dotenv()
 
@@ -26,9 +27,6 @@ creds = client.read('secret/data/CR')
 client_id = creds['data']['data']['CLIENT_ID']
 client_secret = creds['data']['data']['CLIENT_SECRET']
 APP_SECRET = creds['data']['data']['APP_SECRET']
-
-
-
 
 app = Flask(__name__)
 ########################################3
@@ -117,22 +115,120 @@ def logout():
     session.pop('google_token', None)
     return redirect(url_for('.index'))
 
+@app.route('/launch')
+@login_required
+def launch():
+    # The user is authenticated, show the launch page.
+    return render_template('launch-labs.html')
+
 @app.route("/test")
 @login_required
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
 
-@app.route("/lab_one")
+#@app.route("/lab_one")
+#@login_required
+#def lab_one():
+#    return render_template('lab_one.html', email=user_info["email"])
+
+@app.route('/lab_one')
 @login_required
 def lab_one():
-    return render_template('lab_one.html', email=user_info["email"])
+    # Run lab 1 script
+    UUID = str(time.time())
+    UUID = UUID.split('.', 1)[0]
+    username = str(user_info["email"])
+    username = username.split('@', 1)[0]
+    username = re.sub('[^A-Za-z0-9]+', '', username)
+    lab_control(UUID, username)
+    # Redirect to shelly
+    return redirect(url_for('.shelly'))
+    # return redirect(url_for('.waiting'))  
 
-@app.route("/lab_two")
+
+@app.route('/lab_two')
 @login_required
 def lab_two():
-    return '<p>Lab two goes here...</p><a href="/dashboard">Back to dashboard</a>'
+    # Run lab 2 script
+    lab_control()
+    # Redirect to shelly
+    return redirect(url_for('.shelly'))
+    # return redirect(url_for('.waiting'))
 
-@app.route("/lab_three")
+
+@app.route('/lab_three')
 @login_required
 def lab_three():
-    return '<p>Lab three goes here...</p><a href="/dashboard">Back to dashboard</a>'
+    # Run lab 2 script
+    lab_control()
+    # Redirect to shelly
+    return redirect(url_for('.shelly'))
+    # return redirect(url_for('.waiting'))
+
+@app.route('/shelly')
+@login_required
+def shelly():
+    return render_template('shelly.html')
+
+
+@app.route('/end-lab')
+@login_required
+def endlab():
+    # os.system(f"echo '{UUID}, {username}' > /home/vagrant/end-lab-reached")
+    with open('/home/vagrant/kali-ip', 'r') as file:
+        content = file.read()
+        kaliIP = content.strip()
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(SSH_HOST, username=SSH_USER, key_filename=SSH_KEY, port=SSH_PORT)
+    command = "source /home/izziwa/.ssh/environment; source /home/izziwa/user-vars; printenv > /home/izziwa/ssh-destroy-env; bash /home/izziwa/lab_destroy.sh"
+    stdin, stdout, stderr = client.exec_command(command)
+    client.close()
+    os.system(f"sed -i 's/{kaliIP}/<IP-HERE>/g' /home/vagrant/oauth-site/templates/shelly.html")
+    return redirect(url_for('.launch'))
+
+def lab_control(UUID, username):
+    # render_template('waiting.html')
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(SSH_HOST, username=SSH_USER, key_filename=SSH_KEY, port=SSH_PORT)   
+
+    # Pass UUID and username variables to the bash script
+    command = "source /home/izziwa/.ssh/environment; bash /home/izziwa/lab_launch.sh " + UUID + " " + username
+    stdin, stdout, stderr = client.exec_command(command)
+    # Wait for terraform apply to finish
+    exitStatus = stdout.channel.recv_exit_status()
+    if exitStatus == 0:
+        # Retrieve Kali IP
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        proxmox = ProxmoxAPI(config['DEFAULT']['url'], user=config['DEFAULT']['user'], password=config['DEFAULT']['pass'], verify_ssl=False)
+
+        prxmx42 = proxmox.nodes("system42").qemu.get()
+
+        runningvms = []
+        runningwithtagsvms = []
+        # Loop through the first node to get all of the nodes that are of status running and that have the tag of the user
+
+        for vm in prxmx42:
+            if vm['status'] == 'running' and vm['tags'].split(';')[0] == UUID:
+                runningvms.append(vm)
+
+        for vm in runningvms:
+            runningwithtagsvms.append(proxmox.nodes("system35").qemu(vm['vmid']).agent("network-get-interfaces").get())
+            for x in range(len(runningwithtagsvms)):
+                for y in range(len(runningwithtagsvms[x]['result'])):
+                    if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        kaliIP = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                        # replace with sed command to switch IP in templates/shelly.html
+                        os.system(f"sed -i 's/<IP-HERE>/{kaliIP}/g' /home/vagrant/oauth-site/templates/shelly.html")
+                        # echo to file so sed can replace the above line later
+                        os.system(f"echo '{kaliIP}' > /home/vagrant/kali-ip")
+                        break
+    else:
+        os.system(f"echo 'Error. Exit code {exitStatus} returned.' > /home/vagrant/get-kali-ip-log")
+
+
+    client.close()
+    # Redirect to shelly
+    return redirect(url_for('.shelly'))

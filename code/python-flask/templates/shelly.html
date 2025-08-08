@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="terminal"></div>
+  <script>
+    const term = new Terminal();
+    term.open(document.getElementById('terminal'));
+    const socket = io();
+
+    term.onData(data => socket.emit('input', data));
+    socket.on('output', data => term.write(data));
+  </script>
+</body>
+</html>
