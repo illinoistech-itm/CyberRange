@@ -7,9 +7,13 @@ import hvac
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time
 from proxmoxer import ProxmoxAPI
+import tomllib # Import TOML library from Python standard lib 3.11 or <
+# https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 load_dotenv()
-
+socketio = SocketIO(app)
+threading.Thread(target=ssh_thread).start()
+socketio.run(app)
 ####Verified working with Vault#####
 
 # Initialize Vault client
@@ -134,15 +138,18 @@ def hello_world():
 @app.route('/lab_one')
 @login_required
 def lab_one():
+    with open("lab-questions.toml", "rb") as f:
+      questions = tomllib.load(f)
     # Run lab 1 script
     UUID = str(time.time())
     UUID = UUID.split('.', 1)[0]
     username = str(user_info["email"])
     username = username.split('@', 1)[0]
     username = re.sub('[^A-Za-z0-9]+', '', username)
-    lab_control(UUID, username)
+    #lab_control(UUID, username)
+    return render_template('shelly.html', qa=questions)
     # Redirect to shelly
-    return redirect(url_for('.shelly'))
+    #return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))  
 
 

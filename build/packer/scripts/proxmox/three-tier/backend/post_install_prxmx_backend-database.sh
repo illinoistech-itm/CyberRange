@@ -33,4 +33,4 @@ sudo mysql -e "GRANT SELECT,INSERT,UPDATE, CREATE TEMPORARY TABLES ON cyberrange
 # your private team repo
 sudo mysql < ./create-database.sql
 sudo mysql < ./create-table.sql
-#sudo mysql < ./insert-records.sql
+sudo mysql < ./insert-records.sql

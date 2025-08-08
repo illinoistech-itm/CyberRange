@@ -1,0 +1,12 @@
+# lab-questions.toml
+# Enter the Q&A for each lab here
+[lab_one]
+number_of_questions = 4
+question_one = "What is the command to list the contents of a directory?"
+question_one_answer = "ls"
+question_two = "What is the command to check the system resource usage?"
+question_two_answer = "htop"
+question_three = "What is the command in Ubuntu Linux to search for the name of a package named: jinja?"
+question_three_answer = "sudo apt search jinja"
+question_four = "What are the command options to see two levels of verbosity in and ssh command?"
+question_four_answer = "-vv"

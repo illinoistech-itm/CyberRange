@@ -15,5 +15,15 @@
     term.onData(data => socket.emit('input', data));
     socket.on('output', data => term.write(data));
   </script>
+
+    <ul>
+    {% for key, value in qa.items() %}
+      <li><strong>{{ key }}:</strong> {{ value }}</li>
+    {% endfor %}
+
+    {% f you want to avoid accessing keys via info.key, you can unpack the dict:
+    return render_template("index.html", **data)
+    Now in the template, you can use {{ hostname }} directly. %}
+  </ul>
 </body>
 </html>
