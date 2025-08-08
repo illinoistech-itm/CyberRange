@@ -41,7 +41,8 @@
       <button class="grade-lab">Grade Lab</button>
     </aside>
 
-    <ul>
+    {% original code
+  <ul>
     {% for key, value in qa.items() %}
       <li><strong>{{ key }}:</strong> {{ value }}</li>
     {% endfor %}
@@ -50,5 +51,6 @@
     return render_template("index.html", **data)
     Now in the template, you can use {{ hostname }} directly. %}
   </ul>
+%}
 </body>
 </html>
