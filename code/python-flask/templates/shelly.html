@@ -2,10 +2,11 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
-<body>
+<body class="lab-page">
   <div id="terminal"></div>
   <script>
     const term = new Terminal();

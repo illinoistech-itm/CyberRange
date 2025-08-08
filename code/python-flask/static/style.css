@@ -278,3 +278,8 @@ body.dashboard-bkgrd {
   background-color: #994040;
   color: #F2EBEB;
 }
+
+/* Lab page section */
+body.lab-page {
+  background-color: #944040;
+}
