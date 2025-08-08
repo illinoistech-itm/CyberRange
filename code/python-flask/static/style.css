@@ -283,3 +283,7 @@ body.dashboard-bkgrd {
 body.lab-page {
   background-color: #944040;
 }
+
+.terminal-container {
+  border: 2px solid #D98845;
+}

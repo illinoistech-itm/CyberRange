@@ -7,15 +7,17 @@
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body class="lab-page">
-  <div id="terminal"></div>
-  <script>
-    const term = new Terminal();
-    term.open(document.getElementById('terminal'));
-    const socket = io();
+  <section class="terminal-container">
+    <div id="terminal"></div>
+    <script>
+      const term = new Terminal();
+      term.open(document.getElementById('terminal'));
+      const socket = io();
 
-    term.onData(data => socket.emit('input', data));
-    socket.on('output', data => term.write(data));
-  </script>
+      term.onData(data => socket.emit('input', data));
+      socket.on('output', data => term.write(data));
+    </script>
+  </section>
 
     <ul>
     {% for key, value in qa.items() %}
