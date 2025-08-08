@@ -72,11 +72,14 @@ server {
         }
         location /lab_one {
           proxy_pass https://backend/lab_one;
-        }        
+        }
         location /lab_two {
           proxy_pass https://backend/lab_two;
-        }        
+        }
         location /lab_three {
           proxy_pass https://backend/lab_three;
-        }        
+        }
+        location /shelly {
+          proxy_pass https://backend/shelly;
+        }
 }		
