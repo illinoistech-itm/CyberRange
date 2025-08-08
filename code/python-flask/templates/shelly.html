@@ -30,6 +30,17 @@
     </script>
   </section>
 
+  {% lab steps section}
+  <aside class="lab-instructions">
+    <div class="instructions-titlebar">Steps / Instructions</div>
+      <ol class="steps-list">
+        {% for key, value in qa.items() %}
+          <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+      </ol>
+      <button class="grade-lab">Grade Lab</button>
+    </aside>
+
     <ul>
     {% for key, value in qa.items() %}
       <li><strong>{{ key }}:</strong> {{ value }}</li>
