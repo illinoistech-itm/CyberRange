@@ -141,7 +141,7 @@ def lab_one():
     username = str(user_info["email"])
     username = username.split('@', 1)[0]
     username = re.sub('[^A-Za-z0-9]+', '', username)
-    #lab_control(UUID, username)
+    lab_control(UUID, username)
     return render_template('shelly.html', qa=questions, email=user_info["email"])
     # Redirect to shelly
     #return redirect(url_for('.shelly'))

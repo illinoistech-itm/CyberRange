@@ -3,3 +3,4 @@ Host github.com
   Hostname github.com
   IdentityFile PATH-TO-THE-PRIVATE-KEY
   StrictHostKeyChecking no
+ 

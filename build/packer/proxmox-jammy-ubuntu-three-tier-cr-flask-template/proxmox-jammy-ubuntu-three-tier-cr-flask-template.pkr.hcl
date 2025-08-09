@@ -432,6 +432,18 @@ build {
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to clone your source code -- this is needed
+  # so that the flask-app can ssh into the buildserver and execute terraform 
+  # commands to launch infrastructure
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_flask_app_connect_key"
+    destination = "/home/vagrant/.ssh/id_ed25519_flask_app_connect_key"
+  }
+
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface
   #############################################################################
