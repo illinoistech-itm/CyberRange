@@ -25,6 +25,6 @@ question_one_passing_indicator TINYINT(1) DEFAULT 0,
 question_two_passing_indicator TINYINT(1) DEFAULT 0,
 question_three_passing_indicator TINYINT(1) DEFAULT 0,
 question_four_passing_indicator TINYINT(1) DEFAULT 0,
-grades FLOAT(3,2),
+grade FLOAT(3,2),
 last_update TIMESTAMP
 );
