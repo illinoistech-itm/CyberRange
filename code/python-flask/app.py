@@ -24,17 +24,25 @@ client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', t
 # Check authentication
 # assert client.is_authenticated()
 
-# Read dynamic MySQL credentials from Vault
+##############################################################################
+# Read run time access secrets from the CR vault key-pair
+##############################################################################
 creds = client.read('secret/data/CR')
 
 # Extract username and password
 client_id = creds['data']['data']['CLIENT_ID']
 client_secret = creds['data']['data']['CLIENT_SECRET']
 APP_SECRET = creds['data']['data']['APP_SECRET']
+# Retrieve Proxmox Token connection to execute terraform apply
+# Added by JRH
+CR_TOKEN_ID = ['data']['data']['CR_TOKEN_ID']
+CR_TOKEN_VALUE = ['data']['data']['CR_TOKEN_VALUE']
+CR_PROXMOX_URL = ['data']['data']['CR_PROXMOX_URL']
 
 app = Flask(__name__)
-########################################3
+##############################################################################
 # Flask-Login setup
+##############################################################################
 app.secret_key = 'APP_SECRET' # Change to point to the vault instance EDIT: Added Manually, add back as 'APP_SECRET'
 login_manager = LoginManager()
 login_manager.init_app(app)
