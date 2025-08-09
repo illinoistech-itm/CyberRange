@@ -35,10 +35,10 @@ client_secret = creds['data']['data']['CLIENT_SECRET']
 APP_SECRET = creds['data']['data']['APP_SECRET']
 # Retrieve Proxmox Token connection to execute terraform apply
 # Added by JRH
-CR_TOKEN_ID = ['data']['data']['CR_TOKEN_ID']
-CR_TOKEN_VALUE = ['data']['data']['CR_TOKEN_VALUE']
-CR_PROXMOX_URL = ['data']['data']['CR_PROXMOX_URL']
-FLASK_API_SERVER =  ['data']['data']['FLASK_API_SERVER']
+CR_TOKEN_ID = creds['data']['data']['CR_TOKEN_ID']
+CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
+CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
+FLASK_API_SERVER = creds['data']['data']['FLASK_API_SERVER']
 
 app = Flask(__name__)
 ##############################################################################
