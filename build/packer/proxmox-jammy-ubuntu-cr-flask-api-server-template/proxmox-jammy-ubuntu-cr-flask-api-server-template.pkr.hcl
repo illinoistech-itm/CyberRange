@@ -75,9 +75,9 @@ source "proxmox-iso" "frontend-apiserver41" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "26m"
-  template_description     = "A Packer template for Ubuntu Jammy Frontend webserver"
-  vm_name                  = "${var.frontend-VMNAME}"
-  tags                     = "${var.FE-TAGS}"
+  template_description     = "A Packer template Python Flask API Server"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
 }
 
 ###########################################################################################
@@ -140,9 +140,9 @@ source "proxmox-iso" "frontend-apiserver42" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "26m"
-  template_description     = "A Packer template for Ubuntu Jammy Frontend webserver"
-  vm_name                  = "${var.frontend-VMNAME}"
-  tags                     = "${var.FE-TAGS}"
+  template_description     = "A Packer template Python Flask API Server"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
 }
 
 build {
@@ -294,12 +294,12 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ss_cert.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
+    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ss_cert.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
-    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
   }
 
   ########################################################################################################################
