@@ -284,7 +284,7 @@ build {
   ########################################################################################################################
  
   provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/flask-app.service"
+    source      = "../scripts/proxmox/api-server/frontend/flask-api.service"
     destination = "/home/vagrant/"
   }
 
