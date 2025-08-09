@@ -41,16 +41,16 @@
       <button class="grade-lab">Grade Lab</button>
     </aside>
 
-    {# original code
+   
   <ul>
-    {% for key, value in qa.items() %}
+    {% for key, value in response_dict.items() %}
       <li><strong>{{ key }}:</strong> {{ value }}</li>
     {% endfor %}
 
-    {% f you want to avoid accessing keys via info.key, you can unpack the dict:
+    {# f you want to avoid accessing keys via info.key, you can unpack the dict:
     return render_template("index.html", **data)
-    Now in the template, you can use {{ hostname }} directly. %}
+    Now in the template, you can use {{ hostname }} directly. #}
   </ul>
-#}
+
 </body>
 </html>
