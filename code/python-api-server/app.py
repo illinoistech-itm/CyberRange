@@ -5,7 +5,6 @@ import os, re, time, subprocess
 from proxmoxer import ProxmoxAPI
 
 load_dotenv()
-socketio = SocketIO(app)
 ####Verified working with Vault#####
 
 # Initialize Vault client
