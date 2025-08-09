@@ -8,7 +8,7 @@
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body class="lab-page">
-  {% section for the toolbar at the top of the page %}
+  {# section for the toolbar at the top of the page #}
   <header class="lab-toolbar">
     <div class="dropdown">
       <button class="dropbtn">View</button>
@@ -30,7 +30,7 @@
     </script>
   </section>
 
-  {% lab steps section}
+  {# lab steps section #}
   <aside class="lab-instructions">
     <div class="instructions-titlebar">Steps / Instructions</div>
       <ol class="steps-list">
@@ -41,7 +41,7 @@
       <button class="grade-lab">Grade Lab</button>
     </aside>
 
-    {% original code
+    {# original code
   <ul>
     {% for key, value in qa.items() %}
       <li><strong>{{ key }}:</strong> {{ value }}</li>
@@ -51,6 +51,6 @@
     return render_template("index.html", **data)
     Now in the template, you can use {{ hostname }} directly. %}
   </ul>
-%}
+#}
 </body>
 </html>
