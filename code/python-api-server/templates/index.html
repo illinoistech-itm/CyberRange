@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Cyber Range</title>
+  </head>
+<body class=index-page>
+  {# Create a logo for a software Cyber Range - prompt used in MS Paint Copilot AI image generator #}
+  <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+  <div class="help">
+    Need help? Contact <a href="mailto:arosiles@hawk.illinoistech.edu">arosiles@hawk.illinoistech.edu</a>
+  </div>
+
+  <h1>Welcome to the Cyber Range!</h1>
+
+  <div class="button-group"> 
+    <li>
+	<ul><a href="{{ url_for('login') }}"> Login Here </a></ul>
+    </li>
+  </div>
+</body>
+</html>
