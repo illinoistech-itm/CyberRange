@@ -32,10 +32,6 @@ locals {
   SSHUSER = vault("/secret/data/SSH","SSHUSER")
 }
 
-locals {
-  APP_VAULTTOKEN = vault("/secret/data/CR","APP_VAULTTOKEN")
-}
-
 ##############################################################################
 # This set of variables controls the resources allocated to building the 
 # VM templates -- the resources can be low because we will expand/declare the
