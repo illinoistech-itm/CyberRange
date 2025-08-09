@@ -3,7 +3,7 @@
 -- https://copilot.microsoft.com/shares/53BbT7TZNsNYKvGZi2k9z
 
 
-USE cyberrange;
+USE cyrange;
 
 CREATE TABLE users 
 (
