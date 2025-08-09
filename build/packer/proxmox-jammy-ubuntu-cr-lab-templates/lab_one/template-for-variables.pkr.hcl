@@ -39,14 +39,14 @@ locals {
 ###############################################################################
 variable "MEMORY" {
   type    = string
-  default = "4096"
+  default = "8192"
 }
 
 # Best to keep this low -- you can expand the size of a disk when deploying 
 # instances from templates - but not reduce the disk size -- No need to edit this
 variable "DISKSIZE" {
   type    = string
-  default = "10G"
+  default = "6G"
 }
 
 # This is the name of the disk the build template will be stored on in the 
