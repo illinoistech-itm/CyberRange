@@ -12,44 +12,24 @@ variable "pm_timeout" {}
 
 variable "pm_log_file" {}
 
-variable "frontend-numberofvms" {}
-variable "backend-numberofvms" {}
-variable "lb-numberofvms" {}
+variable "numberofvms" {}
 
-variable "frontend-desc" {}
-variable "backend-desc" {}
-variable "lb-desc" {}
-variable "lb-macaddr" {}
+variable "desc" {}
 
-variable "frontend-template_to_clone" {}
-variable "backend-template_to_clone" {}
-variable "lb-template_to_clone" {}
+variable "template_to_clone" {}
 
-variable "frontend-memory" {}
-variable "backend-memory" {}
-variable "lb-memory" {}
+variable "memory" {}
 
-variable "frontend-cores" {}
-variable "backend-cores" {}
-variable "lb-cores" {}
+variable "cores" {}
 
-variable "frontend-sockets" {}
-variable "backend-sockets" {}
-variable "lb-sockets" {}
+variable "sockets" {}
 
-variable "frontend-disk_size" {}
-variable "backend-disk_size" {}
-variable "lb-disk_size" {}
-
+variable "disk_size" {}
 variable "keypath" {}
 
-variable "frontend-yourinitials" {}
-variable "backend-yourinitials" {}
-variable "lb-yourinitials" {}
+variable "yourinitials" {}
 
-variable "fe-tags" {}
-variable "lb-tags" {}
-variable "be-tags" {}
+variable "tags" {}
 
 variable "consul-service-tag-contact-email" {}
 
@@ -74,4 +54,3 @@ variable "consulip-240-student-system41" {
 variable "consulip-242-room" {
   default = "10.110.0.38"
 }
-
