@@ -76,8 +76,8 @@ source "proxmox-iso" "lab_one_edge_server_41" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "26m"
   template_description     = "A Packer template for Ubuntu Jammy Database" 
-  vm_name                  = "${var.backend-VMNAME}"
-  tags                     = "${var.BE-TAGS}"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
 }
 
 ###########################################################################################
@@ -141,8 +141,8 @@ source "proxmox-iso" "lab_one_edge_server_42" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "26m"
   template_description     = "A Packer template for Ubuntu Jammy Database" 
-  vm_name                  = "${var.backend-VMNAME}"
-  tags                     = "${var.BE-TAGS}"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
 }
 
 build {

@@ -32,35 +32,8 @@ locals {
   SSHUSER = vault("/secret/data/SSH","SSHUSER")
 }
 
-# This will be the non-root user account name
-locals { 
-  DBUSER = vault("/secret/data/DB","DBUSER")
-}
-
-# This will be the Database user (non-root) password setup
-locals {
-  DBPASS = vault("/secret/data/DB","DBPASS")
-}
-
 locals {
   APP_VAULTTOKEN = vault("/secret/data/CR","APP_VAULTTOKEN")
-}
-
-# This variable is the IP address range to allow your connections
-# The SQL wildcard is the %
-# 10.110.%.%  could also be a FQDN 
-locals {
-  CONNECTIONFROMIPRANGE = vault("/secret/data/DB","CONNECTIONFROMIPRANGE")
-}
-
-# This will be the fully qualified domain name: team-00-be-vm0.service.consul
-locals {
-  FQDN = vault("/secret/data/DB","DBURL") 
-}
-
-# This will be the Database name you default to (like posts or comments or customers)
-locals {
-  DATABASE = vault("/secret/data/DB","DATABASENAME") 
 }
 
 ##############################################################################
@@ -93,19 +66,7 @@ variable "NUMBEROFCORES" {
 }
 
 # This is the name of the Virtual Machine Template you want to create
-variable "frontend-VMNAME" {
-  type    = string
-  default = ""
-}
-
-# This is the name of the Virtual Machine Template you want to create
-variable "backend-VMNAME" {
-  type    = string
-  default = ""
-}
-
-# This is the name of the Virtual Machine Template you want to create
-variable "loadbalancer-VMNAME" {
+variable "VMNAME" {
   type    = string
   default = ""
 }
@@ -125,18 +86,7 @@ variable "local_iso_name" {
   default = "ubuntu-22.04.5-live-server-amd64.iso"
 }
 
-variable "FE-TAGS" {
+variable "TAGS" {
   type = string
-  default  = "frontend;team00"
-}
-
-variable "BE-TAGS" {
-  type = string
-  default  = "backend;team00"
-}
-
-# Use the tags for your team name and what type of artifact this is
-variable "LB-TAGS" {
-  type = string
-  default  = "loadbalancer;team00"
+  default  = "lab_one;cr"
 }
