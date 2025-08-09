@@ -127,17 +127,39 @@ def logout():
     session.pop('google_token', None)
     return redirect(url_for('.index'))
 
-@app.route('/launch')
-@login_required
-def launch():
-    # The user is authenticated, show the launch page.
-    return render_template('launch-labs.html')
-
 @app.route("/test")
 @login_required
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
 
+##############################################################################
+# Above code deals with login and authentication]
+# Below code is lab launching logic
+##############################################################################
+
+##############################################################################
+# This route is going to launch the content of the lab.
+# This means a few things...
+# First step will be communicating via the API with the details of the user
+# and which lab will be sent over to launch... Launch means on the API side
+# which modifications need to be made to the tags so we can ID these VM 
+# instances in the lab as well as issue a terraform apply command to have the
+# elements of the lab launched...
+
+# Once the elements of the lab have been launched we return control to this 
+# function and the user details - gained from the Google Oauth object, along
+# with the Questions and Answers are sent into the xterm page.
+
+# This requires that an SSH session be established between the Python Flask
+# App and the edge-server of the lab network
+
+# An edge-server is defined as the entry point to the private network 
+# defined by a Proxmox Zone that has two interfaces 
+
+# A call to the Flask API will be needed to retrieve this IP and then pass 
+# that to the function required to establish the SSH connection and pass that
+# to xterm in the shelly.html Flask template...
+##############################################################################
 @app.route('/lab_one')
 @login_required
 def lab_one():
