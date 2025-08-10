@@ -83,7 +83,7 @@ class Lab_two(db.Model):
 # https://copilot.microsoft.com/shares/MiPTDp2uEjHMXBJyHTJBF
 ##############################################################################
 # This will check if the user already exists in the DB else create
-def create_user(email):
+def check_or_create_user(email):
     existing = db.session.execute(select(Users).filter_by(email=email)).scalar_one_or_none()
     if existing:
         return None  # or handle as needed
@@ -134,8 +134,9 @@ def index():
                 # Store email in Session Variable so other functions can access it
                 session['email'] = user_info["email"]
                 login_user(user)
-
-                return render_template('dashboard.html', email=user_info["email"])
+                # Helper function to check if user exists and if not create in DB
+                user = check_or_create_user(user_info['email'])
+                return render_template('dashboard.html', id = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
         except TokenExpiredError:
