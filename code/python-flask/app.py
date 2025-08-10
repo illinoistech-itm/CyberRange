@@ -6,20 +6,18 @@ from oauthlib.oauth2 import TokenExpiredError
 import hvac
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
+from datetime import datetime, timezone
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.automap import automap_base
 import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
+# Instantiate the .env file loader to read the RO Vault TOken
 load_dotenv()
 
-####Verified working with Vault#####
-
 # Initialize Vault client
-client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
 # Added Verify=False, remove hardcoded token for production use
-
-
-# Check authentication
-# assert client.is_authenticated()
+client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
 
 ##############################################################################
 # Read run time access secrets from the CR vault key-pair
@@ -36,7 +34,38 @@ CR_TOKEN_ID = creds['data']['data']['CR_TOKEN_ID']
 CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
 CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
 FLASK_API_SERVER = creds['data']['data']['FLASK_API_SERVER']
+DBUSER = creds['data']['data']['DBUSER']
+DBPASS = creds['data']['data']['DBPASS']
+DBURL = creds['data']['data']['DBURL']
+DATABASENAME = creds['data']['data']['DATABASENAME']
+##############################################################################
+#Initialize SQL Alchemy DB object for SQL
+##############################################################################
+CONNECTION_STRING = 'mysql://' + DBUSER + ':' + DBPASS + '@' + DBURL + '/' + DATABASENAME 
+app.config['SQLALCHEMY_DATABASE_URI'] = CONNECTION_STRING
+db = SQLAlchemy(app)
 
+Base = automap_base()
+Base.prepare(db.engine, reflect=True)
+
+# Access your tables as classes
+users = Base.classes.users
+lab_one = Base.classes.lab_one
+lab_two = Base.classes.lab_two
+
+##############################################################################
+# Create Helper functions for DB access
+# https://copilot.microsoft.com/shares/MiPTDp2uEjHMXBJyHTJBF
+##############################################################################
+def create_user(email):
+    new_user = User(email=email, last_login=datetime.now(timezone=utc))
+    db.session.add(new_user)
+    db.session.commit()
+    return new_user
+
+##############################################################################
+# Instantiate application
+##############################################################################
 app = Flask(__name__)
 ##############################################################################
 # Flask-Login setup

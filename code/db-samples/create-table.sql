@@ -9,7 +9,8 @@ CREATE TABLE users
 (
 email VARCHAR(128) PRIMARY KEY,
 id CHAR(36) DEFAULT (UUID()),
-last_login TIMESTAMP
+last_login TIMESTAMP,
+admin_status TINYINT(1) DEFAULT 0
 );
 
 CREATE TABLE lab_one
@@ -24,6 +25,7 @@ question_two_passing_indicator TINYINT(1) DEFAULT 0,
 question_three_passing_indicator TINYINT(1) DEFAULT 0,
 question_four_passing_indicator TINYINT(1) DEFAULT 0,
 grade FLOAT(3,2),
+lab_complete TINYINT(1) DEFAULT 0,
 last_attempt TIMESTAMP,
 email VARCHAR(128),
 FOREIGN KEY (email) REFERENCES users(email)
