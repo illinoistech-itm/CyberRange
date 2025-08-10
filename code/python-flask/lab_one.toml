@@ -1,7 +1,6 @@
-# lab-questions.toml
+# lab_one.toml
 # Enter the Q&A for each lab here
-[lab_one]
-number_of_steps = 4
+[config]
 step_one = "Open the terminal on your Linux system."
 step_one_answer = "ls"
 step_two = "Check what user you are logged into. Is it root?"

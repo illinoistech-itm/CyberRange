@@ -161,7 +161,9 @@ def hello_world():
 def lab_one():
     # Open the questions TOML document and read them in as a Python dict to be
     # passed into the shelly.html template and rendered
-    with open("lab-questions.toml", "rb") as f:
+    # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default
+    # As of Python 3.11 toml is build in to std lib and requires rb
+    with open("lab_one.toml", "r") as f:
       questions = toml.load(f)
     
     # This is a test to be removed later of the API
