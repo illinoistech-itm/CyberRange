@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.automap import automap_base
+from sqlalchemy import select
 import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
@@ -38,6 +38,11 @@ DBUSER = creds['data']['data']['DBUSER']
 DBPASS = creds['data']['data']['DBPASS']
 DBURL = creds['data']['data']['DBURL']
 DATABASENAME = creds['data']['data']['DATABASENAME']
+
+##############################################################################
+# Instantiate application
+##############################################################################
+app = Flask(__name__)
 ##############################################################################
 #Initialize SQL Alchemy DB object for SQL
 ##############################################################################
@@ -45,28 +50,51 @@ CONNECTION_STRING = 'mysql://' + DBUSER + ':' + DBPASS + '@' + DBURL + '/' + DAT
 app.config['SQLALCHEMY_DATABASE_URI'] = CONNECTION_STRING
 db = SQLAlchemy(app)
 
-Base = automap_base()
-Base.prepare(db.engine, reflect=True)
+class Users(db.Model):
+    email = db.Column(db.String, primary_key=True)
+    id = db.Column(db.String(36), unique=True, nullable=False)
+    last_login = db.Column(db.DateTime, nullable=False)
+    admin_status = db.Column(db.Integer, nullable=False)
 
-# Access your tables as classes
-users = Base.classes.users
-lab_one = Base.classes.lab_one
-lab_two = Base.classes.lab_two
+class Lab_one(db.Model):
+    id = db.Column(db.String(36), unique=True, nullable=False)
+    lab_number = db.Column(db.Integer, nullable=False)
+    question_one_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_two_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_three_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_four_passing_indicator = db.Column(db.Integer, nullable=False)
+    grade = db.Column(db.Float, nullable=False)
+    last_attempt = db.Column(db.DateTime, nullable=False)
+    email = db.Column(db.String, primary_key=True)
+
+class Lab_two(db.Model):
+    id = db.Column(db.String(36), unique=True, nullable=False)
+    lab_number = db.Column(db.Integer, nullable=False)
+    question_one_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_two_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_three_passing_indicator = db.Column(db.Integer, nullable=False)
+    question_four_passing_indicator = db.Column(db.Integer, nullable=False)
+    grade = db.Column(db.Float, nullable=False)
+    last_attempt = db.Column(db.DateTime, nullable=False)
+    email = db.Column(db.String, primary_key=True)
 
 ##############################################################################
 # Create Helper functions for DB access
 # https://copilot.microsoft.com/shares/MiPTDp2uEjHMXBJyHTJBF
 ##############################################################################
+# This will check if the user already exists in the DB else create
 def create_user(email):
-    new_user = User(email=email, last_login=datetime.now(timezone=utc))
+    existing = db.session.execute(select(Users).filter_by(email=email)).scalar_one_or_none()
+    if existing:
+        return None  # or handle as needed
+    new_user = Users(email=email, last_login=datetime.now(timezone.utc))
     db.session.add(new_user)
     db.session.commit()
     return new_user
 
-##############################################################################
-# Instantiate application
-##############################################################################
-app = Flask(__name__)
+def select_filtered(model, **filters):
+    stmt = select(model).filter_by(**filters)
+    return db.session.scalars(stmt).all()
 ##############################################################################
 # Flask-Login setup
 ##############################################################################

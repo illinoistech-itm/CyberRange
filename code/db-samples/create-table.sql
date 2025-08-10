@@ -9,11 +9,11 @@ CREATE TABLE users
 (
 email VARCHAR(128) PRIMARY KEY,
 id CHAR(36) DEFAULT (UUID()),
-last_login TIMESTAMP,
+last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 admin_status TINYINT(1) DEFAULT 0
 );
 
-CREATE TABLE lab_one
+CREATE TABLE labs
 (
 id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
 -- In MySQL, there isn't a native BOOLEAN data type. Instead, BOOLEAN is 
