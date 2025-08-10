@@ -6,7 +6,7 @@ from oauthlib.oauth2 import TokenExpiredError
 import hvac
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
-import tomllib # Import TOML library from Python standard lib 3.11 or <
+import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 load_dotenv()
@@ -164,7 +164,7 @@ def lab_one():
     # Open the questions TOML document and read them in as a Python dict to be
     # passed into the shelly.html template and rendered
     with open("lab-questions.toml", "rb") as f:
-      questions = tomllib.load(f)
+      questions = toml.load(f)
     
     # This is a test to be removed later of the API
     url = FLASK_API_SERVER
