@@ -136,7 +136,7 @@ def hello_world():
 ##############################################################################
 # This route is going to launch the content of the lab.
 # This means a few things...
-# First step will be communicating via the API with the details of the user
+# First step will be communicating via an API the details of the user
 # and which lab will be sent over to launch... Launch means on the API side
 # which modifications need to be made to the tags so we can ID these VM 
 # instances in the lab as well as issue a terraform apply command to have the
