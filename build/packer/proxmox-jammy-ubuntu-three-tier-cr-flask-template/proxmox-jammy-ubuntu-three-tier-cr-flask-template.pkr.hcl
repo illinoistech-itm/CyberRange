@@ -432,6 +432,19 @@ build {
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key to the Flask App server so it can connect via Paramiko
+  # (Python SSH implementation) via ed25519 private key via a socket and 
+  # xterm to embed the edge server of the lab into the shelly.html template
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node"
+    destination = "/home/vagrant/.ssh/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node"
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+  }
+
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface
   #############################################################################
