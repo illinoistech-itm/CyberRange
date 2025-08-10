@@ -167,7 +167,7 @@ def lab_one():
       questions = toml.load(f)
     
     # This is a test to be removed later of the API
-    url = FLASK_API_SERVER
+    url = FLASK_API_SERVER + "/run"
     payload = {'command': 'ls'}
     response = requests.post(url, json=payload)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
