@@ -70,12 +70,12 @@ def index():
         try:
             response = google.get('https://www.googleapis.com/oauth2/v3/userinfo').json()
             if 'email' in response:
-                global user_info
-                # Store email in Session Variable so other functions can access it
-                session['email'] = user_info["email"] 
+                global user_info 
                 user_info = response
                 user = User()
                 user.id = user_info["email"]
+                # Store email in Session Variable so other functions can access it
+                session['email'] = user_info["email"]
                 login_user(user)
 
                 return render_template('dashboard.html', email=user_info["email"])
