@@ -10,9 +10,7 @@ import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 load_dotenv()
-socketio = SocketIO(app)
-threading.Thread(target=ssh_thread).start()
-socketio.run(app)
+
 ####Verified working with Vault#####
 
 # Initialize Vault client
