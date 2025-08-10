@@ -6,7 +6,6 @@ from oauthlib.oauth2 import TokenExpiredError
 import hvac
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
-from proxmoxer import ProxmoxAPI
 import tomllib # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
