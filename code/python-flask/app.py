@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template
+from flask import Flask, request, redirect, url_for, session, render_template, session
 from flask_socketio import SocketIO, emit
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from requests_oauthlib import OAuth2Session
@@ -71,16 +71,12 @@ def index():
             response = google.get('https://www.googleapis.com/oauth2/v3/userinfo').json()
             if 'email' in response:
                 global user_info
-                # global UUID
-                # global username
+                # Store email in Session Variable so other functions can access it
+                session['email'] = user_info["email"] 
                 user_info = response
                 user = User()
                 user.id = user_info["email"]
                 login_user(user)
-                # UUID = str(time.time())
-                # UUID = UUID.split('.', 1)[0]
-                # username = str(user_info["email"])
-                # username = username.split('@', 1)[0]
 
                 return render_template('dashboard.html', email=user_info["email"])
             else:
@@ -172,15 +168,9 @@ def lab_one():
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
-
-    UUID = str(time.time())
-    UUID = UUID.split('.', 1)[0]
-    username = str(user_info["email"])
-    username = username.split('@', 1)[0]
-    username = re.sub('[^A-Za-z0-9]+', '', username)
     
     #lab_control(UUID, username)
-    return render_template('shelly.html', qa=questions, email=user_info["email"], response_dict=my_dict )
+    return render_template('shelly.html', qa=questions, email={session['email']}, response_dict=my_dict )
     # Redirect to shelly
     #return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))  
