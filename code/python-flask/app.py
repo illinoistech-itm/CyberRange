@@ -169,7 +169,8 @@ def lab_one():
     # This is a test to be removed later of the API
     url = FLASK_API_SERVER + "/run"
     payload = {'command': 'ls'}
-    response = requests.post(url, json=payload)
+    # Using internal self-signed generated Certs so need to disable verify
+    response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
 
     UUID = str(time.time())
