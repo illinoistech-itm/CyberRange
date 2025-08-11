@@ -16,6 +16,15 @@ resource "random_shuffle" "nodename" {
   result_count = 1
 }
 
+resource "random_integer" "vlan" {
+  min = 10
+  max = 4095
+}
+
+output "random_number" {
+  value = random_integer.example.result
+}
+
 ##############################################################################
 # Connecting Vault with Secrets for Terraform
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret
@@ -79,6 +88,7 @@ resource "proxmox_vm_qemu" "lab_one_edge_server" {
 
   network {
     id     = 2
+    #tag    = random_shuffle.vlan.result[0]
     model  = "virtio"
     bridge = "vmbr2"
   }
