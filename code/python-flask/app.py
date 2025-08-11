@@ -82,6 +82,13 @@ def check_or_create_user(email):
 def select_filtered(model, **filters):
     stmt = select(model).filter_by(**filters)
     return db.session.scalars(stmt).all()
+
+def create_lab_entry(email,lab_number):
+    new_lab = Labs(lab_number=lab_number,grade=0.0,last_attempt=datetime.now(timezone.utc),email=email)
+    db.session.add(new_lab)
+    db.session.commit()
+    return new_lab
+
 ##############################################################################
 # Flask-Login setup
 ##############################################################################
@@ -201,13 +208,7 @@ def hello_world():
 @app.route('/lab_one')
 @login_required
 def lab_one():
-    # Open the questions TOML document and read them in as a Python dict to be
-    # passed into the shelly.html template and rendered
-    # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default
-    # As of Python 3.11 toml is build in to std lib and requires rb
-    with open("lab_one.toml", "r") as f:
-      questions = toml.load(f)
-    
+        
     # This is a test to be removed later of the API
     url = FLASK_API_SERVER + "/run"
     payload = {'command': 'ls'}
@@ -215,7 +216,12 @@ def lab_one():
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
     
-    #lab_control(UUID, username)
+    # Open the questions TOML document and read them in as a Python dict to be
+    # passed into the shelly.html template and rendered
+    # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default
+    # As of Python 3.11 toml is build in to std lib and requires rb
+    with open("lab_one.toml", "r") as f:
+      questions = toml.load(f)
     return render_template('shelly.html', qa=questions, email={session['email']}, response_dict=my_dict )
     # Redirect to shelly
     #return redirect(url_for('.shelly'))
