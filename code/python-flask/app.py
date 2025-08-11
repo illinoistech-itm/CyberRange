@@ -61,7 +61,7 @@ class Labs(db.Model):
     id = db.Column(db.String(36), unique=True, nullable=False)
     lab_number = db.Column(db.Integer, nullable=False)
     lab_complete = db.Column(db.Integer, nullable=False)
-    grade = db.Column(db.Float, nullable=False)
+    grade = db.Column(db.Integer, nullable=False)
     last_attempt = db.Column(db.DateTime, nullable=False)
     email = db.Column(db.String, primary_key=True)
 
