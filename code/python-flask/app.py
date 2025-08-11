@@ -53,12 +53,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Users(db.Model):
+    __tablename__ = 'Users'  # trying to explicitly set the table name to 'Users' so there is no lowercase
     email = db.Column(db.String, primary_key=True)
     id = db.Column(db.String(36), unique=True, nullable=False)
     last_login = db.Column(db.DateTime, nullable=False)
     admin_status = db.Column(db.Integer, nullable=False)
 
 class Labs(db.Model):
+    __tablename__ = 'Labs'  # trying to explicitly set the table name so there is no lowercase
     id = db.Column(db.String(36), unique=True, nullable=False)
     lab_number = db.Column(db.Integer, nullable=False)
     lab_complete = db.Column(db.Integer, nullable=False)
@@ -131,7 +133,7 @@ def index():
                 login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
-                lab = select_filtered(Labs, user_info['email'])
+                lab = select_filtered(Labs, email=user_info['email'])
                 return render_template('dashboard.html', lab_results=lab, id = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
