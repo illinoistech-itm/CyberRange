@@ -30,6 +30,9 @@
     </script>
   </section>
 
+  {# f you want to avoid accessing keys via info.key, you can unpack the dict:
+   return render_template("index.html", **data)
+   Now in the template, you can use {{ hostname }} directly. #}
   {# lab steps section #}
   <aside class="lab-instructions">
     <div class="instructions-titlebar">Steps / Instructions</div>
@@ -40,17 +43,6 @@
       </ol>
       <button class="grade-lab">Grade Lab</button>
     </aside>
-
    
-  <ul>
-    {% for key, value in response_dict.items() %}
-      <li><strong>{{ key }}:</strong> {{ value }}</li>
-    {% endfor %}
-
-    {# f you want to avoid accessing keys via info.key, you can unpack the dict:
-    return render_template("index.html", **data)
-    Now in the template, you can use {{ hostname }} directly. #}
-  </ul>
-
 </body>
 </html>

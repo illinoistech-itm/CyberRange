@@ -59,21 +59,7 @@ class Users(db.Model):
 class Lab_one(db.Model):
     id = db.Column(db.String(36), unique=True, nullable=False)
     lab_number = db.Column(db.Integer, nullable=False)
-    question_one_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_two_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_three_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_four_passing_indicator = db.Column(db.Integer, nullable=False)
-    grade = db.Column(db.Float, nullable=False)
-    last_attempt = db.Column(db.DateTime, nullable=False)
-    email = db.Column(db.String, primary_key=True)
-
-class Lab_two(db.Model):
-    id = db.Column(db.String(36), unique=True, nullable=False)
-    lab_number = db.Column(db.Integer, nullable=False)
-    question_one_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_two_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_three_passing_indicator = db.Column(db.Integer, nullable=False)
-    question_four_passing_indicator = db.Column(db.Integer, nullable=False)
+    lab_complete = db.Column(db.Integer, nullable=False)
     grade = db.Column(db.Float, nullable=False)
     last_attempt = db.Column(db.DateTime, nullable=False)
     email = db.Column(db.String, primary_key=True)
@@ -136,7 +122,8 @@ def index():
                 login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
-                return render_template('dashboard.html', id = user.id, email=user_info["email"])
+                labs = select_filtered(labs, user_info['email'])
+                return render_template('dashboard.html', lab_results=labs, id = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
         except TokenExpiredError:
