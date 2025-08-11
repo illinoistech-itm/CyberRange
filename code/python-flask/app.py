@@ -10,6 +10,9 @@ import os, paramiko, threading, re, time, requests
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
+from sqlalchemy.dialects.mysql import CHAR # adding imports that specifically bring in the defined char
+from sqlalchemy.dialects.postgresql import UUID # adding uuid()
+from sqlalchemy import Column, String, func # different syntax to explicitly call for the uuid() func
 import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
@@ -55,13 +58,15 @@ db = SQLAlchemy(app)
 class Users(db.Model):
     __tablename__ = 'Users'  # trying to explicitly set the table name to 'Users' so there is no lowercase
     email = db.Column(db.String, primary_key=True)
-    id = db.Column(db.String(36), unique=True, nullable=False)
+    # id = db.Column(db.String(36), unique=True, nullable=False)
+    id = Column(CHAR(36), unique=True, server_default=func.uuid()) # new id declaration
     last_login = db.Column(db.DateTime, nullable=False)
     admin_status = db.Column(db.Integer, nullable=False)
 
 class Labs(db.Model):
     __tablename__ = 'Labs'  # trying to explicitly set the table name so there is no lowercase
-    id = db.Column(db.String(36), unique=True, nullable=False)
+    # id = db.Column(db.String(36), unique=True, nullable=False)
+    id = Column(CHAR(36), server_default=func.uuid()) # new id declaration
     lab_number = db.Column(db.Integer, nullable=False)
     lab_complete = db.Column(db.Integer, nullable=False)
     grade = db.Column(db.Integer, nullable=False)
@@ -213,11 +218,11 @@ def hello_world():
 def lab_one():
     lab_number=1
     # Call SQL Alchemy Helper Function to create a lab record
-    new_lab=create_lab_entry({session['email']},lab_number)
+    new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     # Connect via the API to terraform apply the needed infrastructure for the lab
     runtime_uuid = uuid.uuid4()
     url = FLASK_API_SERVER + "/launch"
-    payload = {'runtime_uuid': runtime_uuid.hex, 'email': {session['email']},lab_number: lab_number }
+    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],lab_number: lab_number } # took out {} from session email
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
