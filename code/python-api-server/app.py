@@ -100,8 +100,8 @@ def run_launch_command():
     src = "/home/vagrant/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
     working_dir = dest + session['runtime_uuid']
-    command = "terraform apply -auto-approve -var=\"" + "tags=" + session['runtime_uuid'] + ";" + email + ";" + lab_number + "\"" + "-var=\"yourinitials=" + session['runtime_uuid'] + "\"" 
-
+    t = session['runtime_uuid'] + ";" + email + ";" + "lab" + str(lab_number) + ";" + "cr"
+   
     if not session['runtime_uuid']:
         return jsonify({'error': 'No uuid provided'}), 400
 
@@ -109,16 +109,22 @@ def run_launch_command():
     # (need to store this in session) so it can be retrieved later...
     try:
         result = subprocess.run(["cp", "-r",src, dest], shell=True, capture_output=True, text=True)
-        return jsonify({
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'returncode': result.returncode
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+            # Define your runtime variables
+        vars = {
+            "tags": t,
+            "yourinitials": session['runtime_uuid']
+        }
 
-    try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        # Build the base command
+        cmd = ["terraform", "apply", "-auto-approve"]
+
+        # Append each -var argument
+        for key, value in vars.items():
+            cmd.append(f"-var={key}={value}")
+
+        # Execute the command
+        subprocess.run(cmd, cwd=working_dir,check=True)
+        
         return jsonify({
             'stdout': result.stdout,
             'stderr': result.stderr,
