@@ -22,9 +22,9 @@
     <section class="progress-section">
       <h2>Progress</h2>
         <ul>
-          <li>Lab 1: 100%</li>
-          <li>Lab 2: 90%</li>
-          <li>Lab 3: 20%</li>
+          {% for lab in lab_results %}
+          <li>Lab: {{ lab.lab_number }} | {{ lab.grade }} | Last Attempt: {{ lab.last_attempt }} </li>
+          {% endfor %}
         </ul>
     </section>
 
@@ -41,11 +41,6 @@
         </a>
       </section>
 
-      <section class="grades-section">
-        <a href="/grades" class="grades-link">
-          <button class="grades-button">All grades</button>
-        </a>
-      </section>
     </section>
 
     <section class="sandbox-section">
