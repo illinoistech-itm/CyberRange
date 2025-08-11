@@ -15,7 +15,7 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 # This is a variable to append to your cloud instances so they have a unique
 # FQDN -- this is needed for the gossip based DNS to work
 ###############################################################################
-yourinitials                     = ""                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+#yourinitials                     = ""                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
 numberofvms                      = 1                      # quantity of that template to launch
 desc                             = ""                     # What is the purpose of the TF template
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
@@ -24,7 +24,7 @@ consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the 
 # instances from
 ###############################################################################
 template_to_clone = "" # The name of the template to clone
-tags              = "" # Tags separated by commas: be,team00
+#tags              = "" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
