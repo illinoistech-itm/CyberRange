@@ -50,7 +50,7 @@ with app.app_context():
 ##############################################################################
 # Proxmoxer Helper function
 ##############################################################################
-def proxmoxer_helper(tags,email):
+def getip(UUID,tags,email):
     TOKEN = CR_TOKEN_ID.split('!')
     proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
@@ -68,14 +68,9 @@ def proxmoxer_helper(tags,email):
             for x in range(len(runningwithtagsvms)):
                 for y in range(len(runningwithtagsvms[x]['result'])):
                     if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                        kaliIP = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-                        # replace with sed command to switch IP in templates/shelly.html
-                        os.system(f"sed -i 's/<IP-HERE>/{kaliIP}/g' /home/vagrant/oauth-site/templates/shelly.html")
-                        # echo to file so sed can replace the above line later
-                        os.system(f"echo '{kaliIP}' > /home/vagrant/kali-ip")
-                        break
-
-    return new_user
+                        return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                        
+        return None
 ##############################################################################
 # Flask-api setup
 ##############################################################################
