@@ -84,7 +84,7 @@ def select_filtered(model, **filters):
     return db.session.scalars(stmt).all()
 
 def create_lab_entry(email,lab_number):
-    new_lab = Labs(lab_number=lab_number,grade=0.0,last_attempt=datetime.now(timezone.utc),email=email)
+    new_lab = Labs(lab_number=lab_number,email=email)
     db.session.add(new_lab)
     db.session.commit()
     return new_lab
