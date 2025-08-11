@@ -26,11 +26,14 @@ creds = client.read('secret/data/CR')
 
 # Retrieve Proxmox Token connection to execute terraform apply
 # Added by JRH
+# Python app secret to start session
+APP_SECRET = creds['data']['data']['APP_SECRET']
 CR_TOKEN_ID = creds['data']['data']['CR_TOKEN_ID']
 CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
 CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
 
 app = Flask(__name__)
+app.secret_key = 'APP_SECRET'
 # Initializing SQLite3 with SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///request_logs.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
