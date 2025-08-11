@@ -24,5 +24,5 @@ grade FLOAT(3,2),
 lab_complete TINYINT(1) DEFAULT 0,
 last_attempt TIMESTAMP,
 email VARCHAR(128),
-FOREIGN KEY (email) REFERENCES users(email)
+FOREIGN KEY (email) REFERENCES Users(email)
 );
