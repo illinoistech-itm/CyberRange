@@ -46,8 +46,9 @@ app = Flask(__name__)
 ##############################################################################
 #Initialize SQL Alchemy DB object for SQL
 ##############################################################################
-CONNECTION_STRING = 'mysql://' + DBUSER + ':' + DBPASS + '@' + DBURL + '/' + DATABASENAME 
+CONNECTION_STRING = 'mysql+pymysql://' + DBUSER + ':' + DBPASS + '@' + DBURL + '/' + DATABASENAME 
 app.config['SQLALCHEMY_DATABASE_URI'] = CONNECTION_STRING
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Users(db.Model):
@@ -279,27 +280,7 @@ def lab_control(UUID, username):
         config.read("config.ini")
         proxmox = ProxmoxAPI(config['DEFAULT']['url'], user=config['DEFAULT']['user'], password=config['DEFAULT']['pass'], verify_ssl=False)
 
-        prxmx42 = proxmox.nodes("system42").qemu.get()
-
-        runningvms = []
-        runningwithtagsvms = []
-        # Loop through the first node to get all of the nodes that are of status running and that have the tag of the user
-
-        for vm in prxmx42:
-            if vm['status'] == 'running' and vm['tags'].split(';')[0] == UUID:
-                runningvms.append(vm)
-
-        for vm in runningvms:
-            runningwithtagsvms.append(proxmox.nodes("system35").qemu(vm['vmid']).agent("network-get-interfaces").get())
-            for x in range(len(runningwithtagsvms)):
-                for y in range(len(runningwithtagsvms[x]['result'])):
-                    if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                        kaliIP = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-                        # replace with sed command to switch IP in templates/shelly.html
-                        os.system(f"sed -i 's/<IP-HERE>/{kaliIP}/g' /home/vagrant/oauth-site/templates/shelly.html")
-                        # echo to file so sed can replace the above line later
-                        os.system(f"echo '{kaliIP}' > /home/vagrant/kali-ip")
-                        break
+  
     else:
         os.system(f"echo 'Error. Exit code {exitStatus} returned.' > /home/vagrant/get-kali-ip-log")
 

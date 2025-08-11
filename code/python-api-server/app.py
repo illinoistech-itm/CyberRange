@@ -48,6 +48,35 @@ class RequestLog(db.Model):
 with app.app_context():
     db.create_all()
 ##############################################################################
+# Proxmoxer Helper function
+##############################################################################
+def proxmoxer_helper(tags,email):
+    TOKEN = CR_TOKEN_ID.split('!')
+    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
+
+    prxmx42 = proxmox.nodes("system42").qemu.get()
+
+    runningvms = []
+    runningwithtagsvms = []
+    # Loop through the first node to get all of the nodes that are of status 
+    # running and that have the tag of the user for vm in prxmx42:
+    if vm['status'] == 'running' and vm['tags'].split(';')[0] == UUID:
+        runningvms.append(vm)
+
+        for vm in runningvms:
+            runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
+            for x in range(len(runningwithtagsvms)):
+                for y in range(len(runningwithtagsvms[x]['result'])):
+                    if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        kaliIP = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                        # replace with sed command to switch IP in templates/shelly.html
+                        os.system(f"sed -i 's/<IP-HERE>/{kaliIP}/g' /home/vagrant/oauth-site/templates/shelly.html")
+                        # echo to file so sed can replace the above line later
+                        os.system(f"echo '{kaliIP}' > /home/vagrant/kali-ip")
+                        break
+
+    return new_user
+##############################################################################
 # Flask-api setup
 ##############################################################################
 ##############################################################################
@@ -85,6 +114,52 @@ def run_command():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+##############################################################################
+# This route will launch or destroy the infrastructure for the declared lab 
+# via terraform.
+# We need to pass some runtime variables so we can retrieve the metadata
+# later -- this will be done via Python3 Fabric/Invoke/Paramiko
+##############################################################################
+@app.route('/run', methods=['POST'])
+def run_command():
+    data = request.get_json()
+    command = data.get('command')
+
+    if not command:
+        return jsonify({'error': 'No command provided'}), 400
+
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        return jsonify({
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+            'returncode': result.returncode
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+##############################################################################
+# This route will use the Proxmoxer API wrapper to authenticate with our 
+# Proxmox cluster and query and return the IP of the running edge_node for the
+# SSH function
+##############################################################################
+@app.route('/getip', methods=['POST'])
+def getip():
+    data = request.get_json()
+    command = data.get('command')
+
+    if not command:
+        return jsonify({'error': 'No command provided'}), 400
+
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        return jsonify({
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+            'returncode': result.returncode
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 ##############################################################################
 # Route to handle 404 errors
 # https://copilot.microsoft.com/shares/sA2qT1ngFCwKdEwaExa4R
