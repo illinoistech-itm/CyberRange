@@ -99,9 +99,11 @@ def run_launch_command():
     lab_number = data.get(lab_number)
     src = "/home/vagrant/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
+    working_dir = dest + session['runtime_uuid']
+    command = "terraform apply -auto-approve -var=\"" + "tags=" + session['runtime_uuid'] + ";" + email + ";" + lab_number + "\"" + "-var=\"yourinitials=" + session['runtime_uuid'] + "\"" 
 
     if not session['runtime_uuid']:
-        return jsonify({'error': 'No command provided'}), 400
+        return jsonify({'error': 'No uuid provided'}), 400
 
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
