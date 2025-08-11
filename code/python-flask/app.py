@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 import hvac
+import uuid
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
 from datetime import datetime, timezone
@@ -211,9 +212,10 @@ def lab_one():
     lab_number=1
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry({session['email']},lab_number)
-    # This is a test to be removed later of the API
-    url = FLASK_API_SERVER + "/run"
-    payload = {'command': 'ls'}
+    # Connect via the API to terraform apply the needed infrastructure for the lab
+    runtime_uuid = uuid.uuid4()
+    url = FLASK_API_SERVER + "/launch"
+    payload = {'runtime_uuid': runtime_uuid.hex, 'email': {session['email']},lab_number: lab_number }
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)

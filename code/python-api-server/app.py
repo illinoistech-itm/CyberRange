@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 import hvac
 from dotenv import load_dotenv
 import os, re, time, subprocess
@@ -91,13 +91,29 @@ def log_request():
 ##############################################################################
 # This route capture the request from the CR Dashboard
 ##############################################################################
-@app.route('/run', methods=['POST'])
-def run_command():
+@app.route('/launch', methods=['POST'])
+def run_launch_command():
     data = request.get_json()
-    command = data.get('command')
+    session['runtime_uuid'] = data.get('runtime_uuid')
+    email = data.get('email')
+    lab_number = data.get(lab_number)
+    src = "/home/vagrant/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
+    dest = "/tmp/" + session['runtime_uuid'] + "/"
 
-    if not command:
+    if not session['runtime_uuid']:
         return jsonify({'error': 'No command provided'}), 400
+
+    # Command to copy the original Terraform plan to a tmp location 
+    # (need to store this in session) so it can be retrieved later...
+    try:
+        result = subprocess.run(["cp", "-r",src, dest], shell=True, capture_output=True, text=True)
+        return jsonify({
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+            'returncode': result.returncode
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
     try:
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -115,8 +131,8 @@ def run_command():
 # We need to pass some runtime variables so we can retrieve the metadata
 # later -- this will be done via Python3 Fabric/Invoke/Paramiko
 ##############################################################################
-@app.route('/run', methods=['POST'])
-def run_command():
+@app.route('/destroy', methods=['POST'])
+def run_destroy_command():
     data = request.get_json()
     command = data.get('command')
 
