@@ -123,7 +123,7 @@ def index():
                 login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
-                lab = select_filtered(labs, user_info['email'])
+                lab = select_filtered(Labs, user_info['email'])
                 return render_template('dashboard.html', lab_results=lab, id = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
