@@ -208,7 +208,9 @@ def hello_world():
 @app.route('/lab_one')
 @login_required
 def lab_one():
-        
+    lab_number=1
+    # Call SQL Alchemy Helper Function to create a lab record
+    new_lab=create_lab_entry({session['email']},lab_number)
     # This is a test to be removed later of the API
     url = FLASK_API_SERVER + "/run"
     payload = {'command': 'ls'}
