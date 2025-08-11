@@ -282,6 +282,10 @@ body.dashboard-bkgrd {
 /* Lab page section */
 body.lab-page {
   background-color: #944040;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .terminal-container {
@@ -289,14 +293,71 @@ body.lab-page {
 }
 
 .lab-toolbar {
-  background-color: #D98845; 
+  background-color: #E0AC87; 
   color: #994040; 
   padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 20px;
   border-bottom: 2px solid #F2EBEB; 
-  position: sticky;
+  /* position: sticky; */
   top: 0;
-  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lab-toolbar .dropbtn,
+.lab-toolbar .toolbar-right button {
+    background-color: transparent;
+    color: inherit;
+    padding: 10px 15px;
+    border: 1px solid #D98845;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.lab-toolbar .dropbtn:hover,
+.lab-toolbar .toolbar-right button:hover {
+    background-color: #D98845;
+    color: #F2EBEB; 
+}
+
+.lab-toolbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.lab-toolbar .dropdown { 
+    display: none;
+    position: absolute;
+    background-color: #F9F9F9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #D98845;
+}
+
+.lab-toolbar .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.lab-toolbar .dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.lab-toolbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.lab-toolbar .toolbar-right {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
 }
