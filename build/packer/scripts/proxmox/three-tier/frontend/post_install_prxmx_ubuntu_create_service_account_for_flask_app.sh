@@ -12,7 +12,7 @@ sudo adduser --system --group flaskuser
 sudo mv /home/vagrant/CyberRange/code/python-flask/app.py /home/flaskuser/app.py
 sudo mv /home/vagrant/CyberRange/code/python-flask/.env /home/flaskuser/.env
 # Move private key that will be needed to connect to the edge_nodes
-sudo mv /home/vagrant/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node /home/flaskuser/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node
+sudo mv /home/vagrant/.ssh/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node /home/flaskuser/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node
 sudo mv /home/vagrant/CyberRange/code/python-flask/static/ /home/flaskuser/static/
 sudo mv /home/vagrant/CyberRange/code/python-flask/templates/ /home/flaskuser/templates/
 # Move all the lab question and answer files over
