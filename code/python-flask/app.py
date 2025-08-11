@@ -57,7 +57,7 @@ class Users(db.Model):
     last_login = db.Column(db.DateTime, nullable=False)
     admin_status = db.Column(db.Integer, nullable=False)
 
-class Lab_one(db.Model):
+class Labs(db.Model):
     id = db.Column(db.String(36), unique=True, nullable=False)
     lab_number = db.Column(db.Integer, nullable=False)
     lab_complete = db.Column(db.Integer, nullable=False)
@@ -123,8 +123,8 @@ def index():
                 login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
-                labs = select_filtered(labs, user_info['email'])
-                return render_template('dashboard.html', lab_results=labs, id = user.id, email=user_info["email"])
+                lab = select_filtered(labs, user_info['email'])
+                return render_template('dashboard.html', lab_results=lab, id = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
         except TokenExpiredError:

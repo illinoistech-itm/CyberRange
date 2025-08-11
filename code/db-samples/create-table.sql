@@ -5,7 +5,7 @@
 
 USE cyrange;
 
-CREATE TABLE users 
+CREATE TABLE Users 
 (
 email VARCHAR(128) PRIMARY KEY,
 id CHAR(36) DEFAULT (UUID()),
@@ -13,7 +13,7 @@ last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 admin_status TINYINT(1) DEFAULT 0
 );
 
-CREATE TABLE labs
+CREATE TABLE Labs
 (
 id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
 -- In MySQL, there isn't a native BOOLEAN data type. Instead, BOOLEAN is 
