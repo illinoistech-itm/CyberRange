@@ -99,7 +99,7 @@ def run_launch_command():
     data = request.get_json()
     session['runtime_uuid'] = data.get('runtime_uuid')
     email = data.get('email')
-    lab_number = data.get(lab_number)
+    lab_number = data.get('lab_number')
     src = "/home/vagrant/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
     working_dir = dest + session['runtime_uuid']
