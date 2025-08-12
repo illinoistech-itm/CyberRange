@@ -41,6 +41,7 @@ db = SQLAlchemy(app)
 
 # Create a model to store request metadata:
 class RequestLog(db.Model):
+    __tablename__ = 'Requestlog'
     id = db.Column(db.Integer, primary_key=True)
     method = db.Column(db.String(10))
     path = db.Column(db.String(200))
