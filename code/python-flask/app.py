@@ -232,8 +232,17 @@ def lab_one():
     # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default
     # As of Python 3.11 toml is build in to std lib and requires rb
     with open("lab_one.toml", "r") as f:
-      questions = toml.load(f)
-    return render_template('shelly.html', qa=questions, email={session['email']}, response_dict=my_dict )
+      lab_questions = toml.load(f)
+ 
+    # This is what the TOML dict looks
+    # {
+    # "questions": {
+    #    "step_one": "Open the terminal on your Linux system.",
+    #    "step_two": "Check what user you are logged into. Is it root?"
+    #    }
+    # }
+    # lab_questions["questions"]  the value questions comes from the TOML document top level Dict
+    return render_template('shelly.html', qa=lab_questions["questions"], email={session['email']}, response_dict=my_dict )
     # Redirect to shelly
     #return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))  
