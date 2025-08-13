@@ -6,6 +6,29 @@ from proxmoxer import ProxmoxAPI
 # Needed for local SQLite logging of requests
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
+# Import logging for keeping track requests
+import logging
+from systemd.journal import JournaldLogHandler
+# Import Python3 Fabric library for SSH connection to buildserver
+from fabric import Connection
+
+# Path to your ed25519 private key
+ed25519_key_path = "/home/flaskapp/id_ed25519_connect_to_buildserver_from_api_server"
+
+# Create the connection
+conn = Connection(
+    host="newyorkphilharmonic.service.consul",
+    user="cr",
+    connect_kwargs={
+        "key_filename": ed25519_key_path
+    }
+)
+
+logger = logging.getLogger('cyberrange')
+journald_handler = JournaldLogHandler()
+journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
+logger.addHandler(journald_handler)
+logger.setLevel(logging.INFO)
 
 # How to add Request logging to SQLite3 instance
 # https://copilot.microsoft.com/shares/gw1pHzhN4AKzFNGNE8YpH
@@ -34,23 +57,7 @@ CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
 
 app = Flask(__name__)
 app.secret_key = 'APP_SECRET'
-# Initializing SQLite3 with SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///request_logs.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
-# Create a model to store request metadata:
-class RequestLog(db.Model):
-    __tablename__ = 'Requestlog'
-    id = db.Column(db.Integer, primary_key=True)
-    method = db.Column(db.String(10))
-    path = db.Column(db.String(200))
-    headers = db.Column(db.Text)
-    body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-
-with app.app_context():
-    db.create_all()
 ##############################################################################
 # Proxmoxer Helper function
 ##############################################################################
@@ -76,22 +83,14 @@ def getip(UUID,tags,email):
                         
         return None
 ##############################################################################
-# Flask-api setup
+# Fabric SSH helper function
+# This function uses Fabric on top of Paramiko in Python to make SSH 
+# connections to remote system. In this case it will be the 'cr' account on 
+# the buildserver to launch terraform plans.
 ##############################################################################
-##############################################################################
-# This will capture each request and log it for future review
-##############################################################################
-@app.before_request
-def log_request():
-    log = RequestLog(
-        method=request.method,
-        path=request.path,
-        headers=str(dict(request.headers)),
-        body=request.get_data(as_text=True)
-    )
-    db.session.add(log)
-    db.session.commit()
+def create_and_run_copy_terraform_plan_command():
 
+    return 1
 ##############################################################################
 # This route capture the request from the CR Dashboard
 ##############################################################################
@@ -101,19 +100,31 @@ def run_launch_command():
     session['runtime_uuid'] = data.get('runtime_uuid')
     email = data.get('email')
     lab_number = data.get('lab_number')
-    src = "/home/vagrant/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
+    src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
     working_dir = dest + session['runtime_uuid']
     t = session['runtime_uuid'] + ";" + email + ";" + "lab" + str(lab_number) + ";" + "cr"
-   
-    if not session['runtime_uuid']:
-        return jsonify({'error': 'No uuid provided'}), 400
+    logger.info("Data from received HTTP post...", extra={
+    'USER': 'cr',
+    'STATUS': 'success',
+    'VALUE': data
+    })
 
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
+    # Navigate to the Terraform directory and apply
+    result_mkdir = conn.run("mkdir -p " + dest, hide=True)
+    logger.info("Output running mkdir directory to create a new directory for this instance of the lab launch...", extra={
+    'USER': 'cr',
+    'VALUE': result_mkdir.stdout.strip()
+    })
+    result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
+    logger.info("Output running cp terraform plan command to new directory...", extra={
+    'USER': 'cr',
+    'VALUE': result_cp.stdout.strip()
+    })
+    
     try:
-        result = subprocess.run(["cp", "-r",src, dest], shell=True, capture_output=True, text=True)
-            # Define your runtime variables
         vars = {
             "tags": t,
             "yourinitials": session['runtime_uuid']
@@ -125,15 +136,19 @@ def run_launch_command():
         # Append each -var argument
         for key, value in vars.items():
             cmd.append(f"-var={key}={value}")
-
-        # Execute the command
-        subprocess.run(cmd, cwd=working_dir,check=True)
         
-        return jsonify({
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'returncode': result.returncode
+        logger.info("Terraform command about to run...", extra={    
+        'USER': 'cr',
+        'STATUS': 'pending',
+        'VALUE': cmd
         })
+
+        result_tfapply = conn.run("cd " + dest + " && " + cmd, hide=True)
+        logger.info("Output running terraform apply command...", extra={
+        'USER': 'cr',
+        'VALUE': result_tfapply.stdout.strip()
+        })
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
