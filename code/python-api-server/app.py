@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
 # Import logging for keeping track requests
 import logging
-from systemd.journal import JournaldLogHandler
+from systemd.journal import JournalHandler
 # Import Python3 Fabric library for SSH connection to buildserver
 from fabric import Connection
 
@@ -28,7 +28,7 @@ conn = Connection(
 )
 
 logger = logging.getLogger('cyberrange')
-journald_handler = JournaldLogHandler()
+journald_handler = JournalHandler()
 journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
 logger.addHandler(journald_handler)
 logger.setLevel(logging.INFO)
