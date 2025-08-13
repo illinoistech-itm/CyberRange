@@ -21,6 +21,9 @@ conn = Connection(
     user="cr",
     connect_kwargs={
         "key_filename": ed25519_key_path
+        "allow_agent": False,
+        "look_for_keys": False,
+        "hostkey_policy": "AutoAddPolicy"  # Accept unknown host keys
     }
 )
 
