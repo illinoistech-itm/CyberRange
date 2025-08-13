@@ -171,6 +171,17 @@ build {
   }
 
   #############################################################################
+  # Using the file provisioner to SCP this private key to our flask API so we 
+  # can connect via SSH to the Buildserver and execute terraform commands per
+  # lab
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
+    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
+  }
+
+  #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface

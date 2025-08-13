@@ -13,17 +13,17 @@ from systemd.journal import JournaldLogHandler
 from fabric import Connection
 
 # Path to your ed25519 private key
-ed25519_key_path = "/home/flaskapp/id_ed25519_connect_to_buildserver_from_api_server"
+ed25519_key_path = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
 
 # Create the connection
 conn = Connection(
     host="newyorkphilharmonic.service.consul",
     user="cr",
     connect_kwargs={
-        "key_filename": ed25519_key_path
+        "key_filename": ed25519_key_path,
         "allow_agent": False,
         "look_for_keys": False,
-        "hostkey_policy": "AutoAddPolicy"  # Accept unknown host keys
+        "hostkey_policy": "AutoAddPolicy"  
     }
 )
 
