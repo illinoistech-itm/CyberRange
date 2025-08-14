@@ -182,6 +182,18 @@ build {
   }
 
   #############################################################################
+  # This shell script moves the private key SCPd to the flaskuser home 
+  # home directory so the flask api app can connect to the buildserver via SSH
+  # to execute the setup (mkdir and cp) commands to get ready for a terraform 
+  # apply command
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh"]
+  }
+
+  #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface

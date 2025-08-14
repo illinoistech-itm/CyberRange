@@ -11,9 +11,10 @@ import logging
 from systemd.journal import JournalHandler
 # Import Python3 Fabric library for SSH connection to buildserver
 from fabric import Connection
+from paramiko import AutoAddPolicy
 
 # Path to your ed25519 private key
-ed25519_key_path = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
+ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_buildserver_connect_key"
 
 # Create the connection
 conn = Connection(
@@ -21,29 +22,25 @@ conn = Connection(
     user="cr",
     connect_kwargs={
         "key_filename": ed25519_key_path,
-        "allow_agent": False,
-        "look_for_keys": False,
-        "hostkey_policy": "AutoAddPolicy"  
     }
 )
 
+# Initialize no strict host key checking
+conn.client.set_missing_host_key_policy(AutoAddPolicy())
+
+# Initialize logging object to send logs to the journal
 logger = logging.getLogger('cyberrange')
 journald_handler = JournalHandler()
 journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
 logger.addHandler(journald_handler)
 logger.setLevel(logging.INFO)
 
-# How to add Request logging to SQLite3 instance
-# https://copilot.microsoft.com/shares/gw1pHzhN4AKzFNGNE8YpH
+# Needed to initialze the ability for Python to read from a .env file
 load_dotenv()
-####Verified working with Vault#####
 
 # Initialize Vault client
 client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
 # Added Verify=False, remove hardcoded token for production use
-
-# Check authentication
-# assert client.is_authenticated()
 
 ##############################################################################
 # Read run time access secrets from the CR vault key-pair
