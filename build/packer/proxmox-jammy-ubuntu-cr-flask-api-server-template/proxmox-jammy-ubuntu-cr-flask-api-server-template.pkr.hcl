@@ -170,16 +170,16 @@ build {
     destination = "/home/vagrant/.ssh/id_ed25519_github_key"
   }
 
-  #############################################################################
-  # This shell script moves the private key SCPd to the flaskuser home 
-  # home directory so the flask api app can connect to the buildserver via SSH
-  # to execute the setup (mkdir and cp) commands to get ready for a terraform 
-  # apply command
+  ##############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to SSH into the build server so that when labs
+  # are launched, it can perform a terraform apply using Fabric (python SSH
+  # implementation)
   #############################################################################
 
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh"]
+  provisioner "file" {
+    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
+    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
   }
 
   #############################################################################
