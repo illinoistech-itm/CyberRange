@@ -171,17 +171,6 @@ build {
   }
 
   #############################################################################
-  # Using the file provisioner to SCP this private key to our flask API so we 
-  # can connect via SSH to the Buildserver and execute terraform commands per
-  # lab
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
-    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
-  }
-
-  #############################################################################
   # This shell script moves the private key SCPd to the flaskuser home 
   # home directory so the flask api app can connect to the buildserver via SSH
   # to execute the setup (mkdir and cp) commands to get ready for a terraform 
@@ -320,6 +309,7 @@ build {
     scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ss_cert.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
     only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
