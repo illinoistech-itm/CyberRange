@@ -99,11 +99,12 @@ def run_launch_command():
     data = request.get_json()
     session['runtime_uuid'] = data.get('runtime_uuid')
     email = data.get('email')
+    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
     lab_number = data.get('lab_number')
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
     working_dir = dest + session['runtime_uuid']
-    t = session['runtime_uuid'] + ";" + email + ";" + "lab" + str(lab_number) + ";" + "cr"
+    t = session['runtime_uuid'] + ";" + username + ";" + "lab" + str(lab_number) + ";" + "cr"
     logger.info("Data from received HTTP post...", extra={
     'USER': 'cr',
     'STATUS': 'success',
@@ -135,20 +136,35 @@ def run_launch_command():
 
         # Append each -var argument
         for key, value in vars.items():
-            cmd.append(f"-var={key}={value}")
+            cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
         
-        logger.info("Terraform command about to run...", extra={    
+    try:
+        logger.info("Terraform command about to run...", extra={
         'USER': 'cr',
         'STATUS': 'pending',
         'VALUE': cmd
         })
 
-        result_tfapply = conn.run("cd " + dest + " && " + cmd, hide=True)
+        tf_cmd_str = " ".join(cmd)
+        logger.info("What directory are we running tf init? " + dest)
+        result_tfapply = conn.run("cd " + dest + "lab_one" + " && " + "terraform init", hide=True) # need to append dest lab_one
+        logger.info("Terraform init command applied")
+        logger.info("Terraform apply command once we cd: " + tf_cmd_str)
+        logger.info("Going to apply changing directory first")
+        result_tfapply = conn.run("cd " + dest + "lab_one", hide=True)
+        logger.info("Directory change complete")
+        logger.info("Trying to run tf apply command from string")
+        result_tfapply = conn.run(tf_cmd_str, hide=True)
+        logger.info("terraform apply was successful!")
+        logger.info("complete apply command: " + "cd " + dest + "lab_one" + " && " + tf_cmd_str)
+        #logger.info("Terraform apply command: " + tf_cmd_str)
         logger.info("Output running terraform apply command...", extra={
         'USER': 'cr',
         'VALUE': result_tfapply.stdout.strip()
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
