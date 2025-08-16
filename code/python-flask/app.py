@@ -217,7 +217,7 @@ def hello_world():
 @app.route('/lab_one')
 @login_required
 def lab_one():
-    lab_number=1
+    lab_number="lab_one"
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     # Connect via the API to terraform apply the needed infrastructure for the lab

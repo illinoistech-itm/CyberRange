@@ -104,7 +104,7 @@ def run_launch_command():
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
     dest = "/tmp/" + session['runtime_uuid'] + "/"
     working_dir = dest + session['runtime_uuid']
-    t = session['runtime_uuid'] + ";" + username + ";" + "lab" + str(lab_number) + ";" + "cr"
+    t = session['runtime_uuid'] + ";" + username + ";" + lab_number + ";" + "cr"
     logger.info("Data from received HTTP post...", extra={
     'USER': 'cr',
     'STATUS': 'success',
@@ -114,17 +114,18 @@ def run_launch_command():
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
-    result_mkdir = conn.run("mkdir -p " + dest, hide=True)
-    logger.info("Output running mkdir directory to create a new directory for this instance of the lab launch...", extra={
+    logger.info("About to run:  the mkdir directory to create a new directory: mkdir -p " + dest, extra={
     'USER': 'cr',
     'VALUE': result_mkdir.stdout.strip()
     })
-    result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
-    logger.info("Output running cp terraform plan command to new directory...", extra={
+    result_mkdir = conn.run("mkdir -p " + dest, hide=True)
+
+    logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...", extra={
     'USER': 'cr',
     'VALUE': result_cp.stdout.strip()
     })
-    
+    result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
+
     try:
         vars = {
             "tags": t,
@@ -157,7 +158,7 @@ def run_launch_command():
         logger.info("Directory change complete")
         logger.info("Trying to run tf apply command from string")
         result_tfapply = conn.run(tf_cmd_str, hide=True)
-        logger.info("terraform apply was successful!")
+        logger.info("Terraform apply was successful!")
         logger.info("complete apply command: " + "cd " + dest + "lab_one" + " && " + tf_cmd_str)
         #logger.info("Terraform apply command: " + tf_cmd_str)
         logger.info("Output running terraform apply command...", extra={
