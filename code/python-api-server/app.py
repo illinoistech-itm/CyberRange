@@ -158,7 +158,7 @@ def run_launch_command():
         })
 
         tf_cmd_str = " ".join(cmd)
-        logger.info("What directory are we running tf init? " + dest)
+        logger.info("What directory are we running tf init? " + dest_after_copy)
         result_tf_init = conn.run("cd " + dest_after_copy + " && " + "terraform init", hide=True) # need to append dest lab_one
         if result_tf_init.exited == 0:
             logger.info("cd " + dest_after_copy + " && " + "terraform init executed successfully (return 0)")
@@ -178,7 +178,7 @@ def run_launch_command():
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
-    # If everything executes succesfully return 1
+    # If everything executes successfully return 1
     return 1
 ##############################################################################
 # This route will launch or destroy the infrastructure for the declared lab 
