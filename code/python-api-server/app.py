@@ -101,9 +101,9 @@ def run_launch_command():
     email = data.get('email')
     username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
     lab_number = data.get('lab_number')
-    src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/lab_one/"
+    src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
     dest = "/tmp/" + session['runtime_uuid'] + "/"
-    working_dir = dest + session['runtime_uuid']
+    dest_after_copy = "/tmp/" + session['runtime_uuid'] + "/" + lab_number
     t = session['runtime_uuid'] + ";" + username + ";" + lab_number + ";" + "cr"
     logger.info("Data from received HTTP post...", extra={
     'USER': 'cr',
@@ -114,18 +114,27 @@ def run_launch_command():
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
-    logger.info("About to run:  the mkdir directory to create a new directory: mkdir -p " + dest, extra={
+    logger.info("About to run: mkdir -p " + dest + " the mkdir directory to create a new directory...", extra={
     'USER': 'cr',
     'VALUE': result_mkdir.stdout.strip()
     })
     result_mkdir = conn.run("mkdir -p " + dest, hide=True)
+    if result_mkdir.exited == 0:
+      logger.info("mkdir -p " + dest + " executed successfully (return 0)")
+    else:
+      logger.info(f"mkdir -p " + dest + " failed with a return code of: {result.exited}")
 
     logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...", extra={
     'USER': 'cr',
     'VALUE': result_cp.stdout.strip()
     })
     result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
+    if result_cp.exited == 0:
+      logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
+    else:
+      logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result.exited}")
 
+    # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     try:
         vars = {
             "tags": t,
@@ -150,25 +159,27 @@ def run_launch_command():
 
         tf_cmd_str = " ".join(cmd)
         logger.info("What directory are we running tf init? " + dest)
-        result_tfapply = conn.run("cd " + dest + "lab_one" + " && " + "terraform init", hide=True) # need to append dest lab_one
-        logger.info("Terraform init command applied")
-        logger.info("Terraform apply command once we cd: " + tf_cmd_str)
-        logger.info("Going to apply changing directory first")
-        result_tfapply = conn.run("cd " + dest + "lab_one", hide=True)
-        logger.info("Directory change complete")
-        logger.info("Trying to run tf apply command from string")
-        result_tfapply = conn.run(tf_cmd_str, hide=True)
-        logger.info("Terraform apply was successful!")
-        logger.info("complete apply command: " + "cd " + dest + "lab_one" + " && " + tf_cmd_str)
-        #logger.info("Terraform apply command: " + tf_cmd_str)
-        logger.info("Output running terraform apply command...", extra={
-        'USER': 'cr',
-        'VALUE': result_tfapply.stdout.strip()
-        })
-
+        result_tf_init = conn.run("cd " + dest_after_copy + " && " + "terraform init", hide=True) # need to append dest lab_one
+        if result_tf_init.exited == 0:
+            logger.info("cd " + dest_after_copy + " && " + "terraform init executed successfully (return 0)")
+        else:
+            logger.info(f"cd " + dest_after_copy + " && " + "terraform init failed with a return code of: {result.exited}")
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 500        
 
+    try:    
+        logger.info("Terraform apply command once we cd: " + tf_cmd_str)
+        logger.info("Need to cd to the directory and execute the terraform apply command at the same time...")
+        result_cd_tfapply = conn.run("cd " + dest_after_copy + ";" + tf_cmd_str, hide=True)
+        if result_cd_tfapply.exited == 0:
+            logger.info("cd " + dest_after_copy + ";" + tf_cmd_str + " executed successfully (return 0)")
+        else:
+            logger.info(f"cd " + dest_after_copy + ";" + tf_cmd_str + " failed with a return code of: {result.exited}")
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500    
+    
+    # If everything executes succesfully return 1
+    return 1
 ##############################################################################
 # This route will launch or destroy the infrastructure for the declared lab 
 # via terraform.
