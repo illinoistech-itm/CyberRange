@@ -135,6 +135,7 @@ def index():
                 user.id = user_info["email"]
                 # Store email in Session Variable so other functions can access it
                 session['email'] = user_info["email"]
+                session['uid'] = user.id
                 login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
