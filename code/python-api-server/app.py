@@ -168,12 +168,12 @@ def run_launch_command():
             cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
 
         tf_cmd_str = " ".join(cmd)
-        logger.info("Constructing the Terraform command about to run: " + tf_cmd_str)
+        logger.info("Constructing the Terraform command about to run: " "cd " + dest_after_copy + "; " + tf_cmd_str)
         result_cd_tfapply = conn.run("cd " + dest_after_copy + ";" + tf_cmd_str, hide=True)
         if result_cd_tfapply.exited == 0:
-            logger.info("cd " + dest_after_copy + ";" + tf_cmd_str + " executed successfully (return 0)")
+            logger.info("cd " + dest_after_copy + "; " + tf_cmd_str + " executed successfully (return 0)")
         else:
-            logger.info(f"cd " + dest_after_copy + ";" + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
+            logger.info(f"cd " + dest_after_copy + "; " + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
