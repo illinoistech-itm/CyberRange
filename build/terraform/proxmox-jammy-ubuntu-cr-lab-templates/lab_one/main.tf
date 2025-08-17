@@ -22,7 +22,7 @@ resource "random_integer" "vlan" {
 }
 
 output "random_number" {
-  value = random_integer.example.result
+  value = random_integer.vlan.result
 }
 
 ##############################################################################
@@ -138,9 +138,4 @@ resource "proxmox_vm_qemu" "lab_one_edge_server" {
       port        = self.ssh_port
     }
   }
-}
-
-output "proxmox_frontend_ip_address_default" {
-  description = "Current Public IP"
-  value       = proxmox_vm_qemu.apiserver.*.default_ipv4_address
 }
