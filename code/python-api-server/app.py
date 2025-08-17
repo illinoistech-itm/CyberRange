@@ -121,14 +121,14 @@ def run_launch_command():
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
-    logger.info("About to run: mkdir -p " + dest + " the mkdir directory to create a new directory...")
+    logger.info("About to run: mkdir -p " + dest + " ::the mkdir command to create a new directory for the terraform plan files...")
     result_mkdir = conn.run("mkdir -p " + dest, hide=True)
     if result_mkdir.exited == 0:
       logger.info("mkdir -p " + dest + " executed successfully (return 0)")
     else:
       logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
 
-    logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...")
+    logger.info("About to run: cp -r " + src + " "  + dest)
     result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
     if result_cp.exited == 0:
       logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
@@ -148,6 +148,8 @@ def run_launch_command():
         # Append each -var argument
         for key, value in vars.items():
             cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
+
+        logger.info("Constructing the Terraform command about to run: " + cmd + "...")
     except Exception as e:
         return jsonify({'error': str(e)}), 500
         
