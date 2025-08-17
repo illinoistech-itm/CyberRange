@@ -140,7 +140,11 @@ def index():
                 # Helper function to check if user exists and if not create in DB
                 user = check_or_create_user(user_info['email'])
                 lab = select_filtered(Labs, email=user_info['email'])
-                return render_template('dashboard.html', lab_results=lab, uid = user.id, email=user_info["email"])
+                # This checks for the UID problem if you reload the index page after a packer/terraform rebuild
+                if user is None:
+                  return redirect(url_for('.index'))
+                else:
+                  return render_template('dashboard.html', lab_results=lab, uid = user.id, email=user_info["email"])
             else:
                 return redirect(url_for('.index'))
         except TokenExpiredError:
@@ -223,7 +227,7 @@ def lab_one():
     # Connect via the API to terraform apply the needed infrastructure for the lab
     runtime_uuid = uuid.uuid4()
     url = FLASK_API_SERVER + "/launch"
-    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],lab_number: lab_number } # took out {} from session email
+    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_number } # took out {} from session email
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
