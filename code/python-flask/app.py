@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for, session, render_template, session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit # Used to connect the lab SSH back to the Python Flask App
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
@@ -47,6 +47,7 @@ DATABASENAME = creds['data']['data']['DATABASENAME']
 # Instantiate application
 ##############################################################################
 app = Flask(__name__)
+socketio = SocketIO(app)
 ##############################################################################
 #Initialize SQL Alchemy DB object for SQL
 ##############################################################################
@@ -190,6 +191,20 @@ def logout():
 def hello_world():
     return "<p>Hello, Cyber Range!</p>"
 
+@socketio.on('input')
+def handle_input(data):
+    ssh.send(data)  # Send user input to SSH session
+
+def ssh_thread(ip):
+    global ssh
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(ip, username='vagrant', key_filename='id_ed25519_flask_app_fe_to_launched_edge_server_for_a_lab')
+    channel = ssh.invoke_shell()
+    while True:
+        output = channel.recv(1024).decode()
+        socketio.emit('output', output)
+
 ##############################################################################
 # Above code deals with login and authentication]
 # Below code is lab launching logic
@@ -222,8 +237,10 @@ def hello_world():
 @login_required
 def lab_one():
     lab_number="lab_one"
+    
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
+    
     # Connect via the API to terraform apply the needed infrastructure for the lab
     runtime_uuid = uuid.uuid4()
     url = FLASK_API_SERVER + "/launch"
@@ -232,6 +249,18 @@ def lab_one():
     response = requests.post(url, json=payload,verify=False)
     my_dict = dict(status_code=response.status_code, response_text=response.text)
     
+    # Next step is to send a HTTP post request to retrieve the IP address of the edge node
+    # for the lab being launched
+
+    get_ip_url = FLASK_API_SERVER + "/getip"
+    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_number } # took out {} from session email
+    # Using internal self-signed generated Certs so need to disable verify
+    response = requests.post(get_ip_url, json=payload,verify=False)
+    ip = response.text # IP address of edge server
+
+    # Establish the SSH connection with the edge node using sockets
+    threading.Thread(target=ssh_thread, args=(ip)).start()
+
     # Open the questions TOML document and read them in as a Python dict to be
     # passed into the shelly.html template and rendered
     # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default

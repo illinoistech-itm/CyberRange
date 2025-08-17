@@ -61,7 +61,13 @@ app.secret_key = 'APP_SECRET'
 ##############################################################################
 # Proxmoxer Helper function
 ##############################################################################
-def getip(UUID,tags,email):
+@app.route('/getip', methods=['POST'])
+def run_getip():
+    data = request.get_json()
+    session['runtime_uuid'] = data.get('runtime_uuid')
+    email = data.get('email')
+    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
+    lab_number = data.get('lab_number')
     TOKEN = CR_TOKEN_ID.split('!')
     proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
@@ -71,17 +77,18 @@ def getip(UUID,tags,email):
     runningwithtagsvms = []
     # Loop through the first node to get all of the nodes that are of status 
     # running and that have the tag of the user for vm in prxmx42:
-    if vm['status'] == 'running' and vm['tags'].split(';')[0] == UUID:
-        runningvms.append(vm)
+    for vm in prxmx42:
+        if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+            runningvms.append(vm)
 
-        for vm in runningvms:
-            runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
-            for x in range(len(runningwithtagsvms)):
-                for y in range(len(runningwithtagsvms[x]['result'])):
-                    if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                        return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
                         
-        return None
+    return None
 ##############################################################################
 # Fabric SSH helper function
 # This function uses Fabric on top of Paramiko in Python to make SSH 
@@ -114,10 +121,7 @@ def run_launch_command():
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
-    logger.info("About to run: mkdir -p " + dest + " the mkdir directory to create a new directory...", extra={
-    'USER': 'cr',
-    'VALUE': result_mkdir.stdout.strip()
-    })
+    logger.info("About to run: mkdir -p " + dest + " the mkdir directory to create a new directory...")
     result_mkdir = conn.run("mkdir -p " + dest, hide=True)
     if result_mkdir.exited == 0:
       logger.info("mkdir -p " + dest + " executed successfully (return 0)")
