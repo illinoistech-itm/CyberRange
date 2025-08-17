@@ -122,7 +122,7 @@ def run_launch_command():
     if result_mkdir.exited == 0:
       logger.info("mkdir -p " + dest + " executed successfully (return 0)")
     else:
-      logger.info(f"mkdir -p " + dest + " failed with a return code of: {result.exited}")
+      logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
 
     logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...", extra={
     'USER': 'cr',
@@ -132,7 +132,7 @@ def run_launch_command():
     if result_cp.exited == 0:
       logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
     else:
-      logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result.exited}")
+      logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result_cp.exited}")
 
     # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     try:
@@ -163,7 +163,7 @@ def run_launch_command():
         if result_tf_init.exited == 0:
             logger.info("cd " + dest_after_copy + " && " + "terraform init executed successfully (return 0)")
         else:
-            logger.info(f"cd " + dest_after_copy + " && " + "terraform init failed with a return code of: {result.exited}")
+            logger.info(f"cd " + dest_after_copy + " && " + "terraform init failed with a return code of: {result_tf_init.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500        
 
@@ -174,7 +174,7 @@ def run_launch_command():
         if result_cd_tfapply.exited == 0:
             logger.info("cd " + dest_after_copy + ";" + tf_cmd_str + " executed successfully (return 0)")
         else:
-            logger.info(f"cd " + dest_after_copy + ";" + tf_cmd_str + " failed with a return code of: {result.exited}")
+            logger.info(f"cd " + dest_after_copy + ";" + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
