@@ -121,22 +121,40 @@ def run_launch_command():
     # Command to copy the original Terraform plan to a tmp location 
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
-    logger.info("About to run: mkdir -p " + dest + " ::the mkdir command to create a new directory for the terraform plan files...")
-    result_mkdir = conn.run("mkdir -p " + dest, hide=True)
-    if result_mkdir.exited == 0:
-      logger.info("mkdir -p " + dest + " executed successfully (return 0)")
-    else:
-      logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
-
-    logger.info("About to run: cp -r " + src + " "  + dest)
-    result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
-    if result_cp.exited == 0:
-      logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
-    else:
-      logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result_cp.exited}")
-
-    # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     try:
+        logger.info("About to run: mkdir -p " + dest + " ::the mkdir command to create a new directory for the terraform plan files...")
+        result_mkdir = conn.run("mkdir -p " + dest, hide=True)
+        if result_mkdir.exited == 0:
+          logger.info("mkdir -p " + dest + " executed successfully (return 0)")
+        else:
+          logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    try:
+        logger.info("About to run: cp -r " + src + " "  + dest)
+        result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
+        if result_cp.exited == 0:
+          logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
+        else:
+          logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result_cp.exited}")
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+      
+    try:
+        logger.info("What directory are we running tf init? " + dest_after_copy)
+        result_tf_init = conn.run("cd " + dest_after_copy + " && " + "terraform init", hide=True) # need to append dest lab_one
+        if result_tf_init.exited == 0:
+            logger.info("cd " + dest_after_copy + " && " + "terraform init executed successfully (return 0)")
+        else:
+            logger.info(f"cd " + dest_after_copy + " && " + "terraform init failed with a return code of: {result_tf_init.exited}")
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    try:    
+        # Gather all of the runtime terraform vars we will be assigning at terraform apply time
         vars = {
             "tags": t,
             "yourinitials": session['runtime_uuid']
@@ -149,26 +167,8 @@ def run_launch_command():
         for key, value in vars.items():
             cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
 
-        logger.info("Constructing the Terraform command about to run: " + cmd + "...")
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-        
-    try:
-        logger.info("Terraform command about to run " + cmd + "...")
-
         tf_cmd_str = " ".join(cmd)
-        logger.info("What directory are we running tf init? " + dest_after_copy)
-        result_tf_init = conn.run("cd " + dest_after_copy + " && " + "terraform init", hide=True) # need to append dest lab_one
-        if result_tf_init.exited == 0:
-            logger.info("cd " + dest_after_copy + " && " + "terraform init executed successfully (return 0)")
-        else:
-            logger.info(f"cd " + dest_after_copy + " && " + "terraform init failed with a return code of: {result_tf_init.exited}")
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500        
-
-    try:    
-        logger.info("Terraform apply command once we cd: " + tf_cmd_str)
-        logger.info("Need to cd to the directory and execute the terraform apply command at the same time...")
+        logger.info("Constructing the Terraform command about to run: " + tf_cmd_str + "...")
         result_cd_tfapply = conn.run("cd " + dest_after_copy + ";" + tf_cmd_str, hide=True)
         if result_cd_tfapply.exited == 0:
             logger.info("cd " + dest_after_copy + ";" + tf_cmd_str + " executed successfully (return 0)")
