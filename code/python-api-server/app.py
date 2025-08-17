@@ -128,10 +128,7 @@ def run_launch_command():
     else:
       logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
 
-    logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...", extra={
-    'USER': 'cr',
-    'VALUE': result_cp.stdout.strip()
-    })
+    logger.info("About to run: cp -r " + src + " "  + dest + ". Output running cp terraform plan command to new directory...")
     result_cp = conn.run("cp" + " -r " + src + " "  + dest, hide=True)
     if result_cp.exited == 0:
       logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
@@ -155,11 +152,7 @@ def run_launch_command():
         return jsonify({'error': str(e)}), 500
         
     try:
-        logger.info("Terraform command about to run...", extra={
-        'USER': 'cr',
-        'STATUS': 'pending',
-        'VALUE': cmd
-        })
+        logger.info("Terraform command about to run " + cmd + "...")
 
         tf_cmd_str = " ".join(cmd)
         logger.info("What directory are we running tf init? " + dest_after_copy)
