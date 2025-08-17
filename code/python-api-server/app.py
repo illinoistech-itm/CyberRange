@@ -169,7 +169,7 @@ def run_launch_command():
 
         tf_cmd_str = " ".join(cmd)
         logger.info("Constructing the Terraform command about to run: " "cd " + dest_after_copy + "; " + tf_cmd_str)
-        result_cd_tfapply = conn.run("cd " + dest_after_copy + ";" + tf_cmd_str, hide=True)
+        result_cd_tfapply = conn.run("cd " + dest_after_copy + ";" + tf_cmd_str, pty=True, hide=False)
         if result_cd_tfapply.exited == 0:
             logger.info("cd " + dest_after_copy + "; " + tf_cmd_str + " executed successfully (return 0)")
         else:
