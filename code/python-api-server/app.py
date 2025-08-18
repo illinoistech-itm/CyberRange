@@ -54,6 +54,9 @@ APP_SECRET = creds['data']['data']['APP_SECRET']
 CR_TOKEN_ID = creds['data']['data']['CR_TOKEN_ID']
 CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
 CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
+VAULT_TOKEN = creds['data']['data']['APP_VAULTTOKEN']
+VAULT_ADDR='https://jrh-vault-instance-vm0.service.consul:8200'
+VAULT_SKIP_VERIFY="true"
 
 app = Flask(__name__)
 app.secret_key = 'APP_SECRET'
@@ -168,12 +171,12 @@ def run_launch_command():
             cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
 
         tf_cmd_str = " ".join(cmd)
-        logger.info("Constructing the Terraform command about to run: source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str)
-        result_cd_tfapply = conn.run("source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + ";" + tf_cmd_str, pty=True, hide=False)
+        logger.info(f"Constructing the Terraform command about to run: cd " + dest_after_copy + "; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} " + tf_cmd_str)
+        result_cd_tfapply = conn.run(f"cd " + dest_after_copy + "; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} " + tf_cmd_str, pty=True, hide=False)
         if result_cd_tfapply.exited == 0:
-            logger.info("source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " executed successfully (return 0)")
+            logger.info(f"cd " + dest_after_copy + "; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} " + tf_cmd_str + " executed successfully (return 0)")
         else:
-            logger.info(f"source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
+            logger.info(f"cd " + dest_after_copy + "; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} " + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
