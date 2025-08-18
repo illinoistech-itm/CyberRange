@@ -171,7 +171,7 @@ def run_launch_command():
             cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
 
         tf_cmd_str = " ".join(cmd)
-        logger.info(f"Constructing the Terraform command about to run: cd " + dest_after_copy + "; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKEN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} " + tf_cmd_str)
+        logger.info(f"Constructing the Terraform command about to run: cd {dest_after_copy} ; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKEN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} {tf_cmd_str}")
         result_cd_tfapply = conn.run(f"cd {dest_after_copy} ; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKEN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} {tf_cmd_str}", pty=True, hide=False)
         if result_cd_tfapply.exited == 0:
             logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={VAULT_ADDR} VAULT_TOKEN={APP_VAULTTOKEN} VAULT_SKIP_VERIFIY={VAULT_SKIP_VERIFY} {tf_cmd_str}" + "executed successfully (return 0)")
