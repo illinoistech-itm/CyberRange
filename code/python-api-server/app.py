@@ -169,11 +169,11 @@ def run_launch_command():
 
         tf_cmd_str = " ".join(cmd)
         logger.info("Constructing the Terraform command about to run: source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str)
-        result_cd_tfapply = conn.run("echo $VAULT_ADDR ; source /home/cr/.bashrc ; echo $VAULT_ADDR ; cd " + dest_after_copy + ";" + tf_cmd_str, pty=True, hide=False)
+        result_cd_tfapply = conn.run("source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + ";" + tf_cmd_str, pty=True, hide=False)
         if result_cd_tfapply.exited == 0:
-            logger.info("source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " executed successfully (return 0)")
+            logger.info("source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " executed successfully (return 0)")
         else:
-            logger.info(f"source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
+            logger.info(f"source /home/cr/.profile ; source /home/cr/.bashrc ; cd " + dest_after_copy + "; " + tf_cmd_str + " failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
