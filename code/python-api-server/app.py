@@ -35,7 +35,7 @@ journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
 logger.addHandler(journald_handler)
 logger.setLevel(logging.INFO)
 
-# Needed to initialze the ability for Python to read from a .env file
+# Needed to initialize the ability for Python to read from a .env file
 load_dotenv()
 
 # Initialize Vault client
@@ -54,6 +54,7 @@ APP_SECRET = creds['data']['data']['APP_SECRET']
 CR_TOKEN_ID = creds['data']['data']['CR_TOKEN_ID']
 CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
 CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
+VAULT_TOKEN = creds['data']['data']['APP_VAULTTOKEN']
 vault_token_build_server = creds['data']['data']['APP_VAULTTOKEN']
 vault_addr_build_server = 'https://jrh-vault-instance-vm0.service.consul:8200'
 vault_skip_verify_build_server = "true"
