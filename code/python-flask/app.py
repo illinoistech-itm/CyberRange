@@ -117,7 +117,7 @@ class User(UserMixin):
     pass
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id): #This function does not get called, what is it for?
     user = User()
     user.id = user_id
     return user
@@ -130,24 +130,24 @@ def index():
         try:
             response = google.get('https://www.googleapis.com/oauth2/v3/userinfo').json()
             if 'email' in response:
-                global user_info 
+                #global user_info #Why is this global?
                 user_info = response
-                user = User()
-                user.id = user_info["email"]
+                # user = User()
+                # user.id = user_info["email"]
                 # Store email in Session Variable so other functions can access it
-                session['email'] = user_info["email"]
-                session['uid'] = user.id
-                login_user(user)
+                session['email'] = user_info["email"] #Isn't this redundant with user.id?
+                session['uid'] = user_info["sub"]
+                # login_user(user)
                 # Helper function to check if user exists and if not create in DB
-                user = check_or_create_user(user_info['email'])
+                user_in_application = check_or_create_user(user_info['email'])
                 lab = select_filtered(Labs, email=user_info['email'])
                 # This checks for the UID problem if you reload the index page after a packer/terraform rebuild
-                if user is None:
-                  return redirect(url_for('.index'))
+                if user_in_application is None:
+                  return redirect(url_for('.index')) #Render template instead?
                 else:
-                  return render_template('dashboard.html', lab_results=lab, uid = user.id, email=user_info["email"])
+                  return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
             else:
-                return redirect(url_for('.index'))
+                return redirect(url_for('.index')) #Render template instead?
         except TokenExpiredError:
             if 'refresh_token' in session['google_token']:
                 # Refresh expired token
@@ -158,10 +158,10 @@ def index():
                     refresh_token=session['google_token'].get('refresh_token')
                 )
                 session['google_token'] = token
-                return redirect(url_for('.index'))
+                return redirect(url_for('.index')) #Render template instead?
             else:
                 # Session expired
-                return redirect(url_for('.login'))
+                return redirect(url_for('.login')) #Where is the login page?
     return render_template('index.html')
 
 @app.route('/login')
