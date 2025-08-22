@@ -143,11 +143,11 @@ def index():
                 lab = select_filtered(Labs, email=user_info['email'])
                 # This checks for the UID problem if you reload the index page after a packer/terraform rebuild
                 if user_in_application is None:
-                  return redirect(url_for('.index')) #Render template instead?
+                  return render_template('index.html') #Render template instead?
                 else:
                   return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
             else:
-                return redirect(url_for('.index')) #Render template instead?
+                return render_template('index.html') #Render template instead?
         except TokenExpiredError:
             if 'refresh_token' in session['google_token']:
                 # Refresh expired token
@@ -158,10 +158,10 @@ def index():
                     refresh_token=session['google_token'].get('refresh_token')
                 )
                 session['google_token'] = token
-                return redirect(url_for('.index')) #Render template instead?
+                return render_template('index.html') #Render template instead?
             else:
                 # Session expired
-                return redirect(url_for('.login')) #Where is the login page?
+                return render_template('index.html')#Where is the login page?
     return render_template('index.html')
 
 @app.route('/login')
