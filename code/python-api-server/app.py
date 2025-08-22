@@ -173,12 +173,12 @@ def run_launch_command():
 
         tf_cmd_str = " ".join(cmd)
         logger.info(f"Constructing the Terraform command...")
-        logger.info(f"About to run: cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFIY={vault_skip_verify_build_server} {tf_cmd_str}")
-        result_cd_tfapply = conn.run(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFIY={vault_skip_verify_build_server} {tf_cmd_str}", pty=True, hide=False)
+        logger.info(f"About to run: cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str}")
+        result_cd_tfapply = conn.run(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str}", pty=True, hide=False)
         if result_cd_tfapply.exited == 0:
-            logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFIY={vault_skip_verify_build_server} {tf_cmd_str}" + " executed successfully (return 0)")
+            logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str}" + " executed successfully (return 0)")
         else:
-            logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFIY={vault_skip_verify_build_server} {tf_cmd_str} failed with a return code of: {result_cd_tfapply.exited}")
+            logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str} failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
     
