@@ -140,12 +140,12 @@ def index():
             if 'email' in response:
                 #global user_info #Why is this global?
                 user_info = response
-                # user = User()
+                user = User()
                 # user.id = user_info["email"]
                 # Store email in Session Variable so other functions can access it
                 session['email'] = user_info["email"] #Isn't this redundant with user.id?
                 session['uid'] = user_info["sub"]
-                # login_user(user)
+                login_user(user)
                 # Helper function to check if user exists and if not create in DB
                 user_in_application = check_or_create_user(user_info['email'])
                 # Function to query all of the current lab progress per user account

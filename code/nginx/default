@@ -82,4 +82,7 @@ server {
         location /shelly {
           proxy_pass https://backend/shelly;
         }
+        location /progress {
+          proxy_pass https://backend/progress;
+        }        
 }		
