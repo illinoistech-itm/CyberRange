@@ -117,17 +117,18 @@ def create_and_run_copy_terraform_plan_command():
 @app.route('/run', methods=['POST'])
 def prepare_command():
     data = request.get_json()
-    subid = data.get('subid')
+    uid = data.get('runtime_uuid')
     email = data.get('email')
     lab_number = data.get('lab_number')
     username = email.split('@')[0] # the tags do not accept special characters, so we have to split out the '@' in the email address
 
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
-    dest = "/tmp/" + subid + "/"
+    dest = "/tmp/" + uid + "/"
     cmd="mkdir -p " + dest
 
     task = run_fabric_command.delay(conn, cmd)
     return jsonify({"task_id": task.id}), 202
+
 
 @app.route("/status/<task_id>")
 def status(task_id):

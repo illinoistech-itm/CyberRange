@@ -227,7 +227,9 @@ def run_cmd(runtime_uuid, lab_num):
 # Above code deals with login and authentication]
 # Below code is lab launching logic
 ##############################################################################
-
+@app.route("/progress/<task_id>")
+def progress_page(task_id):
+    return render_template("progress.html", task_id=task_id)
 ##############################################################################
 # This route is going to launch the content of the lab.
 # This means a few things...
@@ -261,7 +263,10 @@ def lab_one():
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     
     # Call to the API functions broken down into multiple small functions for better debugging
-    run_cmd(runtime_uuid, lab_number)
+    task_id = run_cmd(runtime_uuid, lab_number)
+    # Render progress page
+    progress_page(task_id.id)
+    
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
