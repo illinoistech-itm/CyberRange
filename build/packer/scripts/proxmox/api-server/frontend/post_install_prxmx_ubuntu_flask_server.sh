@@ -8,7 +8,7 @@ set -v
 ##################################################################################################
 
 sudo apt update
-sudo apt install -y python3-setuptools python3-pip python3-dev
+sudo apt install -y python3-setuptools python3-pip python3-dev curl
 
 # https://flask.palletsprojects.com/en/stable/deploying/
 # Install Gunicorn and Flask not via Pip but via Ubuntu apt packages
@@ -20,7 +20,10 @@ sudo apt install -y python3-flask-socketio python3-requests python3-hvac python3
 sudo apt install -y libsystemd-dev python3-systemd
 
 # Install dependencies for Celery (worker tasks) and Redis - https://redis.io/
+# https://github.com/redis/redis-debian#redis-open-source---install-using-debian-advanced-package-tool-apt
 # Install the redis official repo
+curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
 sudo apt install -y lsb-release curl gpg
 sudo apt install -y python3-redis python3-celery celery redis 
@@ -31,6 +34,6 @@ sudo apt install -y python3-redis python3-celery celery redis
 # from /etc/systemd/system/flask-app.service
 sudo mv /home/vagrant/celery-workers.service /etc/systemd/system/celery-workers.service
 sudo mv /home/vagrant/flask-api.service /etc/systemd/system/flask-api.service
-sudo systemctl enable redis.service
+sudo systemctl enable redis-server.service
 sudo systemctl enable celery-workers.service
 sudo systemctl enable flask-api.service
