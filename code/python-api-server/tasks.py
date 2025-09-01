@@ -2,6 +2,7 @@ from celery import Celery
 from fabric import Connection
 import redis
 import time
+import os
 import logging
 from systemd.journal import JournalHandler
 # Import Python3 Fabric library for SSH connection to buildserver
