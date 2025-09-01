@@ -1,0 +1,26 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Task Progress</title>
+</head>
+<body>
+    {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 }
+    <h2>Task Progress</h2>
+    <div id="progress">Waiting for updates...</div>
+
+    <script>
+        const taskId = "{{ task_id }}";
+        const source = new EventSource(`/stream/${taskId}`);
+
+        source.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            document.getElementById("progress").textContent = `Progress: ${data.progress}%`;
+
+            if (data.status === "done") {
+                document.getElementById("progress").textContent += " ✅ Task completed!";
+                source.close();
+            }
+        };
+    </script>
+</body>
+</html>
