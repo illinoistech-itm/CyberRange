@@ -242,8 +242,9 @@ def run_cmd(runtime_uuid, lab_num):
     payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
-    my_dict = dict(status_code=response.status_code, response_text=response.text)
-
+    # Parse JSON body
+    data = response.json()
+    return data['task_id']
 
 ##############################################################################
 # Above code deals with login and authentication]
@@ -285,9 +286,10 @@ def lab_one():
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     
     # Call to the API functions broken down into multiple small functions for better debugging
-    t = run_cmd(runtime_uuid, lab_number)
+    # t_id for task id
+    t_id = run_cmd(runtime_uuid, lab_number)
     # Render progress page
-    progress_page(t.json()['task_id'])
+    progress_page(t_id)
     
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
