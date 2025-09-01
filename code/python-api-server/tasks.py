@@ -79,7 +79,7 @@ def run_fabric_command(self, cmd):
     update_progress(self.request.id, "RUNNING", "Starting SSH command...")
     try:
         with Connection(conn) as c:
-            for line in c.run(cmd, hide=True, pty=True, warn=True).stdout.splitlines():
+            for line in c.run(cmd, hide=False, pty=True, warn=True).stdout.splitlines():
                 update_progress(self.request.id, "RUNNING", line)
                 time.sleep(0.1)  # simulate streaming
         update_progress(self.request.id, "SUCCESS", "Command completed.")
