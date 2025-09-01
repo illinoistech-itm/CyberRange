@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, Response
 import hvac
 from dotenv import load_dotenv
 import os, re, time, subprocess
@@ -13,13 +13,21 @@ from systemd.journal import JournalHandler
 from fabric import Connection
 from paramiko import AutoAddPolicy
 
+# To communicate with Celery the task worker that lets us offload the long
+# running SSH process to avoid the HTTP timeout
+from tasks import run_fabric_command, get_task_progress
+
+
 # Path to your ed25519 private key
 ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_buildserver_connect_key"
 
+HOST="newyorkphilharmonic.service.consul"
+USER="cr"
+
 # Create the connection
 conn = Connection(
-    host="newyorkphilharmonic.service.consul",
-    user="cr",
+    host=HOST,
+    user=USER,
     connect_kwargs={
         "key_filename": ed25519_key_path,
     }
@@ -61,7 +69,6 @@ vault_skip_verify_build_server = "true"
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET
-
 ##############################################################################
 # Proxmoxer Helper function
 ##############################################################################
@@ -79,7 +86,7 @@ def run_getip():
 
     runningvms = []
     runningwithtagsvms = []
-    # Loop through the first node to get all of the nodes that are of status 
+    # Loop through the first node to get all of the nodes that are of status
     # running and that have the tag of the user for vm in prxmx42:
     for vm in prxmx42:
         if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
@@ -91,17 +98,57 @@ def run_getip():
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-                        
+
     return None
 ##############################################################################
 # Fabric SSH helper function
-# This function uses Fabric on top of Paramiko in Python to make SSH 
-# connections to remote system. In this case it will be the 'cr' account on 
+# This function uses Fabric on top of Paramiko in Python to make SSH
+# connections to remote system. In this case it will be the 'cr' account on
 # the buildserver to launch terraform plans.
 ##############################################################################
 def create_and_run_copy_terraform_plan_command():
 
     return 1
+
+##############################################################################
+# This route is more generic and will capture the commands and return one
+# at a time -- making things easier to debug
+##############################################################################
+@app.route('/run', methods=['POST'])
+def prepare_command():
+    data = request.get_json()
+    subid = data.get('subid')
+    email = data.get('email')
+    lab_number = data.get('lab_number')
+    username = email.split('@')[0] # the tags do not accept special characters, so we have to split out the '@' in the email address
+
+    src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
+    dest = "/tmp/" + subid + "/"
+    cmd="mkdir -p " + dest
+
+    task = run_fabric_command.delay(conn, cmd)
+    return jsonify({"task_id": task.id}), 202
+
+
+@app.route("/status/<task_id>")
+def status(task_id):
+    progress = get_task_progress(task_id)
+    return jsonify(progress)
+
+@app.route("/stream/<task_id>")
+def stream(task_id):
+    def event_stream():
+        last_sent = 0
+        while True:
+            progress = get_task_progress(task_id)
+            if progress["timestamp"] > last_sent:
+                yield f"data: {progress}\n\n"
+                last_sent = progress["timestamp"]
+            if progress["status"] in ("SUCCESS", "FAILURE"):
+                break
+            time.sleep(1)
+    return Response(event_stream(), mimetype="text/event-stream")
+
 ##############################################################################
 # This route capture the request from the CR Dashboard
 ##############################################################################
@@ -122,7 +169,7 @@ def run_launch_command():
     'VALUE': data
     })
 
-    # Command to copy the original Terraform plan to a tmp location 
+    # Command to copy the original Terraform plan to a tmp location
     # (need to store this in session) so it can be retrieved later...
     # Navigate to the Terraform directory and apply
     try:
@@ -132,7 +179,7 @@ def run_launch_command():
           logger.info("mkdir -p " + dest + " executed successfully (return 0)")
         else:
           logger.info(f"mkdir -p " + dest + " failed with a return code of: {result_mkdir.exited}")
-    
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -143,10 +190,10 @@ def run_launch_command():
           logger.info("cp -r " + src + " "  + dest + " executed successfully (return 0)")
         else:
           logger.info(f"cp -r " + src + " "  + dest + " failed with a return code of: {result_cp.exited}")
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-      
+
     try:
         logger.info("What directory are we running tf init? " + dest_after_copy)
         result_tf_init = conn.run("cd " + dest_after_copy + " && " + "terraform init", hide=True) # need to append dest lab_one
@@ -157,7 +204,7 @@ def run_launch_command():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    try:    
+    try:
         # Gather all of the runtime terraform vars we will be assigning at terraform apply time
         vars = {
             "tags": t,
@@ -180,12 +227,12 @@ def run_launch_command():
         else:
             logger.info(f"cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str} failed with a return code of: {result_cd_tfapply.exited}")
     except Exception as e:
-        return jsonify({'error': str(e)}), 500    
-    
+        return jsonify({'error': str(e)}), 500
+
     # If everything executes successfully return 1
     return 1
 ##############################################################################
-# This route will launch or destroy the infrastructure for the declared lab 
+# This route will launch or destroy the infrastructure for the declared lab
 # via terraform.
 # We need to pass some runtime variables so we can retrieve the metadata
 # later -- this will be done via Python3 Fabric/Invoke/Paramiko
@@ -209,7 +256,7 @@ def run_destroy_command():
         return jsonify({'error': str(e)}), 500
 
 ##############################################################################
-# This route will use the Proxmoxer API wrapper to authenticate with our 
+# This route will use the Proxmoxer API wrapper to authenticate with our
 # Proxmox cluster and query and return the IP of the running edge_node for the
 # SSH function
 ##############################################################################
@@ -236,9 +283,9 @@ def getip():
 ##############################################################################
 @app.errorhandler(404)
 def handle_404(e):
-    return jsonify(error='Resource not found'), 404
-
+    
     print(e)                  # Outputs: 404 Not Found: The requested URL was not found on the server.
     print(e.code)             # 404
     print(e.name)             # 'Not Found'
     print(e.description)      # 'The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.'
+    return jsonify(error='Resource not found'), 404

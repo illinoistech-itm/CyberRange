@@ -172,14 +172,12 @@ def login():
     session['oauth_state'] = state
     return redirect(authorization_url)
 
-
 @app.route('/callback')
 def callback():
     google = OAuth2Session(client_id, state=session['oauth_state'], redirect_uri=redirect_uri)
     token = google.fetch_token(token_url, client_secret=client_secret, authorization_response=request.url)
     session['google_token'] = token
     return redirect(url_for('.index'))
-
 
 @app.route('/logout')
 @login_required
@@ -205,6 +203,17 @@ def ssh_thread(ip):
     while True:
         output = channel.recv(1024).decode()
         socketio.emit('output', output)
+
+##############################################################################
+# Function to call the run cmd Flask Route on the API server
+def run_cmd(runtime_uuid, lab_num):
+    
+    url = FLASK_API_SERVER + "/run"
+    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
+    # Using internal self-signed generated Certs so need to disable verify
+    response = requests.post(url, json=payload,verify=False)
+    my_dict = dict(status_code=response.status_code, response_text=response.text)
+
 
 ##############################################################################
 # Above code deals with login and authentication]
@@ -238,17 +247,13 @@ def ssh_thread(ip):
 @login_required
 def lab_one():
     lab_number="lab_one"
-    
+    # Generate a UUID to identify this running of the lab
+    runtime_uuid = uuid.uuid4()
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     
-    # Connect via the API to terraform apply the needed infrastructure for the lab
-    runtime_uuid = uuid.uuid4()
-    url = FLASK_API_SERVER + "/launch"
-    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_number } # took out {} from session email
-    # Using internal self-signed generated Certs so need to disable verify
-    response = requests.post(url, json=payload,verify=False)
-    my_dict = dict(status_code=response.status_code, response_text=response.text)
+    # Call to the API functions broken down into multiple small functions for better debugging
+    run_cmd(runtime_uuid, lab_number)
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched

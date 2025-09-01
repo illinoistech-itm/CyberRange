@@ -10,6 +10,7 @@ sudo adduser --system --group flaskuser
 # https://copilot.microsoft.com/shares/nis5fbJZkaup7K34PRKwK
 
 sudo mv /home/vagrant/CyberRange/code/python-api-server/app.py /home/flaskuser/app.py
+sudo mv /home/vagrant/CyberRange/code/python-api-server/tasks.py /home/flaskuser/tasks.py
 sudo mv /home/vagrant/CyberRange/code/python-api-server/.env /home/flaskuser/.env
 
 # How to use an ENV variable in a sed command

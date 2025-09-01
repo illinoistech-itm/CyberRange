@@ -1,0 +1,16 @@
+[Unit]
+Description=Celery Worker for MyApp
+After=network.target
+
+[Service]
+Type=simple
+User=flaskuser
+Group=flaskuser
+WorkingDirectory=/home/flaskuser
+#Environment="PATH=/opt/myapp/venv/bin"
+ExecStart=/usr/bin/celery -A tasks.celery worker --loglevel=info
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
