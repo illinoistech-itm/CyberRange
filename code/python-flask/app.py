@@ -5,6 +5,7 @@ from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 import hvac
 import uuid
+from systemd.journal import JournalHandler
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
 from datetime import datetime, timezone
@@ -15,6 +16,13 @@ from sqlalchemy.dialects.postgresql import UUID # adding uuid()
 from sqlalchemy import Column, String, func # different syntax to explicitly call for the uuid() func
 import toml # Import TOML library from Python standard lib 3.11 or <
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
+
+# Initialize logging object to send logs to the journal
+logger = logging.getLogger('cyberrange')
+journald_handler = JournalHandler()
+journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
+logger.addHandler(journald_handler)
+logger.setLevel(logging.INFO)
 
 # Instantiate the .env file loader to read the RO Vault TOken
 load_dotenv()

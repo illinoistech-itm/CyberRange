@@ -129,7 +129,6 @@ def prepare_command():
     task = run_fabric_command.delay(conn, cmd)
     return jsonify({"task_id": task.id}), 202
 
-
 @app.route("/status/<task_id>")
 def status(task_id):
     progress = get_task_progress(task_id)
