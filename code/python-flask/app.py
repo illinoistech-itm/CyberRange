@@ -122,7 +122,6 @@ def load_user(user_id): #This function does not get called, what is it for?
     user.id = user_id
     return user
 
-
 @app.route('/')
 def index():
     if 'google_token' in session:
@@ -159,11 +158,8 @@ def index():
                     refresh_token=session['google_token'].get('refresh_token')
                 )
                 session['google_token'] = token
-                # Helper function to check if user exists and if not create in DB
-                user_in_application = check_or_create_user(user_info['email'])
-                # Function to query all of the current lab progress per user account
-                lab = select_filtered(Labs, email=user_info['email'])
-                return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
+                #return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
+                return render_template('index.html')
             else:
                 # Session expired
                 return render_template('index.html')#Where is the login page?
