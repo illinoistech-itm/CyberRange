@@ -19,7 +19,7 @@ sudo apt install -y python3-flask-socketio python3-requests python3-hvac python3
 # Install dependencies for application logging to the Journal
 sudo apt install -y libsystemd-dev python3-systemd
 
-# Install dependencies for Celery (worker tasks) and redis
+# Install dependencies for Celery (worker tasks) and Redis - https://redis.io/
 # Install the redis official repo
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
 sudo apt install -y lsb-release curl gpg
