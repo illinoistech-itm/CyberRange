@@ -5,6 +5,7 @@ from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 import hvac
 import uuid
+import logging
 from systemd.journal import JournalHandler
 from dotenv import load_dotenv
 import os, paramiko, threading, re, time, requests
