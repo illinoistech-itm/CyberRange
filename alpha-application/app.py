@@ -66,6 +66,23 @@ def index():
                 user_info = response
                 user = User()
                 user.id = user_info["email"]
+                ######################################################################################
+                '''
+                When you call login_user(user):
+                
+                Stores the user’s ID in the session
+                Flask‑Login calls user.get_id() (provided by UserMixin or your own implementation) and saves that ID in Flask’s session cookie.
+                This is how Flask‑Login remembers who you are between requests.
+
+                Marks the user as authenticated
+                For the rest of the request (and future requests in the same session), current_user will be set to your user object.
+                current_user.is_authenticated will return True.
+
+                Triggers login signals
+                Sends the user_logged_in signal, which you can hook into for logging, auditing, or other side effects.
+                Optionally remembers the user
+                If you pass remember=True, Flask‑Login will set a long‑lived “remember me” cookie so the user stays logged in even after closing the browser.
+                '''
                 login_user(user)
                 # UUID = str(time.time())
                 # UUID = UUID.split('.', 1)[0]
