@@ -126,7 +126,8 @@ def prepare_command():
     dest = "/tmp/" + uid + "/"
     cmd="mkdir -p " + dest
 
-    task = run_fabric_command.delay(conn, cmd)
+    # Pass the constructed command to the Celery Task
+    task = run_fabric_command.delay(cmd)
     return jsonify({"task_id": task.id}), 202
 
 
