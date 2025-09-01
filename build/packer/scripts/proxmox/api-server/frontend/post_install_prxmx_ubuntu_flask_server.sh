@@ -8,7 +8,7 @@ set -v
 ##################################################################################################
 
 sudo apt update
-sudo apt install -y python3-setuptools python3-pip python3-dev curl
+sudo apt install -y python3-setuptools python3-pip python3-dev
 
 # https://flask.palletsprojects.com/en/stable/deploying/
 # Install Gunicorn and Flask not via Pip but via Ubuntu apt packages
@@ -25,6 +25,7 @@ sudo apt install -y libsystemd-dev python3-systemd
 curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+sudo apt update
 sudo apt install -y lsb-release curl gpg
 sudo apt install -y python3-redis python3-celery celery redis 
 
