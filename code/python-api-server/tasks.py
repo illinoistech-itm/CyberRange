@@ -65,6 +65,7 @@ celery = Celery("tasks", broker="redis://localhost:6379/", backend="redis://loca
 r = redis.Redis()
 
 def update_progress(task_id, status, output=""):
+    logger.info("about to run function update_progress defined")
     data = { "status": status, "output": output, "timestamp": str(time.time()) }
     r.set(f"progress:{task_id}", json.dumps(data) )
 
@@ -74,12 +75,15 @@ def get_task_progress(task_id):
 
 @celery.task(bind=True)
 def run_fabric_command(self, cmd):
+    logger.info("running update_progress...")
     update_progress(self.request.id, "RUNNING", "Starting SSH command...")
     try:
         with Connection(conn) as c:
             for line in c.run(cmd, hide=False, pty=True, warn=True).stdout.splitlines():
+                logger.info("running update_progress within the for loop...")
                 update_progress(self.request.id, "RUNNING", line)
                 time.sleep(0.1)  # simulate streaming
         update_progress(self.request.id, "SUCCESS", "Command completed.")
+        logger.info("success!!! update_progress has succeeded and we are out of the for loop")
     except Exception as e:
         update_progress(self.request.id, "FAILURE", str(e))
