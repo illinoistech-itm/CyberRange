@@ -295,34 +295,6 @@ def lab_one():
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
 
-    get_ip_url = FLASK_API_SERVER + "/getip"
-    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_number } # took out {} from session email
-    # Using internal self-signed generated Certs so need to disable verify
-    response = requests.post(get_ip_url, json=payload,verify=False)
-    ip = response.text # IP address of edge server
-
-    # Establish the SSH connection with the edge node using sockets
-    threading.Thread(target=ssh_thread, args=(ip)).start()
-
-    # Open the questions TOML document and read them in as a Python dict to be
-    # passed into the shelly.html template and rendered
-    # Need to use python3-toml library in Ubuntu 22.04 as Python 3.10 is the default
-    # As of Python 3.11 toml is build in to std lib and requires rb
-    with open("lab_one.toml", "r") as f:
-      lab_questions = toml.load(f)
- 
-    # This is what the TOML dict looks
-    # {
-    # "questions": {
-    #    "step_one": "Open the terminal on your Linux system.",
-    #    "step_two": "Check what user you are logged into. Is it root?"
-    #    }
-    # }
-    # lab_questions["questions"]  the value questions comes from the TOML document top level Dict
-    return render_template('shelly.html', qa=lab_questions["questions"], email={session['email']}, response_dict=my_dict )
-    # Redirect to shelly
-    #return redirect(url_for('.shelly'))
-    # return redirect(url_for('.waiting'))  
 
 
 @app.route('/lab_two')
