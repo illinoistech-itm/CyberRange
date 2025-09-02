@@ -289,8 +289,8 @@ def lab_one():
     # t_id for task id
     t_id = run_cmd(runtime_uuid, lab_number)
     # Render progress page
-    progress_page(t_id)
-    
+    # progress_page(t_id)
+    return redirect(url_for('task_view', task_id=t_id))
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
