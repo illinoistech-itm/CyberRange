@@ -3,6 +3,7 @@ from fabric import Connection
 import redis
 import time
 import os
+import json
 import logging
 from systemd.journal import JournalHandler
 # Import Python3 Fabric library for SSH connection to buildserver
@@ -64,11 +65,8 @@ celery = Celery("tasks", broker="redis://localhost:6379/", backend="redis://loca
 r = redis.Redis()
 
 def update_progress(task_id, status, output=""):
-    r.set(f"progress:{task_id}", {
-        "status": status,
-        "output": output,
-        "timestamp": time.time()
-    })
+    data = { "status": status, "output": output, "timestamp": str(time.time()) }
+    r.set(f"progress:{task_id}", json.dumps(data) )
 
 def get_task_progress(task_id):
     data = r.get(f"progress:{task_id}")
