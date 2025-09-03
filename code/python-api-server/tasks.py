@@ -78,11 +78,14 @@ def run_fabric_command(self, cmd):
     logger.info("running update_progress...")
     update_progress(self.request.id, "RUNNING", "Starting SSH command...")
     try:
-        with Connection(conn) as c:
-            for line in c.run(cmd, hide=False, pty=True, warn=True).stdout.splitlines():
-                logger.info("running update_progress within the for loop...")
-                update_progress(self.request.id, "RUNNING", line)
-                time.sleep(0.1)  # simulate streaming
+        logger.info("About to run: " + cmd + " ::the mkdir command to create a new directory for the terraform plan files...")
+        result_mkdir = conn.run(cmd, hide=True)
+        update_progress(self.request.id, "RUNNING", "Running: " + cmd)
+        if result_mkdir.exited == 0:
+          logger.info(cmd + " executed successfully (return 0)")
+        else:
+          logger.info(cmd + " failed with a return code of: {result_mkdir.exited}")
+                
         update_progress(self.request.id, "SUCCESS", "Command completed.")
         logger.info("success!!! update_progress has succeeded and we are out of the for loop")
     except Exception as e:

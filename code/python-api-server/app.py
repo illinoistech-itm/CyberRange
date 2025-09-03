@@ -124,10 +124,11 @@ def prepare_command():
 
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
     dest = "/tmp/" + uid + "/"
-    cmd="mkdir -p " + dest
+    dest_after_copy = "/tmp/" + uid + "/" + lab_number
+    cmd_mkdir="mkdir -p " + dest
 
     # Pass the constructed command to the Celery Task
-    task = run_fabric_command.delay(cmd)
+    task = run_fabric_command.delay(cmd_mkdir)
     return jsonify({"task_id": task.id}), 202
 
 
