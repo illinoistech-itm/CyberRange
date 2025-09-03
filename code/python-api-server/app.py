@@ -125,10 +125,29 @@ def prepare_command():
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
     dest = "/tmp/" + uid + "/"
     dest_after_copy = "/tmp/" + uid + "/" + lab_number
-    cmd_mkdir="mkdir -p " + dest
+    t = uid + ";" + username + ";" + lab_number + ";" + "cr"
+    # Gather all of the runtime terraform vars we will be assigning at terraform apply time
+    vars = {
+        "tags": t,
+        "yourinitials": session['runtime_uuid']
+    }
+    # Build the base command
+    cmd = ["terraform", "apply", "-auto-approve"]
 
+    # Append each -var argument
+    for key, value in vars.items():
+        cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
+
+    tf_cmd_str = " ".join(cmd)
+    # Create strings of commands to send to the Celery worker tasks
+    cmd_mkdir="mkdir -p " + dest
+    cmd_cp="cp" + " -r " + src + " "  + dest
+    cmd_tf_init="cd " + dest_after_copy + " && " + "terraform init"
+    cmd_tf_apply = "cd {dest_after_copy} ; VAULT_ADDR={vault_addr_build_server} VAULT_TOKEN={vault_token_build_server} VAULT_SKIP_VERIFY={vault_skip_verify_build_server} {tf_cmd_str}"
+    list_of_commands = [cmd_mkdir,cmd_cp,cmd_tf_init,cmd_tf_apply]
+    
     # Pass the constructed command to the Celery Task
-    task = run_fabric_command.delay(cmd_mkdir)
+    task = run_fabric_command.delay(list_of_commands)
     return jsonify({"task_id": task.id}), 202
 
 

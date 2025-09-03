@@ -74,19 +74,23 @@ def get_task_progress(task_id):
     return eval(data) if data else {"status": "PENDING", "output": "", "timestamp": 0}
 
 @celery.task(bind=True)
-def run_fabric_command(self, cmd):
-    logger.info("running update_progress...")
+def run_fabric_command(self, list_of_commands):
+    logger.info("Running update_progress...")
     update_progress(self.request.id, "RUNNING", "Starting SSH command...")
-    try:
-        logger.info("About to run: " + cmd + " ::the mkdir command to create a new directory for the terraform plan files...")
-        result_mkdir = conn.run(cmd, hide=True)
-        update_progress(self.request.id, "RUNNING", "Running: " + cmd)
-        if result_mkdir.exited == 0:
-          logger.info(cmd + " executed successfully (return 0)")
-        else:
-          logger.info(cmd + " failed with a return code of: {result_mkdir.exited}")
-                
-        update_progress(self.request.id, "SUCCESS", "Command completed.")
-        logger.info("success!!! update_progress has succeeded and we are out of the for loop")
-    except Exception as e:
-        update_progress(self.request.id, "FAILURE", str(e))
+    
+    for cmd in list_of_commands:
+        try:
+            logger.info("About to run: " + cmd)
+            result = conn.run(cmd, hide=True)
+            update_progress(self.request.id, "RUNNING", "Running: " + cmd)
+            if result.exited == 0:
+              logger.info(cmd + " executed successfully (return 0)")
+            else:
+              logger.info(cmd + " failed with a return code of: {result.exited}")   
+            
+            update_progress(self.request.id, "SUCCESS", "Command completed.")
+            logger.info("success!!! update_progress has succeeded and we are out of the for loop")
+        
+        except Exception as e:
+            update_progress(self.request.id, "FAILURE", str(e))
+        
