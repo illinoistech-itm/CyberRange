@@ -89,8 +89,9 @@ def run_fabric_command(self, list_of_commands):
               logger.info(cmd + " failed with a return code of: {result.exited}")   
             
             update_progress(self.request.id, "SUCCESS", "Command completed.")
-            logger.info("success!!! update_progress has succeeded and we are out of the for loop")
+            logger.info("success!!! for " + cmd)
         
         except Exception as e:
             update_progress(self.request.id, "FAILURE", str(e))
+    logger.info("out of for loop!")
         
