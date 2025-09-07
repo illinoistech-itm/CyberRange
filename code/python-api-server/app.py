@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, session, Response
+from flask_cors import CORS
 import hvac
 from dotenv import load_dotenv
 import os, re, time, subprocess
@@ -69,6 +70,7 @@ vault_skip_verify_build_server = "true"
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET
+CORS(app, resources={r"/stream/*": {"origins": "*"}})  # or restrict to your frontend origin
 ##############################################################################
 # Proxmoxer Helper function
 ##############################################################################
