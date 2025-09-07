@@ -65,7 +65,7 @@ celery = Celery("tasks", broker="redis://localhost:6379/", backend="redis://loca
 r = redis.Redis()
 
 def update_progress(task_id, status, output=""):
-    logger.info("about to run function update_progress defined")
+    logger.info("About to run function update_progress defined...")
     data = { "status": status, "output": output, "timestamp": str(time.time()) }
     r.set(f"progress:{task_id}", json.dumps(data) )
 
@@ -93,5 +93,5 @@ def run_fabric_command(self, list_of_commands):
         
         except Exception as e:
             update_progress(self.request.id, "FAILURE", str(e))
-    logger.info("out of for loop!")
+    logger.info("Out of for loop!")
         
