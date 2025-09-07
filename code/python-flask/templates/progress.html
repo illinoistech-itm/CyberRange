@@ -10,7 +10,7 @@
 
     <script>
         const taskId = "{{ task_id }}";
-        const source = new EventSource(`/stream/progress:${taskId}`);
+        const source = new EventSource(`{{ url }}/stream/progress:${taskId}`);
 
         source.onmessage = function(event) {
             const data = JSON.parse(event.data);
