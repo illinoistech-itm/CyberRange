@@ -6,11 +6,11 @@
 <body>
     {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
     <h2>Task Progress</h2>
-    <div id="progress">Waiting for updates... {{ task_id }}</div>
+    <div id="progress">Waiting for updates... {{ task_id }}, connecting to {{ api_url }}</div>
 
     <script>
         const taskId = "{{ task_id }}";
-        const source = new EventSource(`{{ url }}/stream/progress:${taskId}`);
+        const source = new EventSource(`{{ api_url }}/stream/progress:${taskId}`);
 
         source.onmessage = function(event) {
             const data = JSON.parse(event.data);

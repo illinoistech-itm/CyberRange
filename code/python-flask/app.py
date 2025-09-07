@@ -252,7 +252,7 @@ def run_cmd(runtime_uuid, lab_num):
 ##############################################################################
 @app.route("/progress/<task_id>")
 def progress_page(task_id, api_url):
-    return render_template("progress.html", task_id=task_id, url=api_url)
+    return render_template("progress.html", task_id=task_id, api_url=api_url)
 ##############################################################################
 # This route is going to launch the content of the lab.
 # This means a few things...
