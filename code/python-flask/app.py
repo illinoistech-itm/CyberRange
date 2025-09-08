@@ -291,7 +291,7 @@ def lab_one():
     # Render progress page
     # progress_page(t_id)
     # return redirect(url_for('.progress_page', task_id=t_id))
-    return render_template("progress.html", task_id=t_id, api_url=FLASK_API_SERVER) # trying to render progress without task id in URL
+    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL')) # trying to render progress without task id in URL
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
