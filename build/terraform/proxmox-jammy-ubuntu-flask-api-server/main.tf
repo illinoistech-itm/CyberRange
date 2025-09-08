@@ -69,6 +69,7 @@ resource "proxmox_vm_qemu" "apiserver" {
     id     = 0
     model  = "virtio"
     bridge = "vmbr0"
+    macaddr = "04:9F:15:00:00:39"
   }
 
   network {
