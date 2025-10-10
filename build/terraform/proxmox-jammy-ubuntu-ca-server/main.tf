@@ -39,10 +39,10 @@ data "vault_generic_secret" "target_node" {
 }
 
 ###############################################################################
-# Terraform Plan for frontend apiserver instances
+# Terraform Plan for certificate authority instances
 ###############################################################################
 
-resource "proxmox_vm_qemu" "apiserver" {
+resource "proxmox_vm_qemu" "cert_auth" {
   count = var.numberofvms
   name  = "${var.yourinitials}-vm${count.index}.service.consul"
   desc  = var.desc
