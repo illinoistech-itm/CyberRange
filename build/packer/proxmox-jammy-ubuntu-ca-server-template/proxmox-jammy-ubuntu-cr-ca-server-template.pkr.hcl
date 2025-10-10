@@ -16,9 +16,9 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 # https://github.com/burkeazbill/ubuntu-22-04-packer-fusion-workstation/blob/master/ubuntu-2204-daily.pkr.hcl
 
 ###########################################################################################
-# This is a Packer build template for the frontend webserver
+# This is a Packer build template for the certificate authority server
 ###########################################################################################
-source "proxmox-iso" "frontend-apiserver41" {
+source "proxmox-iso" "certauth_41" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -83,7 +83,7 @@ source "proxmox-iso" "frontend-apiserver41" {
 ###########################################################################################
 # This is a Packer build template for the frontend webserver
 ###########################################################################################
-source "proxmox-iso" "frontend-apiserver42" {
+source "proxmox-iso" "certauth_42" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -146,7 +146,7 @@ source "proxmox-iso" "frontend-apiserver42" {
 }
 
 build {
-  sources = ["source.proxmox-iso.frontend-apiserver42","source.proxmox-iso.frontend-apiserver41"]
+  sources = ["source.proxmox-iso.certauth_42","source.proxmox-iso.certauth_41"]
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
