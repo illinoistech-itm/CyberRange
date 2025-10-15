@@ -140,7 +140,7 @@ source "proxmox-iso" "certauth_42" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "26m"
-  template_description     = "A Packer template Python Flask API Server"
+  template_description     = "A Packer template for the Certificate Authority server"
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
 }
@@ -159,28 +159,6 @@ build {
     destination = "/home/vagrant/.ssh/config"
   }
 
-  #############################################################################
-  # Using the file provisioner to SCP this file to the instance 
-  # Copy the private key used to clone your source code -- make sure the public
-  # key is in your GitHub account and you using a deploy key
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./id_ed25519_github_key"
-    destination = "/home/vagrant/.ssh/id_ed25519_github_key"
-  }
-
-  ##############################################################################
-  # Using the file provisioner to SCP this file to the instance 
-  # Copy the private key used to SSH into the build server so that when labs
-  # are launched, it can perform a terraform apply using Fabric (python SSH
-  # implementation)
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
-    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
-  }
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
@@ -271,35 +249,7 @@ build {
     scripts         = ["../scripts/proxmox/core-jammy/post_install_update_dynamic_motd_message.sh"]
   }
 
-  #############################################################################
-  # Script to install Prometheus Telemetry support
-  #############################################################################
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_install-prometheus-node-exporter.sh"]
-  }
-
-  #############################################################################
-  # Uncomment this block to add your own custom bash install scripts
-  # This block you can add your own shell scripts to customize the image you 
-  # are creating
-  #############################################################################
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh"]
-  }
-
-  ########################################################################################################################
-  # Copying the Flask App service file into the VM
-  ########################################################################################################################
  
-  provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/flask-api.service"
-    destination = "/home/vagrant/"
-  }
-
   ########################################################################################################################
   # Copying the celery-workers service file into the VM
   ########################################################################################################################
@@ -307,21 +257,6 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/api-server/frontend/celery-workers.service"
     destination = "/home/vagrant/"
-  }
-
-  ########################################################################################################################
-  # This block executes scripts to open firewall ports, create self-signed certs, and install Python Flask
-  ########################################################################################################################
-  
-    provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ss_cert.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
-    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
   }
 
   ########################################################################################################################
