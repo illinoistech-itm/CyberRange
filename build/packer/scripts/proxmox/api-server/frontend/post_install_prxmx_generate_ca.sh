@@ -2,8 +2,9 @@
 
 # Generate a signed certificate 
 
-# https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
-# https://ethitter.com/2016/05/generating-a-csr-with-san-at-the-command-line/
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /home/flaskuser/selfsigned.key -out /home/flaskuser/selfsigned.crt -subj "/C=US/ST=IL/L=Chicago/O=IIT/OU=rice/CN=iit.edu"
-sudo chown flaskuser:flaskuser /home/flaskuser/selfsigned.key
-sudo chown flaskuser:flaskuser /home/flaskuser/selfsigned.crt
+# https://4sysops.com/archives/install-and-use-the-step-ca-certificate-authority-client/
+# https://4sysops.com/archives/step-ca-running-your-own-certificate-authority-with-acme-support/
+sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint 
+sudo step certificate install --all ~/.step/certs/root_ca.crt
+sudo TOKEN=$(step ca token system36.rice.iit.edu --provisioner-password 'aaS9UoZFnEfpECJI3dEgJtzHM6Q6W1xK') # find how to pass through the password
+sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key
