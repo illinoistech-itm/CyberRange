@@ -192,6 +192,15 @@ build {
     destination = "/home/vagrant/"
   }
 
+  ########################################################################################################################
+  # Copying the step-ca service file into the VM
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../scripts/proxmox/ca-server/step-ca.service"
+    destination = "/home/vagrant/"
+  }
+  
   #############################################################################
   # This is the script that will open firewall ports needed for a node to 
   # function on the the School Cloud Platform and create the default firewalld
