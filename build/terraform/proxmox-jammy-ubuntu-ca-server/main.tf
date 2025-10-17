@@ -42,7 +42,7 @@ data "vault_generic_secret" "target_node" {
 # Terraform Plan for certificate authority instances
 ###############################################################################
 
-resource "proxmox_vm_qemu" "cert_auth" {
+resource "proxmox_vm_qemu" "cyberrange_ca_server" {
   count = var.numberofvms
   name  = "${var.yourinitials}-vm${count.index}.service.consul"
   desc  = var.desc
@@ -133,7 +133,7 @@ resource "proxmox_vm_qemu" "cert_auth" {
   }
 }
 
-output "proxmox_frontend_ip_address_default" {
+output "proxmox_ca_ip_address_default" {
   description = "Current Public IP"
-  value       = proxmox_vm_qemu.cert_auth.*.default_ipv4_address
+  value       = proxmox_vm_qemu.cyberrange_ca_server.*.default_ipv4_address
 }
