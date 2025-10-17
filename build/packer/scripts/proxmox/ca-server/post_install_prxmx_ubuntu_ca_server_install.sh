@@ -36,7 +36,7 @@ sudo setcap CAP_NET_BIND_SERVICE=+eip $(which step-ca)
 #moves it to step-ca system folder, changes owner to a user 'step'
 sudo mkdir /etc/step-ca
 sudo mv $(step path)/* /etc/step-ca
-sudo chown -R step:step /etc/step-ca
+
 
 # enabling and starting the step-ca service
 sudo systemctl daemon-reload
@@ -47,6 +47,7 @@ echo "export STEPPATH=/etc/step-ca" >> /etc/profile
 
 # locking down the password file
 sudo chmod 600 password.txt
+sudo chown -R step:step /etc/step-ca
 
 
 
