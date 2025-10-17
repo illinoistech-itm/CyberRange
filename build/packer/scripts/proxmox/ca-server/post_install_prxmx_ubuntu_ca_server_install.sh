@@ -11,8 +11,8 @@ wget https://dl.smallstep.com/certificates/docs-ca-install/latest/step-ca_amd64.
 
 # installing step-ca and step-cli
 sudo dpkg -i step-ca_amd64.deb
-wget https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli amd64.deb
-sudo dpkg -i step-cli amd64.deb
+wget https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.deb
+sudo dpkg -i step-cli_amd64.deb
 
 # create password.txt to pass through in the init command
 uuid -F SIV -o password.txt
