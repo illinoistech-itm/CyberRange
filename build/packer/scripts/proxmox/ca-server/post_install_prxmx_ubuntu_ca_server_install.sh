@@ -2,6 +2,7 @@
 
 # following the https://4sysops.com/archives/step-ca-running-your-own-certificate-authority-with-acme-support/
 # tutorial for creating our own CA authority
+sudo mv /home/vagrant/step-ca.service /etc/systemd/system/step-ca.service
 
 # updating and upgrading system
 sudo apt -y update
@@ -24,9 +25,25 @@ step ca init --deployment-type=standalone --name=CyberRangeCA --dns=system36.ric
 # adding ACME provisioner support
 step ca provisioner add acme --type ACME
 
-# running step-ca as a regular user and starting the server 
+# running step-ca as a regular user(commented out starting step-ca to create it as a service)
 sudo setcap CAP_NET_BIND_SERVICE=+eip $(which step-ca)
-step-ca --password-file ./password.txt
+#step-ca --password-file ./password.txt
+
+# steps to run step-ca as a service: running it under a service account, binding it to a port number <1024, 
+sudo useradd --system --home /etc/step-ca --shell /bin/false step
+sudo setcap CAP_NET_BIND_SERVICE=+eip $(which step-ca)
+
+#moves it to step-ca system folder, changes owner to a user 'step'
+sudo mkdir /etc/step-ca
+sudo mv $(step path)/* /etc/step-ca
+sudo chown -R step:step /etc/step-ca
+
+# enabling and starting the step-ca service
+sudo systemctl daemon-reload
+sudo systemctl enable --now step-ca
+sudo systemctl status step-ca
+
+echo "export STEPPATH=/etc/step-ca" >> /etc/profile
 
 # locking down the password file
 sudo chmod 600 password.txt
