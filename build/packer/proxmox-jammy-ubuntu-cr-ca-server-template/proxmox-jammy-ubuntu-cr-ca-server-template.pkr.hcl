@@ -260,8 +260,8 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/ca-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
-                        "../scripts/proxmox/ca-server/frontend/post_install_prxmx_generate_ss_cert.sh",
+    scripts         = ["../scripts/proxmox/ca-server/post_install_prxmx_ubuntu_ca_server_install.sh", 
+                        "../scripts/proxmox/ca-server/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
