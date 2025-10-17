@@ -112,9 +112,9 @@ resource "proxmox_vm_qemu" "cert_auth" {
       "sudo rm /opt/consul/node-id",
       "sudo systemctl restart consul.service",
       "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/node-exporter.service",
-      "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/flask-api.service",
+      "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/step-ca.service",
       "sudo systemctl daemon-reload",
-      "sudo systemctl restart flask-api.service",
+      "sudo systemctl restart step-ca.service",
       "sudo systemctl enable node-exporter.service",
       "sudo systemctl start node-exporter.service",
       "sudo growpart /dev/vda 3",
@@ -135,5 +135,5 @@ resource "proxmox_vm_qemu" "cert_auth" {
 
 output "proxmox_frontend_ip_address_default" {
   description = "Current Public IP"
-  value       = proxmox_vm_qemu.apiserver.*.default_ipv4_address
+  value       = proxmox_vm_qemu.cert_auth.*.default_ipv4_address
 }
