@@ -93,22 +93,11 @@ variable "NUMBEROFCORES" {
 }
 
 # This is the name of the Virtual Machine Template you want to create
-variable "frontend-VMNAME" {
+variable "VMNAME" {
   type    = string
-  default = ""
+  default = "cyber-range-ca-template"
 }
 
-# This is the name of the Virtual Machine Template you want to create
-variable "backend-VMNAME" {
-  type    = string
-  default = ""
-}
-
-# This is the name of the Virtual Machine Template you want to create
-variable "loadbalancer-VMNAME" {
-  type    = string
-  default = ""
-}
 
 variable "iso_checksum" {
   type    = string
@@ -125,18 +114,7 @@ variable "local_iso_name" {
   default = "ubuntu-22.04.5-live-server-amd64.iso"
 }
 
-variable "FE-TAGS" {
+variable "TAGS" {
   type = string
-  default  = "frontend;team00"
-}
-
-variable "BE-TAGS" {
-  type = string
-  default  = "backend;team00"
-}
-
-# Use the tags for your team name and what type of artifact this is
-variable "LB-TAGS" {
-  type = string
-  default  = "loadbalancer;team00"
+  default  = "ca;cr"
 }
