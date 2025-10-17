@@ -36,6 +36,7 @@ sudo setcap CAP_NET_BIND_SERVICE=+eip $(which step-ca)
 #moves it to step-ca system folder, changes owner to a user 'step'
 sudo mkdir /etc/step-ca
 sudo mv $(step path)/* /etc/step-ca
+sed -i 's|/home/vagrant/.step|/etc/step-ca|g' ca.json
 sudo cp /home/vagrant/password.txt /etc/step-ca/password.txt
 sudo chown -R step:step /etc/step-ca
 
