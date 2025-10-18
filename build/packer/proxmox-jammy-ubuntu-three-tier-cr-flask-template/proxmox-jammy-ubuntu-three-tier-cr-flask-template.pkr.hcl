@@ -600,6 +600,15 @@ build {
   }
 
   ########################################################################################################################
+  # This block downloads the root certifcate to all front end instances
+  ########################################################################################################################
+
+   provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_root_ca.sh"]
+  }
+
+  ########################################################################################################################
   # This block executes scripts delete the Deploy Key and remove any uneeded zip files
   ########################################################################################################################
 
