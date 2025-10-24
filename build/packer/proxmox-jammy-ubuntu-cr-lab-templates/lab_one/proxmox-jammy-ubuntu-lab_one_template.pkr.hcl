@@ -212,7 +212,8 @@ build {
     scripts = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_2204.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh"]
+    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
+    "../scripts/proxmox/core-jammy/post_install_prxms_install_pyxtermjs.sh"]
   }
 
   #############################################################################
