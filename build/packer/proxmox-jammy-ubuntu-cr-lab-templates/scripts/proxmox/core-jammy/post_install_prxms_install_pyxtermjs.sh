@@ -7,4 +7,4 @@
 sudo apt install pipx -y
 pipx install pyxtermjs
 pipx ensurepath 
-sudo apt install python-eventlet
+sudo apt install python3-eventlet -y
