@@ -107,6 +107,39 @@ def run_getip():
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None
+
+##############################################################################
+# Helper function to get the IP address of the edge server when user launches
+# lab one
+##############################################################################
+def run_getip():
+    data = request.get_json()
+    session['runtime_uuid'] = data.get('runtime_uuid')
+    email = data.get('email')
+    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
+    lab_number = data.get('lab_number')
+    TOKEN = CR_TOKEN_ID.split('!')
+    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
+
+    prxmx42 = proxmox.nodes("system42").qemu.get()
+
+    runningvms = []
+    runningwithtagsvms = []
+    # Loop through the first node to get all of the nodes that are of status
+    # running and that have the tag of the user for vm in prxmx42:
+    for vm in prxmx42:
+        if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+            runningvms.append(vm)
+
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+
+    return None
+
 ##############################################################################
 # Fabric SSH helper function
 # This function uses Fabric on top of Paramiko in Python to make SSH
