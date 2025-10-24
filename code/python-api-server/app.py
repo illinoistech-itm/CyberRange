@@ -122,6 +122,10 @@ def run_getip():
     proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
     prxmx42 = proxmox.nodes("system42").qemu.get()
+    prxmx41 = proxmox.nodes("system41").qemu.get()
+
+    found42 = False
+    found41 = False
 
     runningvms = []
     runningwithtagsvms = []
@@ -136,7 +140,19 @@ def run_getip():
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            found42 = True
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+        if found42 == False:
+            for vm in prxmx41:
+                if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+                  runningvms.append(vm)
+
+                    for vm in runningvms:
+                        runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                        for x in range(len(runningwithtagsvms)):
+                             for y in range(len(runningwithtagsvms[x]['result'])):
+                                if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None
 
