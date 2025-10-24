@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 #WorkingDirectory=/home/vagrant/.local/bin/pyxtermjs
-ExecStart=/home/vagrant/.local/bin/pyxtermjs
+ExecStart=/home/vagrant/.local/bin/pyxtermjs --port 5000 --host 0.0.0.0 --debug --command bash
 
 Restart=always
 RestartSec=5
