@@ -56,7 +56,7 @@ DATABASENAME = creds['data']['data']['DATABASENAME']
 # Instantiate application
 ##############################################################################
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app) # might move to helper function, called multiple times to instantiate multiple times
 ##############################################################################
 #Initialize SQL Alchemy DB object for SQL
 ##############################################################################
@@ -221,11 +221,11 @@ def hello_world():
     return "<p>Hello, Cyber Range!</p>"
 
 @socketio.on('input')
-def handle_input(data):
+def handle_input(data): # alter for pyxtermjs
     ssh.send(data)  # Send user input to SSH session
 
 def ssh_thread(ip):
-    global ssh
+    global ssh # no longer using parimiko so scrap it 
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(ip, username='vagrant', key_filename='id_ed25519_flask_app_fe_to_launched_edge_server_for_a_lab')

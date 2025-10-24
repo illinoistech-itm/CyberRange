@@ -54,4 +54,7 @@ sudo firewall-cmd --zone=meta-network --add-port=9100/tcp --permanent
 # sudo firewall-cmd --zone=public --add-port=####/tcp --permanent
 # sudo firewall-cmd --zone=public --add-port=####/udp --permanent
 ##############################################################################################
+# Adding open port for the pyxtermjs connection for the web socket 
+sudo firewall-cmd --zone=public --add-port=5000/tcp --permanent
+
 sudo firewall-cmd --reload
