@@ -1,0 +1,25 @@
+# General structure created from https://copilot.microsoft.com/shares/SVpE8dfAbZVoWPrHNEicu
+[Unit]
+Description=pyxtermjs terminal emulator service
+After=network.target
+
+[Service]
+User=flaskuser
+Group=flaskuser
+WorkingDirectory=/home/flaskuser
+# The 0.0.0.0 address will be replaced with a private internal FQDN at runtime
+# by Terraform in the remote exec portion via sed
+ExecStart=/usr/bin/gunicorn --certfile=/home/flaskuser/CAcr.crt --keyfile=/home/flaskuser/CAcr.key --workers 4 --bind 0.0.0.0:5000 app:app
+# defaulted to Environment="PATH=/opt/pyxtermjs/venv/bin"
+# defaulted to ExecStart=/opt/pyxtermjs/venv/bin/pyxtermjs --port 5000
+
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=15
+SyslogIdentifier=CRpyxtermjs
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

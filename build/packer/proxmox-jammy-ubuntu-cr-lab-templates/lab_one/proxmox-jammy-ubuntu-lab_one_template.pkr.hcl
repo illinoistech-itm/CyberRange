@@ -258,4 +258,13 @@ build {
     destination = "/home/vagrant/"
   }
 
+  ########################################################################################################################
+  # Copying the pyxtermjs service file into the VM
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../../scripts/proxmox/api-server/frontend/pyxtermjs.service"
+    destination = "/home/vagrant/"
+  }
+
 }
