@@ -84,6 +84,14 @@ resource "proxmox_vm_qemu" "apiserver" {
     bridge = "vmbr2"
   }
 
+  network {
+    id     = 3
+    #tag    = random_shuffle.vlan.result[0]
+    model  = "virtio"
+    # This is the SDN Zone to isolate the launched VM
+    bridge = "crvlan"
+  }
+
   disks {
     virtio {
       virtio0 {
