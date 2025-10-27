@@ -70,7 +70,7 @@ locals {
 ###############################################################################
 variable "MEMORY" {
   type    = string
-  default = "4096"
+  default = "8192"
 }
 
 # Best to keep this low -- you can expand the size of a disk when deploying 
@@ -84,7 +84,7 @@ variable "DISKSIZE" {
 # Proxmox cloud -- No need to edit this
 variable "STORAGEPOOL" {
   type    = string
-  default = "datadisk1"
+  default = "templatedisk"
 }
 
 variable "NUMBEROFCORES" {
