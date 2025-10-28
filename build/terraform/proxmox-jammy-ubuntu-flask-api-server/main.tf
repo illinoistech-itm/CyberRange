@@ -7,7 +7,8 @@ resource "random_id" "id" {
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle#example-usage
 resource "random_shuffle" "datadisk" {
-  input        = ["datadisk2", "datadisk3", "datadisk4"]
+  #input        = ["datadisk2", "datadisk3", "datadisk4"]
+  input        = ["cyberrange"]
   result_count = 1
 }
 # data.vault_generic_secret.target_node.data
@@ -65,7 +66,7 @@ resource "proxmox_vm_qemu" "apiserver" {
   ipconfig1 = "ip=dhcp"
   ipconfig2 = "ip=dhcp"
   ipconfig3 = "ip=dhcp"
-  
+
   network {
     id     = 0
     model  = "virtio"
