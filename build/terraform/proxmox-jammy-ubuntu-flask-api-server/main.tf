@@ -64,7 +64,8 @@ resource "proxmox_vm_qemu" "apiserver" {
   ipconfig0 = "ip=dhcp"
   ipconfig1 = "ip=dhcp"
   ipconfig2 = "ip=dhcp"
-
+  ipconfig3 = "ip=dhcp"
+  
   network {
     id     = 0
     model  = "virtio"
