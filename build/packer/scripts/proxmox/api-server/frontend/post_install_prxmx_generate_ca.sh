@@ -11,11 +11,11 @@ sudo dpkg -i step-cli_amd64.deb
 
 # have to find a way to dynamically get the password and fingerprint from the CA server
 sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint 095ecc2996e06e9c84d4d1ff211fefb545e4097a3cde68249ecb04cfe231a1b7
-sudo step certificate install --all /root/.step/certs/root_ca.crt
+sudo step certificate install --all /etc/step-ca/certs/root_ca.crt
 echo "158234246165263303871269841982826793299" > password.txt
 
 # explaining the flags https://smallstep.com/docs/step-cli/reference/ca/token/
-TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/root/.step/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
+TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
 sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key
 sudo mv CAcr.crt /home/flaskuser/
 sudo mv CAcr.key /home/flaskuser/
