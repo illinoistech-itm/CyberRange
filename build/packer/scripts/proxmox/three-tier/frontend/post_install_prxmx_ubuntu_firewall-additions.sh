@@ -7,8 +7,8 @@ set -v
 # sudo firewall-cmd --zone=public --add-port=####/tcp --permanent
 # sudo firewall-cmd --zone=public --add-port=####/udp --permanent
 ##############################################################################################
-# Open port 3000 on the internal meta-network port 3000 for our Flask App
+# Open port 3000 on the internal meta-network port 3000 for our Flask App, port 443 for HTTPS
 sudo firewall-cmd --zone=meta-network --add-port=3000/tcp --permanent
-
+sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
 # Restart the firewall to reload the rules
 sudo firewall-cmd --reload
