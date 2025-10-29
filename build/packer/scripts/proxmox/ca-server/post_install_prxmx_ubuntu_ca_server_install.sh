@@ -42,9 +42,10 @@ sudo cp /home/vagrant/password.txt /etc/step-ca/password.txt
 sudo chown -R step:step /etc/step-ca
 
 # enabling and starting the step-ca service
-sudo systemctl daemon-reload
-sudo systemctl enable --now step-ca
-sudo systemctl status step-ca
+sudo systemctl daemon-reload 
+sudo systemctl restart step-ca.service
+sudo systemctl enable --now step-ca.service
+sudo systemctl status step-ca.service
 
 echo "export STEPPATH=/etc/step-ca" >> /etc/profile
 
