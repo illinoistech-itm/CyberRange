@@ -129,6 +129,11 @@ source "proxmox-iso" "frontend-apiserver42" {
     model  = "virtio"
   }
 
+  network_adapters {
+    bridge = "crvlan"
+    model  = "virtio"
+  }
+
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
