@@ -93,7 +93,8 @@ resource "proxmox_vm_qemu" "load-balancer" {
       virtio0 {
         disk {
           iothread = true
-          storage  = random_shuffle.datadisk.result[0]
+          #storage  = random_shuffle.datadisk.result[0]
+          storage  = "cyberrange"
           size     = var.lb-disk_size
         }
       }
@@ -197,7 +198,8 @@ resource "proxmox_vm_qemu" "frontend-webserver" {
       virtio0 {
         disk {
           iothread = true
-          storage  = random_shuffle.datadisk.result[0]
+          #storage  = random_shuffle.datadisk.result[0]
+          storage  = "cyberrange"
           size     = var.frontend-disk_size
         }
       }
