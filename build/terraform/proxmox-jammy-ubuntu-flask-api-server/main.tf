@@ -65,7 +65,7 @@ resource "proxmox_vm_qemu" "apiserver" {
   ipconfig0 = "ip=dhcp"
   ipconfig1 = "ip=dhcp"
   ipconfig2 = "ip=dhcp"
-  ipconfig3 = "ip=dhcp"
+  #ipconfig3 = "ip=dhcp"
 
   network {
     id     = 0
@@ -84,14 +84,6 @@ resource "proxmox_vm_qemu" "apiserver" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
-  }
-
-  network {
-    id     = 3
-    #tag    = random_shuffle.vlan.result[0]
-    model  = "virtio"
-    # This is the SDN Zone to isolate the launched VM
-    bridge = "crvlan"
   }
 
   disks {
