@@ -144,7 +144,7 @@ source "proxmox-iso" "frontend-apiserver42" {
   scsi_controller          = "virtio-scsi-single"
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
-  ssh_timeout              = "26m"
+  ssh_timeout              = "20m"
   template_description     = "A Packer template Python Flask API Server"
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
