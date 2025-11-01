@@ -325,7 +325,7 @@ build {
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
+    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
     only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
   }
 

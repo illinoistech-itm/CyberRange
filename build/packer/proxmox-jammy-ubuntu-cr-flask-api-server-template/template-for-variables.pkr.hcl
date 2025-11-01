@@ -46,6 +46,10 @@ locals {
   APP_VAULTTOKEN = vault("/secret/data/CR","APP_VAULTTOKEN")
 }
 
+locals {
+  FINGERPRINT = vault("/secret/data/CR", "FINGERPRINT")
+}
+
 # This variable is the IP address range to allow your connections
 # The SQL wildcard is the %
 # 10.110.%.%  could also be a FQDN 
