@@ -17,7 +17,8 @@ sudo step certificate install --all /etc/step-ca/certs/root_ca.crt
 echo "158234246165263303871269841982826793299" > password.txt
 
 # explaining the flags https://smallstep.com/docs/step-cli/reference/ca/token/
-TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
+#TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
+TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/root/.step/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
 sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key
 sudo mv CAcr.crt /home/flaskuser/
 sudo mv CAcr.key /home/flaskuser/
