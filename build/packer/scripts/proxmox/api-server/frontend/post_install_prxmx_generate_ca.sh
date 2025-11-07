@@ -58,6 +58,6 @@ sudo chown flaskuser:flaskuser /home/flaskuser/CAcr.crt
 sudo chown flaskuser:flaskuser /home/flaskuser/CAcr.key
 sudo chmod 600 /home/flaskuser/CAcr.crt
 sudo chmod 600 /home/flaskuser/CAcr.key
-sudo chmod 600 password.txt
+sudo chmod 600 provisioner-password.txt
 
 echo "Certificate and unencrypted key successfully created"
