@@ -15,15 +15,26 @@ sudo dpkg -i step-cli_amd64.deb
 sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint $FINGERPRINT
 #sudo step certificate install --all /etc/step-ca/certs/root_ca.crt
 sudo step certificate install --all /root/.step/certs/root_ca.crt
-echo "158234246165263303871269841982826793299" > password.txt
+#echo "158234246165263303871269841982826793299" > password.txt <--commented out to test alternative, add back in if fails
+echo "176820514074201284967811592992451421160" > provisioner-password.txt
 
 # explaining the flags https://smallstep.com/docs/step-cli/reference/ca/token/
 #TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
 TOKEN=$(sudo step ca token system36.rice.iit.edu \
  --ca-url=system36.rice.iit.edu \
- --provisioner-password-file password.txt \
+ --provisioner-password-file provisioner-password.txt \
+ --provisioner "jwksmallstep.com" \
  --root /root/.step/certs/root_ca.crt \
  --kid _NDDiuYtkkyRQMDb9b4jPw0alz_3SG5z5STPYdRfOjI)
+
+#check if token generation was successful
+if [ -z "$TOKEN" ]; then
+    echo "Error: Failed to generate token"
+    exit 1
+fi
+
+echo "Token generated successfully"
+
 
 #sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key <---commented out to test alternative, add back in if fails
 sudo step ca certificate system36.rice.iit.edu \
@@ -48,3 +59,5 @@ sudo chown flaskuser:flaskuser /home/flaskuser/CAcr.key
 sudo chmod 600 /home/flaskuser/CAcr.crt
 sudo chmod 600 /home/flaskuser/CAcr.key
 sudo chmod 600 password.txt
+
+echo "Certificate and unencrypted key successfully created"
