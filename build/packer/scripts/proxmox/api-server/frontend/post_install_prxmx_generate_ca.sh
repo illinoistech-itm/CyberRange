@@ -23,7 +23,7 @@ echo "176820514074201284967811592992451421160" > provisioner-password.txt
 TOKEN=$(sudo step ca token system36.rice.iit.edu \
  --ca-url=system36.rice.iit.edu \
  --provisioner-password-file provisioner-password.txt \
- --provisioner "jwksmallstep.com" \
+ --provisioner "jwk@smallstep.com" \
  --root /root/.step/certs/root_ca.crt \
  --kid _NDDiuYtkkyRQMDb9b4jPw0alz_3SG5z5STPYdRfOjI)
 
