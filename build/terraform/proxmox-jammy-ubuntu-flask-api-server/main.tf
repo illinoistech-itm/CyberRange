@@ -114,7 +114,7 @@ resource "proxmox_vm_qemu" "apiserver" {
       "sudo rm /opt/consul/node-id",
       "sudo systemctl restart consul.service",
       "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/node-exporter.service",
-      "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/flask-api.service",
+      # "sudo sed -i 's/0.0.0.0/${var.yourinitials}-vm${count.index}.service.consul/' /etc/systemd/system/flask-api.service",
       "sudo systemctl daemon-reload",
       "sudo systemctl restart flask-api.service",
       "sudo systemctl enable node-exporter.service",
