@@ -20,7 +20,9 @@ echo "176820514074201284967811592992451421160" > provisioner-password.txt
 
 # explaining the flags https://smallstep.com/docs/step-cli/reference/ca/token/
 #TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
-TOKEN=$(sudo step ca token system36.rice.iit.edu \
+# 8544 hours is 1 year in hours
+TOKEN=$(sudo step ca token system57.rice.iit.edu \
+ --not-after=8544h \
  --ca-url=system36.rice.iit.edu \
  --provisioner-password-file provisioner-password.txt \
  --provisioner "vagrant@system36.rice.iit.edu" \
