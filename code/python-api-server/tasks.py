@@ -88,7 +88,7 @@ def run_fabric_command(self, list_of_commands):
             else:
               logger.info(cmd + " failed with a return code of: {result.exited}")   
             
-            update_progress(self.request.id, "SUCCESS", "Command completed.")
+            update_progress(self.request.id, "SUCCESS", "Command completed:" + cmd)
             logger.info("success!!! for " + cmd)
         
         except Exception as e:
