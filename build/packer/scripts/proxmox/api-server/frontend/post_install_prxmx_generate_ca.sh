@@ -39,7 +39,7 @@ echo "Token generated successfully"
 
 
 #sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key <---commented out to test alternative, add back in if fails
-sudo step ca certificate system36.rice.iit.edu \
+sudo step ca certificate system57.rice.iit.edu \
     CAcr.crt \
     CAcr.key \
     --token "$TOKEN" \
