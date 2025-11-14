@@ -219,9 +219,9 @@ def stream(task_id):
         last_sent = 0
         while True:
             progress = get_task_progress(task_id)
-            if progress["timestamp"] > last_sent:
+            if int(progress["timestamp"]) > last_sent:
                 yield f"data: {progress}\n\n"
-                last_sent = progress["timestamp"]
+                last_sent = int(progress["timestamp"])
             if progress["status"] in ("SUCCESS", "FAILURE"):
                 break
             time.sleep(1)
