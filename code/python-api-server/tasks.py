@@ -67,7 +67,7 @@ r = redis.Redis()
 def update_progress(task_id, status, output=""):
     logger.info("About to run function update_progress defined...")
     data = { "status": status, "output": output, "timestamp": str(time.time()) }
-    r.set(f"progress:{task_id}", json.dumps(data) )
+    r.set(f"progress:{task_id}", data )
 
 def get_task_progress(task_id):
     data = r.get(f"progress:{task_id}")
