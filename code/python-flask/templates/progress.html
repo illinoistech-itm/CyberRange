@@ -28,6 +28,7 @@
         source.onmessage = function(event) {
             // Adding debug output to console (F12) 
             console.log("Raw message:", event.data);
+            console.log("Event.data type: ", typeof event.data);
             const data = JSON.parse(event.data);
             document.getElementById("progress").textContent = `Progress: ${data.progress}%`;
 
