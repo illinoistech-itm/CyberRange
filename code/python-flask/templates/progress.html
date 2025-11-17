@@ -29,7 +29,9 @@
             // Adding debug output to console (F12) 
             console.log("Raw message:", event.data);
             console.log("Event.data type: ", typeof event.data);
-            const data = JSON.parse(event.data);
+            let fixedJson = event.data;
+            //const data = JSON.parse(event.data);
+            const data = JSON.parse(fixedJson.replace(/'/g, '"'));
             document.getElementById("progress").textContent = `Progress: ${data.progress}%`;
 
             if (data.status === "done") {
