@@ -34,12 +34,12 @@
             const data = JSON.parse(fixedJson.replace(/'/g, '"'));
             // Better to append the progress message so we can see what is happening...
             // https://copilot.microsoft.com/shares/hzniNYBynoCFSxEQNVQRX
-            //document.getElementById("progress").textContent = `Progress: ${data.progress}%`;
-            let current = document.getElementById("progress").textContent;
-            current.textContent += `Progress: ${data.status}%`;
+            document.getElementById("progress").textContent += `Progress: ${data.progress}%`;
+            //let current = document.getElementById("progress").textContent;
+            //current.textContent += `Progress: ${data.status}%`;
 
             if (data.status === "FINISHED") {
-                document.getElementById("progress").textContent += " ✅ Task completed!";
+                document.getElementById("progress").textContent += " ✅ Task completed! Ready to enter the Lab...";
                 source.close();
             }
         };
