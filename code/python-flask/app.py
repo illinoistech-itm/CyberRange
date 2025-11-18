@@ -293,13 +293,15 @@ def lab_one():
     # return redirect(url_for('.progress_page', task_id=t_id))
     # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
     # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL')) # trying to render progress without task id in URL
+    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid) # trying to render progress without task id in URL
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
 
-
-
+##############################################################################
+# Probably only needs to be a single lab function that passes different 
+# parameters in -- as this will be too large to scale once we get more labs
+##############################################################################
 @app.route('/lab_two')
 @login_required
 def lab_two():
@@ -321,48 +323,62 @@ def lab_three():
 
 @app.route('/shelly')
 @login_required
-def shelly():
-    return render_template('shelly.html')
+def shelly(launch_id):
+    ip=run_getip(launch_id)
+    return render_template('shelly.html', edge_node_ip=ip)
+
+##############################################################################
+# Helper function to get the IP address of the edge server when user launches
+# a lab -- need to take the launch_uuid and search the tags for the VM with
+# with that value along with the edge_node tag
+##############################################################################
+def run_getip(launch_id):
+    data = request.get_json()
+    session['runtime_uuid'] = data.get('runtime_uuid')
+    email = data.get('email')
+    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
+    lab_number = data.get('lab_number')
+    TOKEN = CR_TOKEN_ID.split('!')
+    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
+
+    prxmx42 = proxmox.nodes("system42").qemu.get()
+    prxmx41 = proxmox.nodes("system41").qemu.get()
+
+    found42 = False
+    found41 = False
+
+    runningvms = []
+    runningwithtagsvms = []
+    # Loop through the first node to get all of the nodes that are of status
+    # running and that have the tag of the user for vm in prxmx42:
+    for vm in prxmx42:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags']:
+            runningvms.append(vm)
+
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            found42 = True
+                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+        
+    if found42 == False:
+        for vm in prxmx41:
+            if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                            for y in range(len(runningwithtagsvms[x]['result'])):
+                                if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+
+    return None
 
 
 @app.route('/end-lab')
 @login_required
 def endlab():
-    # os.system(f"echo '{UUID}, {username}' > /home/vagrant/end-lab-reached")
-    with open('/home/vagrant/kali-ip', 'r') as file:
-        content = file.read()
-        kaliIP = content.strip()
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(SSH_HOST, username=SSH_USER, key_filename=SSH_KEY, port=SSH_PORT)
-    command = "source /home/izziwa/.ssh/environment; source /home/izziwa/user-vars; printenv > /home/izziwa/ssh-destroy-env; bash /home/izziwa/lab_destroy.sh"
-    stdin, stdout, stderr = client.exec_command(command)
-    client.close()
-    os.system(f"sed -i 's/{kaliIP}/<IP-HERE>/g' /home/vagrant/oauth-site/templates/shelly.html")
-    return redirect(url_for('.launch'))
-
-def lab_control(UUID, username):
-    # render_template('waiting.html')
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(SSH_HOST, username=SSH_USER, key_filename=SSH_KEY, port=SSH_PORT)   
-
-    # Pass UUID and username variables to the bash script
-    command = "source /home/izziwa/.ssh/environment; bash /home/izziwa/lab_launch.sh " + UUID + " " + username
-    stdin, stdout, stderr = client.exec_command(command)
-    # Wait for terraform apply to finish
-    exitStatus = stdout.channel.recv_exit_status()
-    if exitStatus == 0:
-        # Retrieve Kali IP
-        config = configparser.ConfigParser()
-        config.read("config.ini")
-        proxmox = ProxmoxAPI(config['DEFAULT']['url'], user=config['DEFAULT']['user'], password=config['DEFAULT']['pass'], verify_ssl=False)
-
-  
-    else:
-        os.system(f"echo 'Error. Exit code {exitStatus} returned.' > /home/vagrant/get-kali-ip-log")
-
-
-    client.close()
-    # Redirect to shelly
-    return redirect(url_for('.shelly'))
+   return None

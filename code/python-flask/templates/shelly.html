@@ -24,8 +24,9 @@
       <script>
         const term = new Terminal();
         term.open(document.getElementById('terminal'));
-        const socket = io();
-
+        //const socket = io();
+        //const socket = io("http://{{ request.host.split(':')[0] }}:5000");
+        const socket = io("http://system57.rice.iit.edu:5000");
         term.onData(data => socket.emit('input', data));
         socket.on('output', data => term.write(data));
       </script>

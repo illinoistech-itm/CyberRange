@@ -84,7 +84,9 @@ def run_getip():
     data = request.get_json()
     session['runtime_uuid'] = data.get('runtime_uuid')
     email = data.get('email')
-    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
+    # The tags do not accept special characters, so we have to split the email
+    # address
+    username = email.split('@')[0] 
     lab_number = data.get('lab_number')
     TOKEN = CR_TOKEN_ID.split('!')
     proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -139,7 +141,7 @@ def run_getip():
                 runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found42 = True
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
         
@@ -152,7 +154,7 @@ def run_getip():
                     runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                                     return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None

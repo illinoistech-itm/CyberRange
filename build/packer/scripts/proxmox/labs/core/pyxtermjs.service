@@ -1,0 +1,19 @@
+# General structure created from https://copilot.microsoft.com/shares/SVpE8dfAbZVoWPrHNEicu
+[Unit]
+Description=pyxtermjs terminal emulator service
+After=network.target
+
+[Service]
+#WorkingDirectory=/home/vagrant/.local/bin/pyxtermjs
+ExecStart=/home/vagrant/.local/bin/pyxtermjs --port 5000 --host 0.0.0.0 --debug --command bash
+
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=15
+SyslogIdentifier=CRpyxtermjs
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

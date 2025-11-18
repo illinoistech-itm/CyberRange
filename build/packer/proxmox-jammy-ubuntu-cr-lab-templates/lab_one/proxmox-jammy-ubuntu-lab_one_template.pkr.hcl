@@ -74,8 +74,73 @@ source "proxmox-iso" "lab_one_edge_server_41" {
   scsi_controller          = "virtio-scsi-single"
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
-  ssh_timeout              = "26m"
-  template_description     = "A Packer template for Ubuntu Jammy Database" 
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template for CR edge_node lab_one" 
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
+}
+
+###########################################################################################
+# This is a Packer build template the lab_node for lab_one
+###########################################################################################
+source "proxmox-iso" "lab_one_node_41" {
+  boot_command = [
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+  boot_iso {
+    type="scsi"
+    iso_file="local:iso/${var.local_iso_name}"
+    unmount=true
+    iso_checksum="${var.iso_checksum}"
+  }
+  boot_wait = "5s"
+  cores     = "${var.NUMBEROFCORES}"
+  node      = "${local.NODENAME}"
+  username  = "${local.USERNAME}"
+  token     = "${local.PROXMOX_TOKEN}"
+  cpu_type  = "host"
+  disks {
+    disk_size    = "${var.DISKSIZE}"
+    storage_pool = "${var.STORAGEPOOL}"
+    type         = "virtio"
+    io_thread    = true
+    format       = "raw"
+  }
+  http_directory    = "subiquity/http"
+  http_bind_address = "10.110.0.45"
+  http_port_max    = 9200
+  http_port_min    = 9001
+  memory           = "${var.MEMORY}"
+
+  network_adapters {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr1"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr2"
+    model  = "virtio"
+  }
+
+  os                       = "l26"
+  proxmox_url              = "${local.URL}"
+  insecure_skip_tls_verify = true
+  qemu_agent               = true
+  cloud_init               = true
+  cloud_init_storage_pool  = "local"
+  # io thread option requires virtio-scsi-single controller
+  scsi_controller          = "virtio-scsi-single"
+  ssh_password             = "${local.SSHPW}"
+  ssh_username             = "${local.SSHUSER}"
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template CR lab_one lab node" 
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
 }
@@ -139,14 +204,79 @@ source "proxmox-iso" "lab_one_edge_server_42" {
   scsi_controller          = "virtio-scsi-single"
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
-  ssh_timeout              = "26m"
-  template_description     = "A Packer template for Ubuntu Jammy Database" 
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template for CR edge_node lab_one"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
+}
+
+###########################################################################################
+# This is a Packer build template the lab_node for lab_one
+###########################################################################################
+source "proxmox-iso" "lab_one_node_42" {
+  boot_command = [
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+  boot_iso {
+    type="scsi"
+    iso_file="local:iso/${var.local_iso_name}"
+    unmount=true
+    iso_checksum="${var.iso_checksum}"
+  }
+  boot_wait = "12s"
+  cores     = "${var.NUMBEROFCORES}"
+  node      = "${local.NODENAME2}"
+  username  = "${local.USERNAME}"
+  token     = "${local.PROXMOX_TOKEN}"
+  cpu_type  = "host"
+  disks {
+    disk_size    = "${var.DISKSIZE}"
+    storage_pool = "${var.STORAGEPOOL}"
+    type         = "virtio"
+    io_thread    = true
+    format       = "raw"
+  }
+  http_directory    = "subiquity/http"
+  http_bind_address = "10.110.0.45"
+  http_port_max    = 9200
+  http_port_min    = 9001
+  memory           = "${var.MEMORY}"
+
+  network_adapters {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr1"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr2"
+    model  = "virtio"
+  }
+
+  os                       = "l26"
+  proxmox_url              = "${local.URL}"
+  insecure_skip_tls_verify = true
+  qemu_agent               = true
+  cloud_init               = true
+  cloud_init_storage_pool  = "local"
+  # io thread option requires virtio-scsi-single controller
+  scsi_controller          = "virtio-scsi-single"
+  ssh_password             = "${local.SSHPW}"
+  ssh_username             = "${local.SSHUSER}"
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template for CR lab_node lab_one"
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 build {
-  sources = ["source.proxmox-iso.lab_one_edge_server_42","source.proxmox-iso.lab_one_edge_server_41"]
+  sources = ["source.proxmox-iso.lab_one_edge_server_42","source.proxmox-iso.lab_one_edge_server_41","source.proxmox-iso.lab_one_node_42","source.proxmox-iso.lab_one_node_41"]
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
@@ -263,8 +393,29 @@ build {
   ########################################################################################################################
  
   provisioner "file" {
-    source      = "../../scripts/proxmox/api-server/frontend/pyxtermjs.service"
+    source      = "../../scripts/proxmox/labs/core/pyxtermjs.service"
     destination = "/home/vagrant/"
+    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    }
+
+  #############################################################################
+  # Script to move the pyxtermjs service file and enable it
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/labs/core/move-pyxtermjs-service.sh"]
+    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
+  }
+
+  #############################################################################
+  # Script to move the pyxtermjs service file and enable it
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/labs/core/move-pyxtermjs-service.sh"]
+    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
 }

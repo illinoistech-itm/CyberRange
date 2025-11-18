@@ -1,0 +1,20 @@
+# lab_one.toml
+# Enter the Questions for each lab here
+[answers]
+step_one = "ls"
+step_two = "whoami"
+step_three = "sudo adduser john1"
+step_four = "sudo adduser jane1"
+step_five = "sudo addgroup developers"
+step_six = "sudo addgroup sys-admin"
+step_seven = "sudo usermod -G developers john1"
+step_eight = "groups john1"
+step_nine = "sudo usermod -G sys-admin jane1"
+step_ten = "groups jane1"
+step_eleven = "touch lab_file.txt"
+step_twelve = "ls -l lab_file.txt"
+step_thirteen = "sudo chmod 600 lab_file.txt"
+step_fourteen = "ls -l lab_file.txt"
+step_fifteen = "sudo chmod 750 lab_file.txt"
+step_sixteen = "ls -l lab_file.txt"
+step_seventeen = "sudo chown jane1 lab_file.txt"
