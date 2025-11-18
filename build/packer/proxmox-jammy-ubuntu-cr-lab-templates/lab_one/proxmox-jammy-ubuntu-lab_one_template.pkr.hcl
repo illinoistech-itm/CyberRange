@@ -343,7 +343,7 @@ build {
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
     "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxms_install_pyxtermjs.sh"]
+    ]
   }
 
   #############################################################################
@@ -404,7 +404,8 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/labs/core/move-pyxtermjs-service.sh"]
+    scripts         = ["../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
+                      "../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh"]
     only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
