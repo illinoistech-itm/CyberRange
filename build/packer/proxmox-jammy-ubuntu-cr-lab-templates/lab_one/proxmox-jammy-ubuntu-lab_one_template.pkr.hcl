@@ -419,4 +419,14 @@ build {
     only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
+  #############################################################################
+  # Install the lab elements on the node(s)
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../../scripts/proxmox/labs/lab_one/install-lab-elements.sh"]
+    only=["source.proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41"]
+  }
+
 }
