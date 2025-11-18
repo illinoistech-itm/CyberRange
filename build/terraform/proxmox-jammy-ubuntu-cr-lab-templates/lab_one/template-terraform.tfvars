@@ -24,6 +24,7 @@ consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the 
 # instances from
 ###############################################################################
 template_to_clone = "" # The name of the template to clone
+ln_template_to_clone = "" # The name of the template to clone
 #tags              = "" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings

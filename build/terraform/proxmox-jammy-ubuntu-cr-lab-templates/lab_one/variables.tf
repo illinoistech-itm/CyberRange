@@ -29,7 +29,11 @@ variable "keypath" {}
 
 variable "yourinitials" {}
 
+variable "ln_yourinitials" {}
+
 variable "tags" {}
+
+variable "ln_tags" {}
 
 variable "consul-service-tag-contact-email" {}
 
