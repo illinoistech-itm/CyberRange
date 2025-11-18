@@ -67,6 +67,12 @@ variable "VMNAME" {
   default = ""
 }
 
+# This is the name of the Virtual Machine Template you want to create
+variable "LN-VMNAME" {
+  type    = string
+  default = ""
+}
+
 variable "iso_checksum" {
   type    = string
   default = "file:https://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/SHA256SUMS"

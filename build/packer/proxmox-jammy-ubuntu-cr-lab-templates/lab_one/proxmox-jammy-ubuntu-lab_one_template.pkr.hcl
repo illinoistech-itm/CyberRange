@@ -141,7 +141,7 @@ source "proxmox-iso" "lab_one_node_41" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
   template_description     = "A Packer template CR lab_one lab node" 
-  vm_name                  = "${var.VMNAME}"
+  vm_name                  = "${var.LN-VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
@@ -271,7 +271,7 @@ source "proxmox-iso" "lab_one_node_42" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
   template_description     = "A Packer template for CR lab_node lab_one"
-  vm_name                  = "${var.VMNAME}"
+  vm_name                  = "${var.LN-VMNAME}"
   tags                     = "${var.TAGS}"
 }
 

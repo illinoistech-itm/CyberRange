@@ -77,38 +77,6 @@ app.secret_key = APP_SECRET
 ##############################################################################
 CORS(app, resources={r"/*": {"origins": ["https://system60.rice.iit.edu"]}}) 
 ##############################################################################
-# Proxmoxer Helper function
-##############################################################################
-@app.route('/getip', methods=['POST'])
-def run_getip():
-    data = request.get_json()
-    session['runtime_uuid'] = data.get('runtime_uuid')
-    email = data.get('email')
-    # The tags do not accept special characters, so we have to split the email
-    # address
-    username = email.split('@')[0] 
-    lab_number = data.get('lab_number')
-    TOKEN = CR_TOKEN_ID.split('!')
-    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
-
-    prxmx42 = proxmox.nodes("system42").qemu.get()
-
-    runningvms = []
-    runningwithtagsvms = []
-    # Loop through the first node to get all of the nodes that are of status
-    # running and that have the tag of the user for vm in prxmx42:
-    for vm in prxmx42:
-        if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
-            runningvms.append(vm)
-
-            for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                for x in range(len(runningwithtagsvms)):
-                    for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168.100." in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-
-    return None
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
@@ -184,11 +152,13 @@ def prepare_command():
     src = "/home/cr/CyberRange/build/terraform/proxmox-jammy-ubuntu-cr-lab-templates/" + lab_number
     dest = "/tmp/" + uid + "/"
     dest_after_copy = "/tmp/" + uid + "/" + lab_number
-    t = uid + ";" + username + ";" + lab_number + ";" + "cr"
+    t = uid + ";" + username + ";" + lab_number + ";" + "cr" + ";" + "edge"
+    ln = uid + ";" + username + ";" + lab_number + ";" + "cr"
     # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     vars = {
         "tags": t,
-        "yourinitials": uid
+        "yourinitials": uid,
+        "ln_tags": ln
     }
     # Build the base command
     cmd = ["terraform", "apply", "-auto-approve"]
