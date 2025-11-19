@@ -7,10 +7,16 @@
     {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
     <h2>Task Progress</h2>
     <div id="progress">Waiting for updates... {{ task_id }}, connecting to {{ api_url }}</div>
+    {# test styling to put place the shelly link #}
+    <a id="shelly-link" style="display:block; margin-top:1em;"></a>
 
     <script>
         const taskId = "{{ task_id }}";
-        const source = new EventSource(`{{ api_url }}/stream/${taskId}`);
+        const apiURL = "{{ api_url }}";
+        const source = new EventSource(`${apiUrl}/stream/${taskId}`);
+
+        // trying to safely transfer the lab uuid to JS
+        const launchedLabUUID = {{ lab_launch_uuid | tojson }};
 
         // Fires when the connection is successfully opened
         source.onopen = function() {
@@ -26,7 +32,7 @@
         };
 
         source.onmessage = function(event) {
-            // Adding debug output to console (F12) 
+            // Adding debug output to console (F12)
             console.log("Raw message:", event.data);
             console.log("Event.data type: ", typeof event.data);
             let fixedJson = event.data;
@@ -40,14 +46,25 @@
 
             if (data.status === "FINISHED") {
                 document.getElementById("progress").textContent += " ✅ Task completed! Ready to enter the Lab...\n";
-                // This block shows a URL after the Terraform launch is complete. The link is to 
+                // This block shows a URL after the Terraform launch is complete. The link is to
                 // shelly route that will take as input the UUID added to the tags of the recently
-                // launched lab edge node, and give that found IP to th pyxtermjs to connect 
+                // launched lab edge node, and give that found IP to th pyxtermjs to connect
                 // via port 5000 over a websocket.
-                let link = document.getElementById("progress")
-                console.log("{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}");
-                link.href = "{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}";
-                link.textContent; 
+
+                // trying to build in the shelly html without nested {{ }}
+                const baseShelly = "{{ url_for('shelly') }}";
+                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUuid)}`;
+
+                const linkEl = document.getElementById("shelly-link");
+                linkEl.href = shellyURL;
+                linkEl.textContent = "Open Shelly console";
+                linkEl.target = "_blank";
+                console.log("URL: " + shellyURL);
+
+                //let link = document.getElementById("progress")
+                //console.log("{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}");
+                //link.href = "{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}";
+                //link.textContent;
                 source.close();
             }
 
