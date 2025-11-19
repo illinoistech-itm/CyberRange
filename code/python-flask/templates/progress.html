@@ -16,7 +16,7 @@
         const source = new EventSource(`${apiUrl}/stream/${taskId}`);
 
         // trying to safely transfer the lab uuid to JS
-        const launchedLabUUID = {{ lab_launch_uuid | tojson }};
+        const launchedLabUUID = "{{ lab_launch_uuid | tojson }}";
 
         // Fires when the connection is successfully opened
         source.onopen = function() {
