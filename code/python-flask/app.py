@@ -324,6 +324,7 @@ def lab_three():
 @app.route('/shelly')
 @login_required
 def shelly(launch_id):
+    launch_id = request.args.get('launch_id')
     ip=run_getip(launch_id)
     return render_template('shelly.html', edge_node_ip=ip)
 

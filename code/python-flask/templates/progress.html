@@ -1,73 +1,69 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Task Progress</title>
+    <style>
+        /* So newlines in textContent actually show up */
+        #progress {
+            white-space: pre-line;
+        }
+    </style>
 </head>
 <body>
     {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
     <h2>Task Progress</h2>
-    <div id="progress">Waiting for updates... {{ task_id }}, connecting to {{ api_url }}</div>
-    {# test styling to put place the shelly link #}
+    <div id="progress">
+        Waiting for updates... {{ task_id }}, connecting to {{ api_url }}
+    </div>
+
+    {# Link that will be populated when the lab is ready #}
     <a id="shelly-link" style="display:block; margin-top:1em;"></a>
 
     <script>
         const taskId = "{{ task_id }}";
-        const apiURL = "{{ api_url }}";
+        const apiUrl = "{{ api_url }}";  // match case
         const source = new EventSource(`${apiUrl}/stream/${taskId}`);
 
-        // trying to safely transfer the lab uuid to JS
-        const launchedLabUUID = "{{ lab_launch_uuid | tojson }}";
+        // UUID for this launched lab, passed from Flask
+        const labLaunchUUID = "{{ lab_launch_uuid }}";
 
-        // Fires when the connection is successfully opened
-        source.onopen = function() {
+        source.onopen = function () {
             console.log("SSE connection established");
         };
 
-        // Fires on connection error (including CORS issues, server down, etc.)
-        source.onerror = function(err) {
+        source.onerror = function (err) {
             console.error("SSE connection error", err);
-
-            // Optional: close and retry manually
-            // source.close();
+            // Optional: source.close();
         };
 
-        source.onmessage = function(event) {
-            // Adding debug output to console (F12)
+        source.onmessage = function (event) {
             console.log("Raw message:", event.data);
-            console.log("Event.data type: ", typeof event.data);
+            console.log("Event.data type:", typeof event.data);
+
             let fixedJson = event.data;
-            //const data = JSON.parse(event.data);
+            // If your backend eventually sends valid JSON, just do:
+            // const data = JSON.parse(event.data);
             const data = JSON.parse(fixedJson.replace(/'/g, '"'));
-            // Better to append the progress message so we can see what is happening...
-            // https://copilot.microsoft.com/shares/hzniNYBynoCFSxEQNVQRX
-            document.getElementById("progress").textContent += `Status: ${data.status} ${data.output}\n`;
-            //let current = document.getElementById("progress").textContent;
-            //current.textContent += `Progress: ${data.status}%`;
+
+            const progressEl = document.getElementById("progress");
+            progressEl.textContent += `\nStatus: ${data.status} ${data.output}`;
 
             if (data.status === "FINISHED") {
-                document.getElementById("progress").textContent += " ✅ Task completed! Ready to enter the Lab...\n";
-                // This block shows a URL after the Terraform launch is complete. The link is to
-                // shelly route that will take as input the UUID added to the tags of the recently
-                // launched lab edge node, and give that found IP to th pyxtermjs to connect
-                // via port 5000 over a websocket.
+                progressEl.textContent += "\n✅ Task completed! Ready to enter the Lab...";
 
-                // trying to build in the shelly html without nested {{ }}
+                // Build link to Shelly console with launch_id as a query param
                 const baseShelly = "{{ url_for('shelly') }}";
-                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUuid)}`;
+                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)}`;
 
                 const linkEl = document.getElementById("shelly-link");
                 linkEl.href = shellyURL;
                 linkEl.textContent = "Open Shelly console";
                 linkEl.target = "_blank";
-                console.log("URL: " + shellyURL);
 
-                //let link = document.getElementById("progress")
-                //console.log("{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}");
-                //link.href = "{{ url_for('shelly', launch_id= {{lab_launch_uuid}}) }}";
-                //link.textContent;
+                console.log("Shelly URL:", shellyURL);
+
                 source.close();
             }
-
         };
     </script>
 </body>
