@@ -1,0 +1,21 @@
+// Sample config for Alloy.
+//
+// For a full configuration reference, see https://grafana.com/docs/alloy
+//https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.journal/
+
+logging {
+  level = "debug" // all logs, including debug
+}
+
+loki.source.journal "flask_journal" {
+  //directory = "/var/log/journal"
+  labels = {component = "REPLACE"}
+  matches = "_SYSTEMD_UNIT=flask-app.service"
+  forward_to = [loki.write.send_to_loki.receiver]
+}
+
+loki.write "send_to_loki" {
+  endpoint {
+    url = "http://loki-vm0.service.consul:3100/loki/api/v1/push"
+  }
+}

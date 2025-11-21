@@ -466,6 +466,16 @@ build {
     destination = "/home/vagrant/"
   }
 
+  ##############################################################################
+  # Copying the custom configuration for Alloy to be setup to send systemd logs
+  # to Loki
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/config.alloy"
+    destination = "/home/vagrant/config.alloy"
+  }
+
   #############################################################################
   # Copy the consul.conf file to the instance to update the consul DNS to look 
   # on the internal port of 8600 to resolve the .consul domain lookups
@@ -507,7 +517,8 @@ build {
     scripts = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_2204.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh"]
+    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
   }
 
   #############################################################################

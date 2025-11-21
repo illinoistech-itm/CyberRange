@@ -187,6 +187,16 @@ build {
     destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
   }
 
+  ##############################################################################
+  # Copying the custom configuration for Alloy to be setup to send systemd logs
+  # to Loki
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/config.alloy"
+    destination = "/home/vagrant/config.alloy"
+  }
+
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
@@ -251,7 +261,8 @@ build {
     scripts = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_2204.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh"]
+    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
   }
 
   #############################################################################
