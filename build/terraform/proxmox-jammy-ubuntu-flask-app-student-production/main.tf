@@ -255,7 +255,7 @@ output "proxmox_frontend_ip_address_default" {
 ###############################################################################
 # Terraform Plan for Loki Instance - log server
 ###############################################################################
-resource "proxmox_vm_qemu" "backend-database" {
+resource "proxmox_vm_qemu" "log-server" {
   count = var.logserver-numberofvms
   name  = "${var.logserver-yourinitials}-vm${count.index}.service.consul"
   desc  = var.backend-desc
@@ -346,10 +346,15 @@ resource "proxmox_vm_qemu" "backend-database" {
   }
 }
 
+output "proxmox_logserver_ip_address_default" {
+  description = "Current Public IP"
+  value       = proxmox_vm_qemu.log-server.*.default_ipv4_address
+}
+
 ###############################################################################
 # Terraform Plan for backend Database instances
 ###############################################################################
-resource "proxmox_vm_qemu" "log-server" {
+resource "proxmox_vm_qemu" "backend-database" {
   count = var.backend-numberofvms
   name  = "${var.backend-yourinitials}-vm${count.index}.service.consul"
   desc  = var.backend-desc
