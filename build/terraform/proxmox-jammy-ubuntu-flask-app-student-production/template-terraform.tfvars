@@ -24,6 +24,9 @@ backend-desc                     = ""                     # What is the purpose 
 lb-yourinitials                  = ""                     # initials to add to make unique systems
 lb-numberofvms                   = 1                      # quantity of that template to launch
 lb-desc                          = ""                     # What is the purpose of the TF template
+logserver-yourinitials                  = ""                     # initials to add to make unique systems
+logserver-numberofvms                   = 1                      # quantity of that template to launch
+logserver-desc                          = ""                     # What is the purpose of the TF template
 lb-macaddr                       = ""                     # Class assigned mac address for a public IP for your lb
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
@@ -36,6 +39,7 @@ lb-template_to_clone       = "" # The name of the template to clone
 fe-tags                    = "" # Tags separated by commas: fe,team00
 lb-tags                    = "" # Tags separated by commas: lb,team00
 be-tags                    = "" # Tags separated by commas: be,team00
+ls-tags                    = "" # Tags separated by commas: ls,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
@@ -51,3 +55,7 @@ lb-memory          = 2048  # Memory size of a VM
 lb-cores           = 1     # vCPU = cores * sockets
 lb-sockets         = 1     # vCPU = cores * sockets
 lb-disk_size       = "30G" # Disk size of a VM - min size must equal to the disk size of your clone image
+logserver-memory          = 2048  # Memory size of a VM
+logserver-cores           = 1     # vCPU = cores * sockets
+logserver-sockets         = 1     # vCPU = cores * sockets
+logserver-disk_size       = "30G" # Disk size of a VM - min size must equal to the disk size of your clone image
