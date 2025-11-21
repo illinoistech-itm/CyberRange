@@ -53,7 +53,8 @@
 
                 // Build link to Shelly console with launch_id as a query param
                 const baseShelly = "{{ url_for('shelly') }}";
-                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)}`;
+                //const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)};
+                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)}${labLaunchUUID ? `&user_id={{ user_email }}` : ''}`;
 
                 const linkEl = document.getElementById("shelly-link");
                 linkEl.href = shellyURL;

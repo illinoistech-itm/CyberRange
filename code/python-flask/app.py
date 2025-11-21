@@ -293,7 +293,7 @@ def lab_one():
     # return redirect(url_for('.progress_page', task_id=t_id))
     # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
     # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid) # trying to render progress without task id in URL
+    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
@@ -305,6 +305,8 @@ def lab_one():
 @app.route('/lab_two')
 @login_required
 def lab_two():
+    # Run lab 2 script
+    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
@@ -313,13 +315,15 @@ def lab_two():
 @app.route('/lab_three')
 @login_required
 def lab_three():
+    # Run lab 2 script
+    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
 
-@app.route('/shelly')
+@app.route('/shelly', methods=['GET', 'POST'])
 @login_required
-def shelly(launch_id):
+def shelly():
     launch_id = request.args.get('launch_id')
     ip=run_getip(launch_id)
     return render_template('shelly.html', edge_node_ip=ip)
@@ -331,7 +335,6 @@ def shelly(launch_id):
 ##############################################################################
 def run_getip(launch_id):
     data = request.get_json()
-    session['runtime_uuid'] = data.get('runtime_uuid')
     email = data.get('email')
     username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
     lab_number = data.get('lab_number')
