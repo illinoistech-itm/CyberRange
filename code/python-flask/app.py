@@ -325,8 +325,9 @@ def lab_three():
 @login_required
 def shelly():
     launch_id = request.args.get('launch_id')
+    user_id = request.args.get('user_id')
     ip=run_getip(launch_id)
-    return render_template('shelly.html', edge_node_ip=ip)
+    return render_template('shelly.html', edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
@@ -334,10 +335,10 @@ def shelly():
 # with that value along with the edge_node tag
 ##############################################################################
 def run_getip(launch_id):
-    data = request.get_json()
-    email = data.get('email')
-    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
-    lab_number = data.get('lab_number')
+    #data = request.get_json()
+    #email = data.get('email')
+    #username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
+    #lab_number = data.get('lab_number')
     TOKEN = CR_TOKEN_ID.split('!')
     proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
