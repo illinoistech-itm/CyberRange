@@ -772,6 +772,18 @@ build {
   }
 
   ########################################################################################################################
+  # This block installs python3-proxmoxer only on the front-end templates
+  ########################################################################################################################
+
+   provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_install_proxmoxer_fe.sh"]
+    only            = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+  }
+
+
+
+  ########################################################################################################################
   # This block executes scripts delete the Deploy Key and remove any uneeded zip files
   ########################################################################################################################
 

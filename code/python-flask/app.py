@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, url_for, session, render_template, session
 from flask_socketio import SocketIO, emit # Used to connect the lab SSH back to the Python Flask App
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from proxmoxer import ProxmoxAPI
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import TokenExpiredError
 import hvac
