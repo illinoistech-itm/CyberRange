@@ -127,7 +127,7 @@ resource "proxmox_vm_qemu" "load-balancer" {
       "sudo systemctl enable node-exporter.service",
       "sudo systemctl start node-exporter.service",
       "sudo systemctl restart nginx",
-      "sed -i 's/REPLACE/${var.lb-yourinitials}-vm${count.index}/' /etc/alloy/config.alloy",
+      "sudo sed -i 's/REPLACE/${var.lb-yourinitials}-vm${count.index}/' /etc/alloy/config.alloy",
       "sudo sed -i 's/flask-app.service/nginx.service/' /etc/alloy/config.alloy",
       "sudo systemctl restart alloy.service",      
       "sudo growpart /dev/vda 3",
