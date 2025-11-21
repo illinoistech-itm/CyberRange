@@ -110,6 +110,12 @@ variable "loadbalancer-VMNAME" {
   default = ""
 }
 
+# This is the name of the Virtual Machine Template you want to create
+variable "LOGS-VMNAME" {
+  type    = string
+  default = ""
+}
+
 variable "iso_checksum" {
   type    = string
   default = "file:https://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/SHA256SUMS"
@@ -139,4 +145,10 @@ variable "BE-TAGS" {
 variable "LB-TAGS" {
   type = string
   default  = "loadbalancer;cr"
+}
+
+# Use the tags for your team name and what type of artifact this is
+variable "LOGS-TAGS" {
+  type = string
+  default  = "loki;cr"
 }
