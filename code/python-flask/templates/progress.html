@@ -13,13 +13,14 @@
     {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
     <h2>Task Progress</h2>
     <div id="progress">
-        Waiting for updates... {{ task_id }}, connecting to {{ api_url }}
+        Waiting for updates for {{ lab_id }}... {{ task_id }}, connecting to {{ api_url }}
     </div>
 
     {# Link that will be populated when the lab is ready #}
-    <a id="shelly-link" style="display:block; margin-top:1em;"></a>
+    <a id="shelly-link" style="display:block; margin-top:1em;">Start lab</a>
 
     <script>
+        const labID = "{{ lab_id }}";
         const taskId = "{{ task_id }}";
         const apiUrl = "{{ api_url }}";  // match case
         const source = new EventSource(`${apiUrl}/stream/${taskId}`);

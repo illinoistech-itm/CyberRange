@@ -39,9 +39,15 @@
     <aside class="lab-instructions">
       <div class="instructions-titlebar">Steps / Instructions</div>
         <ol class="steps-list">
-          {% for key, value in qa.items() %}
-            <li>{{ value }}</li>
-          {% endfor %}
+        {% for step in steps %}
+          <div class="step" id="{{ step.id or 'step-' ~ loop.index }}">
+            <h3>Step {{ loop.index }}</h3>
+            <p>{{ step.text }}</p>
+          </div>
+        {% else %}
+          <p>No steps found for this lab.</p>
+        {% endfor %}
+
         </ol>
         <button class="grade-lab">Grade Lab</button>
       </aside>

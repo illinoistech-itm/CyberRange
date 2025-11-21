@@ -252,8 +252,8 @@ def run_cmd(runtime_uuid, lab_num):
 # Below code is lab launching logic
 ##############################################################################
 @app.route("/progress/<task_id>")
-def progress_page(task_id, api_url):
-    return render_template("progress.html", task_id=task_id, api_url=api_url)
+def progress_page(lab_id, task_id, api_url):
+    return render_template("progress.html", lab_id=lab_number, task_id=task_id, api_url=api_url)
 ##############################################################################
 # This route is going to launch the content of the lab.
 # This means a few things...
@@ -294,7 +294,7 @@ def lab_one():
     # return redirect(url_for('.progress_page', task_id=t_id))
     # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
     # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("progress.html", task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
+    return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
@@ -322,13 +322,34 @@ def lab_three():
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
 
+##############################################################################
+# Creating function to read .toml files
+##############################################################################
+def load_lab_steps(lab_id: str):
+    filename = f"labs/{lab_id}.toml"
+    with open(filename, "r", encoding="utf-8") as f:
+        return toml.load(f)
+##############################################################################   
+
 @app.route('/shelly', methods=['GET', 'POST'])
 @login_required
 def shelly():
     launch_id = request.args.get('launch_id')
     user_id = request.args.get('user_id')
+    lab_id = request.args.get('lab_id')
     ip=run_getip(launch_id)
-    return render_template('shelly.html', edge_node_ip=ip, user_email=user_id)
+    loaded_lab_steps = load_lab_steps(lab_id)
+    lab_steps = []
+    steps = loaded_lab_steps.get("questions")
+    if isinstance(questions, dict):
+        # convert mapping to ordered list by key name
+        steps = [{"id": k, "text": v} for k, v in sorted(questions.items())]
+    elif isinstance(questions, list):
+        # already an array-of-tables: each item should be a dict
+        steps = questions
+    else:
+        steps = []
+    return render_template('shelly.html', lab_id=lab_id, steps=steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
