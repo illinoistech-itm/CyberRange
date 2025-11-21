@@ -17,7 +17,7 @@
     </div>
 
     {# Link that will be populated when the lab is ready #}
-    <a id="shelly-link" style="display:block; margin-top:1em;">Start lab</a>
+    <a id="shelly-link" style="display:block; margin-top:1em;"></a>
 
     <script>
         const labID = "{{ lab_id }}";
@@ -59,7 +59,7 @@
 
                 const linkEl = document.getElementById("shelly-link");
                 linkEl.href = shellyURL;
-                linkEl.textContent = "Open Shelly console";
+                linkEl.textContent = "Start lab";
                 linkEl.target = "_blank";
 
                 console.log("Shelly URL:", shellyURL);
