@@ -305,8 +305,6 @@ def lab_one():
 @app.route('/lab_two')
 @login_required
 def lab_two():
-    # Run lab 2 script
-    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
@@ -315,8 +313,6 @@ def lab_two():
 @app.route('/lab_three')
 @login_required
 def lab_three():
-    # Run lab 2 script
-    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
