@@ -158,6 +158,7 @@ def prepare_command():
     vars = {
         "tags": t,
         "yourinitials": uid,
+        "ln_yourinitials": uid,
         "ln_tags": ln
     }
     # Build the base command
