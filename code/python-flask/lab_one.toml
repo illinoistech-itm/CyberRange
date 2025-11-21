@@ -1,20 +1,4 @@
 # lab_one.toml
-# Enter the Q&A for each lab here
+# Enter the Q&A for each lab here 
 [questions]
-step_one = "Open the terminal on your Linux system."
-step_two = "Check what user you are logged into. Is it root?"
-step_three = "Let's create a new user. Name the new user 'john1'."
-step_four = "Create another user under the name of 'jane1'."
-step_five = "Create a new user group called 'developers'."
-step_six = "Create a new user group called 'sys-admin'."
-step_seven = "Add the user 'john1' to the 'developers' group."
-step_eight = "Verify that 'john1' was added to the correct group."
-step_nine = "Add the user 'jane1' to the 'sys-admin' group."
-step_ten = "Verify that 'jane1' was added to the correct group."
-step_eleven = "Create a new text file called 'lab_file'."
-step_twelve = "Check the file permissions for the file you just created."
-step_thirteen = "Give only the owner read and write permissions, and remove all permissions for everyone else on 'lab_file.txt'."
-step_fourteen = "Check that the file permissions have been set correctly."
-step_fifteen = "Allow the owner to read, write, and execute, and the groups to read and execute, while others have no permissions on 'lab_file.txt'."
-step_sixteen = "Check that the file permissions have been set correctly."
-step_seventeen = "Change the owner of 'lab_file.txt' to 'jane1'."
+step_one = "Scan the machine and check which port is open."
