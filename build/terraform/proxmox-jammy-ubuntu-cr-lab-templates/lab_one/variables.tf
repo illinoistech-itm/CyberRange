@@ -18,6 +18,8 @@ variable "desc" {}
 
 variable "template_to_clone" {}
 
+variable "ln_template_to_clone" {}
+
 variable "memory" {}
 
 variable "cores" {}
