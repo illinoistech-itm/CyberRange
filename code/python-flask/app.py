@@ -306,8 +306,6 @@ def lab_one():
 @app.route('/lab_two')
 @login_required
 def lab_two():
-    # Run lab 2 script
-    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
@@ -316,8 +314,6 @@ def lab_two():
 @app.route('/lab_three')
 @login_required
 def lab_three():
-    # Run lab 2 script
-    lab_control()
     # Redirect to shelly
     return redirect(url_for('.shelly'))
     # return redirect(url_for('.waiting'))
@@ -362,7 +358,8 @@ def run_getip(launch_id):
     #username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
     #lab_number = data.get('lab_number')
     TOKEN = CR_TOKEN_ID.split('!')
-    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
+    FQDN = CR_PROXMOX_URL.replace("https://", "")
+    proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
     prxmx42 = proxmox.nodes("system42").qemu.get()
     prxmx41 = proxmox.nodes("system41").qemu.get()
@@ -374,8 +371,9 @@ def run_getip(launch_id):
     runningwithtagsvms = []
     # Loop through the first node to get all of the nodes that are of status
     # running and that have the tag of the user for vm in prxmx42:
+    # and that they have the tag 'edge' meaning they are the edge node
     for vm in prxmx42:
-        if vm['status'] == 'running' and str(launch_id) in vm['tags']:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
             runningvms.append(vm)
 
             for vm in runningvms:
