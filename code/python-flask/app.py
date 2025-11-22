@@ -335,16 +335,16 @@ def shelly():
     lab_id = request.args.get('lab_id')
     ip=run_getip(launch_id)
     loaded_lab_steps = load_lab_steps(lab_id)
-    lab_steps = []
+    #lab_steps = []
     steps = loaded_lab_steps.get("questions")
-    if isinstance(questions, dict):
+    #if isinstance(questions, dict):
         # convert mapping to ordered list by key name
-        steps = [{"id": k, "text": v} for k, v in sorted(questions.items())]
-    elif isinstance(questions, list):
+        #steps = [{"id": k, "text": v} for k, v in sorted(questions.items())]
+    #elif isinstance(questions, list):
         # already an array-of-tables: each item should be a dict
-        steps = questions
-    else:
-        steps = []
+        #steps = questions
+    #else:
+        #steps = []
     return render_template('shelly.html', lab_id=lab_id, steps=steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
@@ -380,7 +380,7 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found42 = True
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
         
@@ -393,7 +393,7 @@ def run_getip(launch_id):
                     runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                                     return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None
