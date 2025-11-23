@@ -362,6 +362,9 @@ def run_getip(launch_id):
 
     found42 = False
     found41 = False
+    # This replaces the '-' in the launch_id, we removed them when we added them
+    # as a tag in Terraform. Terraform doesn't support '-' 
+    launch_id=launch_id.replace("-","")
 
     runningvms = []
     runningwithtagsvms = []
