@@ -353,10 +353,6 @@ def shelly():
 # with that value along with the edge_node tag
 ##############################################################################
 def run_getip(launch_id):
-    #data = request.get_json()
-    #email = data.get('email')
-    #username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
-    #lab_number = data.get('lab_number')
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -386,7 +382,7 @@ def run_getip(launch_id):
         
     if found42 == False:
         for vm in prxmx41:
-            if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
 
                 for vm in runningvms:

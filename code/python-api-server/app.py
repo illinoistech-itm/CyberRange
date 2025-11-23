@@ -80,16 +80,13 @@ CORS(app, resources={r"/*": {"origins": ["https://system60.rice.iit.edu"]}})
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
-# lab one
+# a lab -- need to take the launch_uuid and search the tags for the VM with
+# with that value along with the edge_node tag
 ##############################################################################
-def run_getip():
-    data = request.get_json()
-    session['runtime_uuid'] = data.get('runtime_uuid')
-    email = data.get('email')
-    username = email.split('@')[0] # the tags do not accept special characters, so we have to split the email address
-    lab_number = data.get('lab_number')
+def run_getip(launch_id):
     TOKEN = CR_TOKEN_ID.split('!')
-    proxmox = ProxmoxAPI(CR_PROXMOX_URL, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
+    FQDN = CR_PROXMOX_URL.replace("https://", "")
+    proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
     prxmx42 = proxmox.nodes("system42").qemu.get()
     prxmx41 = proxmox.nodes("system41").qemu.get()
@@ -101,28 +98,29 @@ def run_getip():
     runningwithtagsvms = []
     # Loop through the first node to get all of the nodes that are of status
     # running and that have the tag of the user for vm in prxmx42:
+    # and that they have the tag 'edge' meaning they are the edge node
     for vm in prxmx42:
-        if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
             runningvms.append(vm)
 
             for vm in runningvms:
                 runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found42 = True
                             return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
         
     if found42 == False:
         for vm in prxmx41:
-            if vm['status'] == 'running' and vm['tags'].split(';')[0] == session['runtime_uuid']:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
 
                 for vm in runningvms:
                     runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "10.110" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                                     return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None
