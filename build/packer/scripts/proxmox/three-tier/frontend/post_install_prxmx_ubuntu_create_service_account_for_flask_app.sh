@@ -16,7 +16,7 @@ sudo mv /home/vagrant/.ssh/id_ed25519_paramiko_connect_key_from_flask_app_to_lab
 sudo mv /home/vagrant/CyberRange/code/python-flask/static/ /home/flaskuser/static/
 sudo mv /home/vagrant/CyberRange/code/python-flask/templates/ /home/flaskuser/templates/
 # Move all the lab question and answer files over
-sudo mv /home/vagrant/CyberRange/code/python-flask/labs/*.toml /home/flaskuser/
+sudo mv /home/vagrant/CyberRange/code/python-flask/labs/*.toml /home/flaskuser/labs/
 
 # How to use an ENV variable in a sed command
 # https://askubuntu.com/questions/76808/how-do-i-use-variables-in-a-sed-command
