@@ -434,16 +434,6 @@ build {
   }
 
   #############################################################################
-  # Script to move the pyxtermjs service file and enable it
-  #############################################################################
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh"]
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
-  }
-
-  #############################################################################
   # Install the lab elements on the node(s)
   #############################################################################
 
