@@ -6,8 +6,8 @@
 # Change team00 to your team repo
 
 # This overrides the default nginx conf file enabling loadbalacning and 443 TLS only
-sudo cp -v /home/vagrant/CyberRange/code/nginx/default /etc/nginx/sites-available/
+sudo cp -v /home/vagrant/default /etc/nginx/sites-available/
 # This connects the TLS certs built in this script with the instances
-sudo cp -v /home/vagrant/CyberRange/code/nginx/self-signed.conf /etc/nginx/snippets/
+sudo cp -v /home/vagrant/self-signed.conf /etc/nginx/snippets/
 
 sudo systemctl daemon-reload
