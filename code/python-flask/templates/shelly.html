@@ -25,10 +25,9 @@
         const term = new Terminal();
         term.open(document.getElementById('terminal'));
         //const socket = io();
-        //const socket = io("http://{{ request.host.split(':')[0] }}:5000");
-        //const socket = io("http://system57.rice.iit.edu:5000");
-        // use ws as we are making a websocket not http or https
-        const url = "ws://" + "{{ edge_node_ip }}" + ":5000";
+        //const socket = io("https://system57.rice.iit.edu:5000");
+        // Connect via https as each edge node is proxying an internal connection on 5000 via 443
+        const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
         const socket = io(url);
         term.onData(data => socket.emit('input', data));

@@ -395,7 +395,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/pyxtermjs.service"
     destination = "/home/vagrant/"
-    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
 
   #############################################################################
@@ -406,7 +406,7 @@ build {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh"]
-    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
   #############################################################################
@@ -416,7 +416,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh"]
-    only=["source.proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
   #############################################################################
@@ -426,7 +426,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/lab_one/install-lab-elements.sh"]
-    only=["source.proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41"]
+    only=["proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41"]
   }
 
 }
