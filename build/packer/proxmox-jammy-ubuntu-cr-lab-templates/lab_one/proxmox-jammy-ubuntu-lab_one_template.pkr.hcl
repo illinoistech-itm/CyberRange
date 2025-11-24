@@ -398,6 +398,26 @@ build {
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
 
+  ########################################################################################################################
+  # Copying the default file needed into Nginx
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/core/nginx/default"
+    destination = "/home/vagrant/"
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    }
+
+  ########################################################################################################################
+  # Copying the self-signed.conf into Nginx
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/core/nginx/self-signed.conf"
+    destination = "/home/vagrant/"
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    }
+
   #############################################################################
   # Script to move the pyxtermjs service file and enable it
   #############################################################################
@@ -405,7 +425,10 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
-                      "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh"]
+                      "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
+                      "../../scripts/proxmox/labs/core/install-nginx.sh",
+                      "../../scripts/proxmox/labs/core/move-nginx-files.sh",
+                      "../../scripts/proxmox/labs/core/post_install_prxmx_load_balancer.sh"]
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
 
