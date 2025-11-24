@@ -29,8 +29,10 @@
         // Connect via https as each edge node is proxying an internal connection on 5000 via 443
         const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
-        const socket = io(url, { transports: ['websocket'], rejectUnauthorized: false });
+        const socket = io(url, { transports: ["websocket"], secure: false});
+        //Capture keystrokes and send to backend
         term.onData(data => socket.emit('input', data));
+        // When backend sends output, write it to xterm
         socket.on('output', data => term.write(data));
       </script>
     </section>
