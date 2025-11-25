@@ -4,7 +4,9 @@ Description=pyxtermjs terminal emulator service
 After=network.target
 
 [Service]
-WorkingDirectory=/home/vagrant/.local/bin
+User=flaskuser
+Group=flaskuser
+WorkingDirectory=/home/flaskuser
 ExecStart=/usr/bin/gunicorn -k eventlet -w 1 pyxtermjs:app --bind 127.0.0.1:5000
 
 Restart=always
