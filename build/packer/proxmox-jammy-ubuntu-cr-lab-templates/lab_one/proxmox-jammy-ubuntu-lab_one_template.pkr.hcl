@@ -377,18 +377,6 @@ build {
     scripts         = ["../../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_install-prometheus-node-exporter.sh"]
   }
 
-  #############################################################################
-  # Using the file provisioner to SCP this file to the instance 
-  # the lab_one_answers.toml has the command to run to check for the presence
-  # of a correct value
-  #############################################################################
-
-  provisioner "file" {
-    source      = "../../scripts/proxmox/toml/lab_one_answers.toml"
-    destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
-  }
-
   ########################################################################################################################
   # Copying the pyxtermjs service file into the VM
   ########################################################################################################################

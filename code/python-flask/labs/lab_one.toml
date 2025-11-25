@@ -1,4 +1,5 @@
 # lab_one.toml
 # Enter the Q&A for each lab here 
 [questions]
-step_one = "Scan the machine and check which port is open."
+step_one = "Using nmap report the first port open: "
+step_two = "Using nmap report the second port open: "

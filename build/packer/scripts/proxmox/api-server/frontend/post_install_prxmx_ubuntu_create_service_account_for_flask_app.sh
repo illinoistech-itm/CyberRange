@@ -12,6 +12,8 @@ sudo adduser --system --group flaskuser
 sudo mv /home/vagrant/CyberRange/code/python-api-server/app.py /home/flaskuser/app.py
 sudo mv /home/vagrant/CyberRange/code/python-api-server/tasks.py /home/flaskuser/tasks.py
 sudo mv /home/vagrant/CyberRange/code/python-api-server/.env /home/flaskuser/.env
+# Copy directory with lab answers
+sudo mv /home/vagrant/CyberRange/code/python-api-server/labs/ /home/flaskuser/labs/
 
 # How to use an ENV variable in a sed command
 # https://askubuntu.com/questions/76808/how-do-i-use-variables-in-a-sed-command
