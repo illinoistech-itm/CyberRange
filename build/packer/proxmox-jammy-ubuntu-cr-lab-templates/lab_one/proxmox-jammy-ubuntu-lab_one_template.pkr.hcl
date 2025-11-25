@@ -280,6 +280,39 @@ build {
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
+  # Copy the configured config file to the ~/.ssh directory so you can clone 
+  # your GitHub account to the server
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./config"
+    destination = "/home/vagrant/.ssh/config"
+  }
+
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to clone your source code -- make sure the public
+  # key is in your GitHub account and you using a deploy key
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_github_key"
+    destination = "/home/vagrant/.ssh/id_ed25519_github_key"
+  }
+
+  #############################################################################
+  # Uncomment this block to add your own custom bash install scripts
+  # This block you can add your own shell scripts to customize the image you 
+  # are creating
+  #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh"]
+  }
+
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface
   #############################################################################
@@ -423,7 +456,8 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
+    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
+                      "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-flask-dependencies.sh",
                       "../../scripts/proxmox/labs/core/move-wss-proxy.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
