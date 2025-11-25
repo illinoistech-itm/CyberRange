@@ -4,16 +4,14 @@ Description=pyxtermjs terminal emulator service
 After=network.target
 
 [Service]
-#WorkingDirectory=/home/vagrant/.local/bin/pyxtermjs
-ExecStart=/home/vagrant/.local/bin/pyxtermjs --port 5000 --host 127.0.0.1 --debug --command bash
+WorkingDirectory=/home/vagrant/.local/bin
+ExecStart=/usr/bin/gunicorn -k eventlet -w 1 pyxtermjs:app --bind 127.0.0.1:5000
 
 Restart=always
 RestartSec=5
 KillSignal=SIGINT
 TimeoutStopSec=15
 SyslogIdentifier=CRpyxtermjs
-StandardOutput=syslog
-StandardError=syslog
 
 [Install]
 WantedBy=multi-user.target
