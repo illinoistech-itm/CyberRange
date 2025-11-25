@@ -6,5 +6,5 @@
 
 sudo apt install pipx -y
 # sudo -u vagrant is to ensure that the packages are installed as vagrant not as root
-sudo -u vagrant pipx install pyxtermjs
-sudo -u vagrant pipx ensurepath 
+sudo -u flaskuser pipx install pyxtermjs
+sudo -u flaskuser pipx ensurepath 
