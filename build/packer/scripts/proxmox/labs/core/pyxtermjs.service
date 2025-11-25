@@ -7,7 +7,8 @@ After=network.target
 User=flaskuser
 Group=flaskuser
 WorkingDirectory=/home/flaskuser
-ExecStart=/usr/bin/gunicorn -k eventlet -w 1 pyxtermjs:app --bind 127.0.0.1:5000
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/flaskuser/.local/bin"
+ExecStart=/home/flaskuser/.local/bin/gunicorn -k eventlet -w 1 pyxtermjs.app:app --bind 127.0.0.1:5000
 
 Restart=always
 RestartSec=5

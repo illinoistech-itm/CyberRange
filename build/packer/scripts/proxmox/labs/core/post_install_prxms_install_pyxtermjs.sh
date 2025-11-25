@@ -6,5 +6,7 @@
 
 sudo apt install pipx -y
 # sudo -u vagrant is to ensure that the packages are installed as vagrant not as root
-sudo -u flaskuser pipx install pyxtermjs
-sudo -u flaskuser pipx ensurepath 
+# Need to inject each package into the others virtual environment otherwise you will
+# receive a module not found error
+sudo -u flaskuser pipx inject pyxtermjs gunicorn eventlet gevent
+sudo -u flaskuser pipx inject gunicorn pyxtermjs eventlet gevent
