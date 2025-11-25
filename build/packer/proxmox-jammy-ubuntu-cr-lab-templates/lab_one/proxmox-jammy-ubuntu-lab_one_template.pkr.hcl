@@ -308,7 +308,7 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh"]
+    scripts         = ["../scripts/proxmox/labs/core/clone-team-repo.sh"]
   }
 
   #############################################################################
