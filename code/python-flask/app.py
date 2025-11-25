@@ -316,17 +316,27 @@ def lab_two():
 def lab_three():
     # Redirect to shelly
     return redirect(url_for('.shelly'))
-    # return redirect(url_for('.waiting'))
 
 ##############################################################################
-# Creating function to read .toml files
+# Creating function to read lab question .toml files
 ##############################################################################
 def load_lab_steps(lab_id: str):
     filename = f"labs/{lab_id}.toml"
     with open(filename, "r", encoding="utf-8") as f:
         return toml.load(f)
-##############################################################################   
 
+##############################################################################
+# Creating function to read lab answer .toml files
+##############################################################################
+def load_answer_steps(lab_id: str):
+    filename = f"labs/{lab_id}_answers.toml"
+    with open(filename, "r", encoding="utf-8") as f:
+        return toml.load(f)
+
+##############################################################################
+# Shelly route will display the page with the xterm js connected via socketio
+# to the edge node for this lab
+##############################################################################
 @app.route('/shelly', methods=['GET', 'POST'])
 @login_required
 def shelly():
@@ -346,6 +356,29 @@ def shelly():
     #else:
         #steps = []
     return render_template('shelly.html', lab_id=lab_id, steps=steps, edge_node_ip=ip, user_email=user_id)
+
+##############################################################################
+# Route to grade lab submission
+##############################################################################
+@app.route("/grade_lab", methods=["POST"])
+def grade_lab():
+    correct_answers = load_answer_steps(request.form.get("lab_id"))
+    answers = correct_answers.get("answers")
+    numberOfAnswers = len(correct_answers)
+    total = 0
+    
+    # Grab the a list of the form values
+    values_list = list(request.form.values())
+    
+    for answer in answers:
+        for value in values_list:
+            if answer == value:
+                total += 1
+
+    # Call database function to insert data here
+        
+    # Do something with the data (e.g., log, process, return response)
+    return f"Grand Total of {total} points out of {numberOfAnswers} points..."
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
