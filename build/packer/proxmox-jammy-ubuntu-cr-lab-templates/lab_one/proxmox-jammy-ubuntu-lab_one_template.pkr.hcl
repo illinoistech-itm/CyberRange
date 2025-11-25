@@ -440,16 +440,6 @@ build {
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
 
-  ########################################################################################################################
-  # Copying the wss-proxy.service file into the core lab
-  ########################################################################################################################
- 
-  provisioner "file" {
-    source      = "../../scripts/proxmox/labs/core/wss-proxy.service"
-    destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
-    }
-
   #############################################################################
   # Script to move the pyxtermjs service file and enable it
   #############################################################################
