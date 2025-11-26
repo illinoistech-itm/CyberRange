@@ -438,7 +438,7 @@ build {
   ########################################################################################################################
  
   provisioner "file" {
-    source      = "../../scripts/proxmox/labs/core/nginx/self-signed.conf"
+    source      = "../../scripts/proxmox/labs/core/nginx/signed.conf"
     destination = "/home/vagrant/"
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
