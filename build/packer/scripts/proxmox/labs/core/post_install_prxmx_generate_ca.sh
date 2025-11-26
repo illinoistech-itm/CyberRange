@@ -23,6 +23,8 @@ echo "176820514074201284967811592992451421160" > provisioner-password.txt
 # 8544 hours is 1 year in hours
 TOKEN=$(sudo step ca token *.rice.iit.edu \
  --ca-url=system36.rice.iit.edu \
+ --san "*.rice.iit.edu" \
+ --san "rice.iit.edu" \
  --provisioner-password-file provisioner-password.txt \
  --provisioner "vagrant@system36.rice.iit.edu" \
  --root /root/.step/certs/root_ca.crt \
@@ -40,8 +42,7 @@ echo "Token generated successfully"
 sudo step ca certificate *.rice.iit.edu \
     nginx-signed.crt \
     nginx-signed.key \
-    --san "*.rice.iit.edu" \
-    --san "rice.iit.edu" \
+    --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
