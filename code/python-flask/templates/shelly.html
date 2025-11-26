@@ -46,14 +46,14 @@
         <form action="{{ url_for('grade_lab') }}" method="post">
           <input type="hidden" name="{{ lab_id }}" value="{{ lab_id }}">
           <label for="course">{{ lab_id }}</label><br />
-          {% for step in steps %}
-          <!-- Text input box -->
-          <label for="{{ step }}">{{ step }} </label> 
-          <label for="{{ loop.index }}">Answer: </label><br />
-          <input type="text" id="{{ loop.index }}" name="{{ loop.index }}" required>
-          {% else %}
-          <p>No steps found for this lab.</p>
-          {% endfor %} 
+          {% for dict_item in loaded_lab_steps %}
+            {% for key, value in dict_item.items() %}
+            <!-- Text input box -->
+            <label for="{{ key }}">{{ Value }} :</label><br /> 
+            <input type="text" id="{{ key }}" name="{{ key }}" required>
+            {% else %}
+            <p>No steps found for this lab.</p>
+            {% endfor %} 
           <!-- Submit button -->
           <input type="submit" value="Grade Lab">
         </form>  

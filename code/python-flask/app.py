@@ -344,18 +344,11 @@ def shelly():
     user_id = request.args.get('user_id')
     lab_id = request.args.get('lab_id')
     ip=run_getip(launch_id)
+    # Returns .toml file as a dictionary
     loaded_lab_steps = load_lab_steps(lab_id)
-    #lab_steps = []
-    steps = loaded_lab_steps.get("questions")
-    #if isinstance(questions, dict):
-        # convert mapping to ordered list by key name
-        #steps = [{"id": k, "text": v} for k, v in sorted(questions.items())]
-    #elif isinstance(questions, list):
-        # already an array-of-tables: each item should be a dict
-        #steps = questions
-    #else:
-        #steps = []
-    return render_template('shelly.html', lab_id=lab_id, steps=steps, edge_node_ip=ip, user_email=user_id)
+    #steps = loaded_lab_steps.get("questions")
+    
+    return render_template('shelly.html', lab_id=lab_id, loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
 # Route to grade lab submission
