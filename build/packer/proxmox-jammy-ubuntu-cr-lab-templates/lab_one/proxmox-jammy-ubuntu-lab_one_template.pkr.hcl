@@ -446,7 +446,8 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
+    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_generate_ca.sh",
+                      "../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-flask-dependencies.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
