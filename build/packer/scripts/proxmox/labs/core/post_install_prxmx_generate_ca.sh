@@ -46,7 +46,7 @@ sudo step ca certificate *.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
 # Check if files were created successfully
-if [ ! -f "*.crt" ] || [ ! -f "*.key" ]; then
+if [ ! -f "nginx-signed.crt" ] || [ ! -f "nginx-signed.key" ]; then
     echo "Error: Certificate files were not created..."
     exit 1
 fi
