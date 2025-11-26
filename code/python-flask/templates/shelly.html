@@ -51,9 +51,8 @@
             <!-- Text input box -->
             <label for="{{ key }}">{{ Value }} :</label><br /> 
             <input type="text" id="{{ key }}" name="{{ key }}" required>
-            {% else %}
-            <p>No steps found for this lab.</p>
-            {% endfor %} 
+            {% endfor %}
+          {% endfor %} 
           <!-- Submit button -->
           <input type="submit" value="Grade Lab">
         </form>  
