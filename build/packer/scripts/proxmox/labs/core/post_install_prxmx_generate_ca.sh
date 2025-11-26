@@ -42,7 +42,6 @@ sudo step ca certificate *.rice.iit.edu \
     nginx-signed.key \
     --san "*.rice.iit.edu" \
     --san "rice.iit.edu" \
-    --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
