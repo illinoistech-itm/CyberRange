@@ -22,7 +22,6 @@ echo "176820514074201284967811592992451421160" > provisioner-password.txt
 #TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
 # 8544 hours is 1 year in hours
 TOKEN=$(sudo step ca token system57.rice.iit.edu \
- --not-after="8544h" \
  --ca-url=system36.rice.iit.edu \
  --provisioner-password-file provisioner-password.txt \
  --provisioner "vagrant@system36.rice.iit.edu" \
@@ -42,6 +41,7 @@ echo "Token generated successfully"
 sudo step ca certificate system57.rice.iit.edu \
     CAcr.crt \
     CAcr.key \
+    --not-after = 8760h \
     --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
