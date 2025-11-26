@@ -287,6 +287,7 @@ build {
   provisioner "file" {
     source      = "./config"
     destination = "/home/vagrant/.ssh/config"
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
   }
 
   #############################################################################
@@ -298,6 +299,7 @@ build {
   provisioner "file" {
     source      = "./id_ed25519_github_key"
     destination = "/home/vagrant/.ssh/id_ed25519_github_key"
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
   }
 
   #############################################################################
@@ -309,6 +311,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/clone-team-repo.sh"]
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
   }
 
   #############################################################################
