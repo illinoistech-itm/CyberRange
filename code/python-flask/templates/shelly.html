@@ -45,13 +45,15 @@
       <div class="instructions-titlebar">Steps / Instructions</div>
         <form action="{{ url_for('grade_lab') }}" method="post">
           <input type="hidden" name="{{ lab_id }}" value="{{ lab_id }}">
-          <label for="course">{{ lab_id }}</label><br />
+          <label for="Labname">{{ lab_id }}</label><br />
           {% for key, value in loaded_lab_steps.items() %}
+            {% for key, value in questions.items() %}
             <!-- Text input box -->
             <label for="{{ key }}">{{ Value }} :</label><br /> 
-            <input type="text" id="{{ key }}" name="{{ key }}" required>
-          {% endfor %} 
-          <!-- Submit button -->
+            <input type="text" id="{{ key }}" name="{{ key }}" required><br />
+            {% endfor %} 
+          {% endfor %}
+            <!-- Submit button -->
           <input type="submit" value="Grade Lab">
         </form>  
       </aside>
