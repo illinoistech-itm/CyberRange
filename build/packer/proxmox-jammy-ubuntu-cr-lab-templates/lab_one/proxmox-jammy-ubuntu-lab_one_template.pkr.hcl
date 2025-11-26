@@ -443,20 +443,29 @@ build {
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
 
+  ########################################################################################################################
+  # Script to Generate signed certificates
+  ########################################################################################################################
+ 
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_generate_ca.sh"]
+    only=["proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41"]
+  }
+
+
   #############################################################################
   # Script to move the pyxtermjs service file and enable it
   #############################################################################
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_generate_ca.sh",
-                      "../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
+    scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-flask-dependencies.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
-                      "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
   }
