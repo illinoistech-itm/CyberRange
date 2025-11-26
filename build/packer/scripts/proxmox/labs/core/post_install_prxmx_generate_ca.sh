@@ -36,11 +36,12 @@ fi
 
 echo "Token generated successfully"
 
-
 #sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key <---commented out to test alternative, add back in if fails
 sudo step ca certificate *.rice.iit.edu \
     nginx-signed.crt \
     nginx-signed.key \
+    --san "*.rice.iit.edu" \
+    --san "rice.iit.edu" \
     --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
