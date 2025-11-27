@@ -432,6 +432,16 @@ build {
     destination = "/home/vagrant/"
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
+  
+  ########################################################################################################################
+  # Copying the wss-proxy.service file needed to support the socketio websocket request over http
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/core/wss-proxy.service"
+    destination = "/home/vagrant/"
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    }
 
   ########################################################################################################################
   # Copying the self-signed.conf into Nginx
@@ -463,6 +473,7 @@ build {
     scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-flask-dependencies.sh",
+                      "../../scripts/proxmox/labs/core/move-wss-proxy.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
