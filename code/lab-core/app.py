@@ -1,25 +1,34 @@
 from flask import Flask
 from flask_socketio import SocketIO, emit
-import socketio
+import websocket
+import threading
 
 app = Flask(__name__)
-flask_sio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Connect to pyxtermjs backend (running on localhost:5000 for example)
-backend_sio = socketio.Client()
-backend_sio.connect("ws://127.0.0.1:5000")
+# Connect to pyxtermjs backend WebSocket
+def connect_pyxterm():
+    ws = websocket.WebSocket()
+    ws.connect("ws://localhost:5000/")  # pyxtermjs service
+    return ws
 
-@app.route("/")
-def index():
-    return "Socket.IO HTTPS → WSS bridge"
+# Keep a global reference for simplicity
+pyxterm_ws = connect_pyxterm()
 
-@flask_sio.on("input")
+# Thread to read from pyxtermjs and forward to Socket.IO clients
+def pyxterm_reader():
+    while True:
+        msg = pyxterm_ws.recv()
+        socketio.emit("output", msg)
+
+threading.Thread(target=pyxterm_reader, daemon=True).start()
+
+# Handle client connect
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected")
+
+# Handle input from client terminal
+@socketio.on("input")
 def handle_input(data):
-    # Forward input to pyxtermjs
-    backend_sio.emit("input", data)
-
-@backend_sio.on("output")
-def handle_output(data):
-    # Forward backend output to client
-    socketio.emit("output", data)
-    
+    pyxterm_ws.send(data)
