@@ -351,6 +351,18 @@ def shelly():
     return render_template('shelly.html', lab_id=lab_id, loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
+# Helper function to take the returned IP and turn it into an FQDN
+##############################################################################
+def getFqdn(ip_address):
+  import socket
+
+  try:
+    fqdn = socket.gethostbyaddr(ip_address)[0]
+    return fqdn
+  except socket.herror as e:
+    return f"Unable to resolve IP: {e}"
+
+##############################################################################
 # Route to grade lab submission
 ##############################################################################
 @app.route("/grade_lab", methods=["POST"])
@@ -407,7 +419,7 @@ def run_getip(launch_id):
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found42 = True
-                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
         
     if found42 == False:
         for vm in prxmx41:
@@ -419,7 +431,7 @@ def run_getip(launch_id):
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
                                 if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                    return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                                    return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
 
