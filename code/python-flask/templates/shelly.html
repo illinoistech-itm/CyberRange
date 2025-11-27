@@ -27,7 +27,7 @@
         //const socket = io();
         //const socket = io("https://system57.rice.iit.edu:5000");
         // Connect via https as each edge node is proxying an internal connection on 5000 via 443
-        const url = "https://" + "{{ edge_node_ip }}";
+        const url = "https://" + "{{ edge_node_ip }}" + "/ws";
         console.log("Connecting to websocket on: " + url+ "...")
         const socket = io(url);
         //Capture keystrokes and send to backend
