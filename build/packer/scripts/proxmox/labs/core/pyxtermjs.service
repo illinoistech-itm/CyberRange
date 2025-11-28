@@ -8,7 +8,7 @@ User=flaskuser
 Group=flaskuser
 WorkingDirectory=/home/flaskuser
 Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/flaskuser/.local/bin"
-ExecStart=/home/flaskuser/.local/bin/gunicorn -k eventlet -w 1 pyxtermjs.app:app --bind 127.0.0.1:5000
+ExecStart=/home/flaskuser/.local/bin/pyxtermjs --host 0.0.0.0 --port 5000 --command bash --debug
 
 Restart=always
 RestartSec=5
