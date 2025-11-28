@@ -22,28 +22,18 @@
     <section class="terminal-container">
       <div id="terminal"></div>
       <script>
-          // 1. Create the terminal
-          const term = new Terminal();
-          term.open(document.getElementById("terminal"));
-
-          // 2. Connect to pyxtermjs backend via raw WebSocket
-          // Replace host/port with your pyxtermjs server
-          const url = "wss://" + "{{ edge_node_ip }}" + "/";
-          const ws = new WebSocket(url);
-
-          // 3. When backend sends data, write it to the terminal
-          ws.onmessage = (event) => {
-            term.write(event.data);
-          };
-
-          // 4. When user types in terminal, send input to backend
-          term.onData((data) => {
-            ws.send(data);
-          });
-
-          // 5. Handle connection lifecycle
-          ws.onopen = () => term.write("\r\n*** Connected to pyxtermjs ***\r\n");
-          ws.onclose = () => term.write("\r\n*** Disconnected ***\r\n");
+        const term = new Terminal();
+        term.open(document.getElementById('terminal'));
+        //const socket = io();
+        // Connect via https as each edge node is proxying an internal connection on 5000 via 443
+        const url = "https://" + "{{ edge_node_ip }}" + "/ws";
+        console.log("Connecting to websocket on: " + url+ "...")
+        const socket = io(url, { transports: ["websocket"] });
+        socket.on("connect", () => { console.log("Connected to /ws namespace"); });
+        //Capture keystrokes and send to backend
+        term.onData(data => socket.emit('input', data));
+        // When backend sends output, write it to xterm
+        socket.on('output', data => term.write(data));          
       </script>
     </section>
 
