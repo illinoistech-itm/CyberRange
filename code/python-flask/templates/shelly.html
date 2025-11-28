@@ -28,7 +28,7 @@
 
           // 2. Connect to pyxtermjs backend via raw WebSocket
           // Replace host/port with your pyxtermjs server
-          const url = "wss://" + "{{ edge_node_ip }} " + "/";
+          const url = "wss://" + "{{ edge_node_ip }}" + "/";
           const ws = new WebSocket(url);
 
           // 3. When backend sends data, write it to the terminal
