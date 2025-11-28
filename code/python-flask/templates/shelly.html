@@ -48,7 +48,7 @@
           <label for="Labname">{{ lab_id }}</label><br />
           {% for key, value in loaded_lab_steps["questions"].items() %}
             <!-- Text input box -->
-            <label for="{{ key }}">{{ Value }} :</label><br /> 
+            <label for="{{ key }}">{{ value }} :</label><br /> 
             <input type="text" id="{{ key }}" name="{{ key }}" required><br />
           {% endfor %}
             <!-- Submit button -->
