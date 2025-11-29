@@ -8,7 +8,7 @@ User=flaskuser
 Group=flaskuser
 WorkingDirectory=/home/flaskuser
 Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/flaskuser/.local/bin"
-ExecStart=/home/flaskuser/.local/bin/pyxtermjs --host 0.0.0.0 --port 5000 --command bash --debug
+ExecStart=/home/flaskuser/.local/bin/pyxtermjs --host 0.0.0.0 --port 5000 --command bash
 
 Restart=always
 RestartSec=5
