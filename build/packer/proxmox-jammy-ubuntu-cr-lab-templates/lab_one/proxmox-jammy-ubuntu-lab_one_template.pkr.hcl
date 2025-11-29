@@ -472,7 +472,6 @@ build {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
-                      "../../scripts/proxmox/labs/core/install-flask-dependencies.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
                       "../../scripts/proxmox/labs/core/move-wss-proxy.sh",

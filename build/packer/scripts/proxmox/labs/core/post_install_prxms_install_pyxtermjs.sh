@@ -12,6 +12,7 @@ sudo -u flaskuser pipx install pyxtermjs
 sudo -u flaskuser pipx install gunicorn
 sudo -u flaskuser pipx inject pyxtermjs gunicorn eventlet gevent
 sudo -u flaskuser pipx inject gunicorn pyxtermjs eventlet gevent
+sudo -u flaskuser pipx inject flask python-socketio python-engineio flask-socketio
 
 # Using sed to replace the app instantiation and wrap it in a CORS allow Origin for system60
 sudo sed -i 's/socketio = SocketIO(app)/socketio = SocketIO(app, cors_allowed_origins="https\:\/\/system60.rice.iit.edu")/g' /home/flaskuser/.local/pipx/venvs/pyxtermjs/lib/python3.10/site-packages/pyxtermjs/app.py

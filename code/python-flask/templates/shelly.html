@@ -26,7 +26,7 @@
         term.open(document.getElementById('terminal'));
         //const socket = io();
         // Connect via https as each edge node is proxying an internal connection on 5000 via 443
-        const url = "https://" + "{{ edge_node_ip }}" + "/ws";
+        const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
         const socket = io(url, { transports: ["websocket"] });
         socket.on("connect", () => { console.log("Connected to /ws namespace"); });
