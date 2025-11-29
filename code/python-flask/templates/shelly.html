@@ -29,7 +29,7 @@
         const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
         const socket = io(url);
-        socket.on("connect", () => { console.log("Connected to /ws namespace"); });
+        socket.on("connect", () => { console.log("Connected..."); });
         //Capture keystrokes and send to backend
         term.onData(data => socket.emit('input', data));
         // When backend sends output, write it to xterm
