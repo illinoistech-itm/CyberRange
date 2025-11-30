@@ -36,7 +36,7 @@
             
         // Handle connection
         socket.on("connect", () => {
-          console.log("Connected to pyxtermjs server...");
+          console.log("Connected to server, id:", socket.id);
         });
         // Receive terminal output from server
         socket.on("pty-output", (data) => {
