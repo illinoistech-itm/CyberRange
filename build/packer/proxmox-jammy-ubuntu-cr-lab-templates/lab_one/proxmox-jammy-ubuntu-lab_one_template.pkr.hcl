@@ -284,7 +284,7 @@ build {
   #############################################################################
 
   provisioner "file" {
-    source      = "../scripts/proxmox/jammy-services/config.alloy"
+    source      = "../../scripts/proxmox/jammy-services/config.alloy"
     destination = "/home/vagrant/config.alloy"
   }
 
