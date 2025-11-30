@@ -278,6 +278,16 @@ source "proxmox-iso" "lab_one_node_42" {
 build {
   sources = ["source.proxmox-iso.lab_one_edge_server_42","source.proxmox-iso.lab_one_edge_server_41","source.proxmox-iso.lab_one_node_42","source.proxmox-iso.lab_one_node_41"]
 
+  ##############################################################################
+  # Copying the custom configuration for Alloy to be setup to send systemd logs
+  # to Loki
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/config.alloy"
+    destination = "/home/vagrant/config.alloy"
+  }
+
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
@@ -343,7 +353,7 @@ build {
       "../../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
     "../../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
-    ]
+     "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
   }
 
   #############################################################################
