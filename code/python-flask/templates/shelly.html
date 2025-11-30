@@ -46,6 +46,11 @@
         // Send terminal input to server
         term.onData((data) => {
           console.log("Emitting a command... " + data)
+          if (data === '\r') {   // Enter key
+          term.write('\r\n');  // new line
+          } else {
+          term.write(data);    // echo typed character
+          }
           socket.emit("pty-input", data);
         });
         // Handle disconnect
