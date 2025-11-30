@@ -36,7 +36,7 @@
             
         // Handle connection
         socket.on("connect", () => {
-          console.log("Connected to server, id:", socket.id);
+          console.log("Connected to server, id: ", socket.id);
         });
         // Receive terminal output from server
         socket.on("pty-output", (data) => {
@@ -54,6 +54,15 @@
         socket.on("connect_error", (err) => {
           console.error("Connection error:", err.message);
         });
+        // Catch-all listener for any incoming event -- used for debugging to 
+        // see if data is being sent back
+        socket.onAny((event, ...args) => {
+          console.group(`📡 Event received: ${event}`);
+          console.log("Payload:", args);
+          console.groupEnd();
+        });
+
+
       </script>
     </section>
 
