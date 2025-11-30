@@ -280,42 +280,6 @@ build {
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
-  # Copy the configured config file to the ~/.ssh directory so you can clone 
-  # your GitHub account to the server
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./config"
-    destination = "/home/vagrant/.ssh/config"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
-  }
-
-  #############################################################################
-  # Using the file provisioner to SCP this file to the instance 
-  # Copy the private key used to clone your source code -- make sure the public
-  # key is in your GitHub account and you using a deploy key
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./id_ed25519_github_key"
-    destination = "/home/vagrant/.ssh/id_ed25519_github_key"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
-  }
-
-  #############################################################################
-  # Uncomment this block to add your own custom bash install scripts
-  # This block you can add your own shell scripts to customize the image you 
-  # are creating
-  #############################################################################
-
-  provisioner "shell" {
-    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/core/clone-team-repo.sh"]
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"] 
-  }
-
-  #############################################################################
-  # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
   # DNS on the third interface
   #############################################################################
@@ -422,16 +386,6 @@ build {
     destination = "/home/vagrant/"
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
     }
-  
-  ########################################################################################################################
-  # Copying the wss-proxy.service file needed to support the socketio websocket request over http
-  ########################################################################################################################
- 
-  provisioner "file" {
-    source      = "../../scripts/proxmox/labs/core/wss-proxy.service"
-    destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
-    }
 
   ########################################################################################################################
   # Copying the default file needed into Nginx
@@ -474,8 +428,7 @@ build {
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
-                      "../../scripts/proxmox/labs/core/move-wss-proxy.sh",
-                      "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
+                        "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nmap.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
     only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
