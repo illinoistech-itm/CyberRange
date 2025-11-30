@@ -13,7 +13,12 @@ sudo -u flaskuser pipx install pyxtermjs
 sudo -u flaskuser pipx install gunicorn
 sudo -u flaskuser pipx inject pyxtermjs gunicorn eventlet gevent
 sudo -u flaskuser pipx inject gunicorn pyxtermjs eventlet gevent
-sudo -u flaskuser pipx inject flask python-socketio python-engineio flask-socketio
+# When you install pyxtermjs (whether via pip, pipx, or inside a virtualenv), 
+# you don’t need to separately install Flask yourself — the package already 
+# declares Flask (and Flask‑SocketIO, python‑socketio, python‑engineio, etc.)
+# as dependencies.
+
+#sudo -u flaskuser pipx inject flask python-socketio python-engineio flask-socketio
 
 # Using sed to replace the app instantiation and wrap it in a CORS allow Origin
 # for system60
