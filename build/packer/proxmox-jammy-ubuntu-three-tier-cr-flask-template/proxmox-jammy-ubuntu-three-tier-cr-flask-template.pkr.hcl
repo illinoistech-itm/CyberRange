@@ -711,6 +711,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/flask-app.service"
     destination = "/home/vagrant/"
+    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
   }
 
   ########################################################################################################################
