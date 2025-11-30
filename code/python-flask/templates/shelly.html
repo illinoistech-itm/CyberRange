@@ -19,13 +19,16 @@
         </div>
     </div>
   <main class="lab-content">
+    <span id="status">connecting...</span>
     <section class="terminal-container">
       <div id="terminal"></div>
       <script>
         //https://www.eddymens.com/blog/creating-a-browser-based-interactive-terminal-using-xtermjs-and-nodejs.html#frontend-setup
         const term = new Terminal({ 
           cursorStyle: 'underline',   // makes cursor look like "_"
-          cursorBlink: true 
+          cursorBlink: true,
+          macOptionIsMeta: true,
+          scrollback: true,
         });
         term.open(document.getElementById('terminal'));
         //const socket = io();
@@ -33,21 +36,27 @@
         const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
         const socket = io(url);
+        const status = document.getElementById("status");
             
         // Handle connection
         socket.on("connect", () => {
+          status.innerHTML = '<span style="background-color: lightgreen;">connected</span>';
           console.log("Connected to server, id: ", socket.id);
           term.write("Welcome to {{ lab_id }}\r\n");
           term.write("Execute your commands in this terminal...\r\n")
           term.write("Answer the questions in the textarea to the right...\r\n");
         });
         // Receive terminal output from server
-        socket.on("pty-output", (data) => {
-          term.write(data);
+        //socket.on("pty-output", (data) => {
+        //  term.write(data);
+        //});
+        socket.on("pty-output", function (data) {
+        console.log("New output received from server:", data.output);
+        term.write(data.output);
         });
         // Send terminal input to server
         term.onData((data) => {
-          console.log("Emitting a command... " + data)
+          console.log("Typing a command... " + data)
           if (data === '\r') {   // Enter key
           term.write('\r\n');  // new line
           } else {
