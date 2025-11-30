@@ -45,6 +45,7 @@
         });
         // Send terminal input to server
         term.onData((data) => {
+          console.log("Emitting a command... " + data)
           socket.emit("pty-input", data);
         });
         // Handle disconnect
