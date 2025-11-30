@@ -32,7 +32,6 @@
         // Connect via https as each edge node is proxying an internal connection on 5000 via 443
         const url = "https://" + "{{ edge_node_ip }}";
         console.log("Connecting to websocket on: " + url+ "...")
-        // Force websockets and avoid the long polling of http
         const socket = io(url);
             
         // Handle connection
