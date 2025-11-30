@@ -23,7 +23,10 @@
       <div id="terminal"></div>
       <script>
         //https://www.eddymens.com/blog/creating-a-browser-based-interactive-terminal-using-xtermjs-and-nodejs.html#frontend-setup
-        const term = new Terminal({ cursorBlink: true });
+        const term = new Terminal({ 
+          cursorStyle: 'underline',   // makes cursor look like "_"
+          cursorBlink: true 
+        });
         term.open(document.getElementById('terminal'));
         //const socket = io();
         // Connect via https as each edge node is proxying an internal connection on 5000 via 443
