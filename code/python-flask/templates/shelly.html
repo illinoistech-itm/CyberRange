@@ -37,6 +37,9 @@
         // Handle connection
         socket.on("connect", () => {
           console.log("Connected to server, id: ", socket.id);
+          term.write("Welcome to {{ lab_id }}\r\n");
+          term.write("Execute your commands in this terminal...\r\n")
+          term.write("Answer the questions in the textarea to the right...\r\n");
         });
         // Receive terminal output from server
         socket.on("pty-output", (data) => {
