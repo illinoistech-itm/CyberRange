@@ -43,8 +43,7 @@ sudo step ca certificate system57.rice.iit.edu \
     CAcr.key \
     --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
-    --root /root/.step/certs/root_ca.crt \
-    --not-after=8760h 
+    --root /root/.step/certs/root_ca.crt 
 
 # Check if files were created successfully
 if [ ! -f "CAcr.crt" ] || [ ! -f "CAcr.key" ]; then
