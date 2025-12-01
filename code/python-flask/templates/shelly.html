@@ -43,6 +43,7 @@
           term.write("Welcome to {{ lab_id }}\r\n");
           term.write("Execute your commands in this terminal...\r\n")
           term.write("Answer the questions in the textarea to the right...\r\n");
+          term.write("Press the Enter Key to start...\r\n");
         });
         // Receive terminal output from server
         //socket.on("pty-output", (data) => {
@@ -55,11 +56,6 @@
         // Send terminal input to server
         term.onData((data) => {
           console.log("Typing a command... " + data)
-          if (data === '\r') {   // Enter key
-          term.write('\r\n');  // new line
-          } else {
-          term.write(data);    // echo typed character
-          }
           socket.emit("pty-input", data);
         });
         // Handle disconnect
