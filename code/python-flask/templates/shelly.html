@@ -19,7 +19,6 @@
         </div>
     </div>
   <main class="lab-content">
-    <span id="status">connecting...</span>
     <section class="terminal-container">
       <div id="terminal"></div>
       <script>
@@ -40,7 +39,6 @@
             
         // Handle connection
         socket.on("connect", () => {
-          status.innerHTML = '<span style="background-color: lightgreen;">connected</span>';
           console.log("Connected to server, id: ", socket.id);
           term.write("Welcome to {{ lab_id }}\r\n");
           term.write("Execute your commands in this terminal...\r\n")

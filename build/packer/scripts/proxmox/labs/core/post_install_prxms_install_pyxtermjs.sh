@@ -18,7 +18,9 @@ sudo -u flaskuser pipx inject pyxtermjs gunicorn eventlet gevent
 
 # Using sed to replace the app instantiation and wrap it in a CORS allow Origin
 # for system60
-sudo sed -i 's/socketio = SocketIO(app)/socketio = SocketIO(app, cors_allowed_origins="*")/g' /home/flaskuser/.local/pipx/venvs/pyxtermjs/lib/python3.10/site-packages/pyxtermjs/app.py
+# Turn off debugging
+# sudo sed -i 's/socketio = SocketIO(app)/socketio = SocketIO(app, cors_allowed_origins="*")/g' /home/flaskuser/.local/pipx/venvs/pyxtermjs/lib/python3.10/site-packages/pyxtermjs/app.py
+sudo sed -i 's/socketio = SocketIO(app)/socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)/g' /home/flaskuser/.local/pipx/venvs/pyxtermjs/lib/python3.10/site-packages/pyxtermjs/app.py
 
 # Comment these two lines the pyxtermjs app.py to log at INFO level not ERROR 
 # turn off if you don't need to debug. 
