@@ -237,9 +237,13 @@ def ssh_thread(ip):
 
 ##############################################################################
 # Function to call the run cmd Flask Route on the API server
-def run_cmd(runtime_uuid, lab_num):
+def run_cmd(runtime_uuid, lab_num,action):
     
-    url = FLASK_API_SERVER + "/run"
+    if action == "run":
+        url = FLASK_API_SERVER + "/run"
+    else:
+        url == FLASK_API_SERVER + "/destroy"
+
     payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
@@ -283,35 +287,13 @@ def launch_lab():
     lab_number = request.args.get('lab_id')
     # Generate a UUID to identify this running of the lab
     runtime_uuid = uuid.uuid4()
+    action = "run"
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
     
     # Call to the API functions broken down into multiple small functions for better debugging
     # t_id for task id
-    t_id = run_cmd(runtime_uuid, lab_number)
-    # Render progress page
-    # progress_page(t_id)
-    # return redirect(url_for('.progress_page', task_id=t_id))
-    # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
-    # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
-    
-    # Next step is to send a HTTP post request to retrieve the IP address of the edge node
-    # for the lab being launched
-
-##############################################################################
-@app.route('/lab_one')
-@login_required
-def lab_one():
-    lab_number="lab_one"
-    # Generate a UUID to identify this running of the lab
-    runtime_uuid = uuid.uuid4()
-    # Call SQL Alchemy Helper Function to create a lab record
-    new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
-    
-    # Call to the API functions broken down into multiple small functions for better debugging
-    # t_id for task id
-    t_id = run_cmd(runtime_uuid, lab_number)
+    t_id = run_cmd(runtime_uuid, lab_number, action)
     # Render progress page
     # progress_page(t_id)
     # return redirect(url_for('.progress_page', task_id=t_id))

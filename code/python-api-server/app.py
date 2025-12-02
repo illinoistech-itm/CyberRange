@@ -228,12 +228,9 @@ def prepare_destroy_command():
         cmd.append(f"-var '{key}={value}'") #syntax -var 'key=value'
 
     tf_cmd_str = " ".join(cmd)
-    # Create strings of commands to send to the Celery worker tasks
-    cmd_mkdir="mkdir -p " + dest
-    cmd_cp="cp" + " -r " + src + " "  + dest
-    cmd_tf_init="cd " + dest_after_copy + " && " + " terraform init"
+    # Create string of command to issue the terraform destroy to send to the Celery worker tasks
     cmd_tf_apply = "cd " + dest_after_copy + "; VAULT_ADDR=" + vault_addr_build_server + " VAULT_TOKEN=" + vault_token_build_server +" VAULT_SKIP_VERIFY=" + vault_skip_verify_build_server + " " + tf_cmd_str
-    list_of_commands = [cmd_mkdir,cmd_cp,cmd_tf_init,cmd_tf_apply]
+    list_of_commands = [cmd_tf_apply]
     
     # Pass the constructed command to the Celery Task
     task = run_fabric_command.delay(list_of_commands)
