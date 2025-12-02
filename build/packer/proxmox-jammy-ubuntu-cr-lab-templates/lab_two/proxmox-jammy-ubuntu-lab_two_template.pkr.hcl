@@ -450,7 +450,8 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/lab_two/install-lab-elements.sh"]
+    scripts         = ["../../scripts/proxmox/labs/lab_two/install-lab-elements.sh",
+    "../../scripts/proxmox/labs/lab_one/post_install_prxmx_lab_node-open-ports.sh"]
     only=["proxmox-iso.lab_two_node_42","proxmox-iso.lab_two_node_41"]
   }
 
