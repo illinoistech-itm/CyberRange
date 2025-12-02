@@ -300,9 +300,27 @@ def launch_lab():
     # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
     # This is defined in the .env file and can be found by running: consul catalog nodes
     return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
+
+##############################################################################
+# Destroy lab via issuing the terraform destroy command
+##############################################################################
+@app.route('/destroy_lab')
+@login_required
+def destroy_lab():
+    lab_number = request.args.get('lab_id')
+    # Generate a UUID to identify this running of the lab
+    runtime_uuid = uuid.uuid4()
+    action = "destroy"
     
-    # Next step is to send a HTTP post request to retrieve the IP address of the edge node
-    # for the lab being launched
+    # Call to the API functions broken down into multiple small functions for better debugging
+    # t_id for task id
+    t_id = run_cmd(runtime_uuid, lab_number, action)
+    # Render progress page
+    # progress_page(t_id)
+    # return redirect(url_for('.progress_page', task_id=t_id))
+    # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
+    # This is defined in the .env file and can be found by running: consul catalog nodes
+    return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
 
 ##############################################################################
 # Creating function to read lab question .toml files
@@ -423,8 +441,3 @@ def run_getip(launch_id):
     return None
 
 ##############################################################################
-
-@app.route('/end-lab')
-@login_required
-def endlab():
-   return None
