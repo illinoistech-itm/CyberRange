@@ -320,7 +320,7 @@ def destroy_lab():
     # return redirect(url_for('.progress_page', task_id=t_id))
     # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
     # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
+    return render_template("dashbaord.html") # trying to render progress without task id in URL
 
 ##############################################################################
 # Creating function to read lab question .toml files
@@ -388,7 +388,13 @@ def grade_lab():
     # Call database function to insert data here
         
     # Do something with the data (e.g., log, process, return response)
-    return f"Grand Total of {total} points out of {numberOfAnswers} points..."
+    return render_template(
+        "shelly.html",
+        t=total,
+        noa=numberOfAnswers
+    )
+
+    #return f"Grand Total of {total} points out of {numberOfAnswers} points..."
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches

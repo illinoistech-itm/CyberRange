@@ -94,7 +94,18 @@
           {% endfor %}
             <!-- Submit button -->
           <input type="submit" value="Grade Lab">
-        </form>  
+        </form>
+        <div id="grade">
+          <script>
+           let ca = "{{ t }}";
+           let noa = " {{ noa }}"
+           const grade = document.getElementById("grade");
+           grade.textContent += "There were "+ noa + "questions...\n";
+           grade.textContent += "You answered " + ca +"correctly...\n";
+           grade.textContent += "Your grade is: " (ca/noa) + "...\n";
+          </script> 
+        </div>    
+
       </aside>
     </main>
 </body>
