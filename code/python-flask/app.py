@@ -277,6 +277,29 @@ def progress_page(lab_id, task_id, api_url):
 # that to the function required to establish the SSH connection and pass that
 # to xterm in the shelly.html Flask template...
 ##############################################################################
+@app.route('/launch_lab')
+@login_required
+def launch_lab():
+    lab_number = request.args.get('lab_id')
+    # Generate a UUID to identify this running of the lab
+    runtime_uuid = uuid.uuid4()
+    # Call SQL Alchemy Helper Function to create a lab record
+    new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
+    
+    # Call to the API functions broken down into multiple small functions for better debugging
+    # t_id for task id
+    t_id = run_cmd(runtime_uuid, lab_number)
+    # Render progress page
+    # progress_page(t_id)
+    # return redirect(url_for('.progress_page', task_id=t_id))
+    # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
+    # This is defined in the .env file and can be found by running: consul catalog nodes
+    return render_template("progress.html", lab_id=lab_number, task_id=t_id, api_url=os.getenv('PUBLICAPIURL'), lab_launch_uuid=runtime_uuid, user_email=session['email']) # trying to render progress without task id in URL
+    
+    # Next step is to send a HTTP post request to retrieve the IP address of the edge node
+    # for the lab being launched
+
+##############################################################################
 @app.route('/lab_one')
 @login_required
 def lab_one():
@@ -298,24 +321,6 @@ def lab_one():
     
     # Next step is to send a HTTP post request to retrieve the IP address of the edge node
     # for the lab being launched
-
-##############################################################################
-# Probably only needs to be a single lab function that passes different 
-# parameters in -- as this will be too large to scale once we get more labs
-##############################################################################
-@app.route('/lab_two')
-@login_required
-def lab_two():
-    # Redirect to shelly
-    return redirect(url_for('.shelly'))
-    # return redirect(url_for('.waiting'))
-
-
-@app.route('/lab_three')
-@login_required
-def lab_three():
-    # Redirect to shelly
-    return redirect(url_for('.shelly'))
 
 ##############################################################################
 # Creating function to read lab question .toml files
@@ -435,6 +440,7 @@ def run_getip(launch_id):
 
     return None
 
+##############################################################################
 
 @app.route('/end-lab')
 @login_required
