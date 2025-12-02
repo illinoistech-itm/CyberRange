@@ -88,7 +88,7 @@ variable "DISKSIZE" {
 # Proxmox cloud -- No need to edit this
 variable "STORAGEPOOL" {
   type    = string
-  default = "templatedisk"
+  default = "datadisk1"
 }
 
 variable "NUMBEROFCORES" {
