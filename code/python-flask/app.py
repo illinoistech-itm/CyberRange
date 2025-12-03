@@ -317,7 +317,7 @@ def destroy_lab():
     # better debugging
     # t_id for task id
     t_id = run_cmd(launch_id, lab_number, action)
-    return render_template("dashbaord.html") # Go back to the Dashboard
+    return render_template("dashboard.html") # Go back to the Dashboard
 
 ##############################################################################
 # Creating function to read lab question .toml files

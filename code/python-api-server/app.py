@@ -236,26 +236,6 @@ def prepare_destroy_command():
     task = run_fabric_command.delay(list_of_commands)
     return jsonify({"task_id": task.id}), 202
 
-
-@app.route("/status/<task_id>")
-def status(task_id):
-    progress = get_task_progress(task_id)
-    return jsonify(progress)
-
-@app.route("/stream/<task_id>")
-def stream(task_id):
-    def event_stream():
-        last_sent = 0
-        while True:
-            progress = get_task_progress(task_id)
-            if float(progress["timestamp"]) > last_sent:
-                yield f"data: {progress}\n\n"
-                last_sent = float(progress["timestamp"])
-            if progress["status"] in ("SUCCESS", "FAILURE"):
-                break
-            time.sleep(1)
-    return Response(event_stream(), mimetype="text/event-stream")
-
 ##############################################################################
 # Route to handle 404 errors
 # https://copilot.microsoft.com/shares/sA2qT1ngFCwKdEwaExa4R
