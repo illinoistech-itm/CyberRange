@@ -1,0 +1,5 @@
+# lab_one.toml
+# Enter the Q&A for each lab here 
+[questions]
+step_one = "Using nmap report the first port open: "
+step_two = "Using nmap report the second port open: "
