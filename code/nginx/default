@@ -86,6 +86,22 @@ server {
         location /templates {
           proxy_pass https://backend/templates;
         }
+          location /launch_lab {
+          proxy_pass https://backend$request_uri;
+                        proxy_set_header Host $host;
+                        proxy_set_header X-Real_IP $remote_addr;
+                        proxy_ssl_server_name on;
+                        proxy_set_header X-Forwarded_For $proxy_add_x_forwarded_for;
+                        proxy_set_header X-Forwarded_Proto $scheme;
+        }
+        location /grade_lab {
+          proxy_pass https://backend$request_uri;
+                        proxy_set_header Host $host;
+                        proxy_set_header X-Real_IP $remote_addr;
+                        proxy_ssl_server_name on;
+                        proxy_set_header X-Forwarded_For $proxy_add_x_forwarded_for;
+                        proxy_set_header X-Forwarded_Proto $scheme;
+        }
         location /lab_one {
           proxy_pass https://backend/lab_one;
         }
