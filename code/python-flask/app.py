@@ -257,7 +257,7 @@ def run_cmd(runtime_uuid, lab_num,action):
 ##############################################################################
 @app.route("/progress/<task_id>")
 def progress_page(lab_id, task_id, api_url):
-    return render_template("progress.html", lab_id=lab_number, task_id=task_id, api_url=api_url)
+    return render_template("progress.html", lab_id=lab_id, task_id=task_id, api_url=api_url)
 ##############################################################################
 # This route is going to launch the content of the lab.
 # This means a few things...
@@ -308,19 +308,15 @@ def launch_lab():
 @login_required
 def destroy_lab():
     lab_number = request.args.get('lab_id')
-    # Generate a UUID to identify this running of the lab
-    runtime_uuid = uuid.uuid4()
+    # Set this parameter so that the run_cmd celery task runs the /destroy
+    # route
     action = "destroy"
     
-    # Call to the API functions broken down into multiple small functions for better debugging
+    # Call to the API functions broken down into multiple small functions for
+    # better debugging
     # t_id for task id
     t_id = run_cmd(runtime_uuid, lab_number, action)
-    # Render progress page
-    # progress_page(t_id)
-    # return redirect(url_for('.progress_page', task_id=t_id))
-    # GOSSIPAPIURL is the internal address that the flask APIserver is listening on
-    # This is defined in the .env file and can be found by running: consul catalog nodes
-    return render_template("dashbaord.html") # trying to render progress without task id in URL
+    return render_template("dashbaord.html") # Go back to the Dashboard
 
 ##############################################################################
 # Creating function to read lab question .toml files
@@ -353,7 +349,7 @@ def shelly():
     loaded_lab_steps = load_lab_steps(lab_id)
     #steps = loaded_lab_steps.get("questions")
     
-    return render_template('shelly.html', lab_id=lab_id, loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
+    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN

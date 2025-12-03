@@ -103,7 +103,9 @@
            grade.textContent += "There were "+ noa + "questions...\n";
            grade.textContent += "You answered " + ca +"correctly...\n";
            grade.textContent += "Your grade is: " (ca/noa) + "...\n";
-          </script> 
+          </script>
+          <br />
+          <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link"></a>
         </div>    
 
       </aside>
