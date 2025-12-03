@@ -308,6 +308,7 @@ def launch_lab():
 @login_required
 def destroy_lab():
     lab_number = request.args.get('lab_id')
+    launch_id = request.args.get('launch_id')
     # Set this parameter so that the run_cmd celery task runs the /destroy
     # route
     action = "destroy"
@@ -315,7 +316,7 @@ def destroy_lab():
     # Call to the API functions broken down into multiple small functions for
     # better debugging
     # t_id for task id
-    t_id = run_cmd(runtime_uuid, lab_number, action)
+    t_id = run_cmd(launch_id, lab_number, action)
     return render_template("dashbaord.html") # Go back to the Dashboard
 
 ##############################################################################
