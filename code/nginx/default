@@ -102,15 +102,6 @@ server {
                         proxy_set_header X-Forwarded_For $proxy_add_x_forwarded_for;
                         proxy_set_header X-Forwarded_Proto $scheme;
         }
-        location /lab_one {
-          proxy_pass https://backend/lab_one;
-        }
-        location /lab_two {
-          proxy_pass https://backend/lab_two;
-        }
-        location /lab_three {
-          proxy_pass https://backend/lab_three;
-        }
         location /shelly {
           proxy_pass https://backend/shelly;
         }
