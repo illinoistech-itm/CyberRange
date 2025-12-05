@@ -367,7 +367,7 @@ def getFqdn(ip_address):
 ##############################################################################
 # Route to grade lab submission
 ##############################################################################
-@app.route("/grade_lab", methods=["POST"])
+@app.route("/grade_lab", methods=['GET', 'POST'])
 def grade_lab():
     logger.info("The lab_id passed is: %s", request.form.get("lab_id"))
     correct_answers = load_answer_steps(request.form.get("lab_id"))
