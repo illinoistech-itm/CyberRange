@@ -26,7 +26,7 @@ journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %(message)s'))
 logger.addHandler(journald_handler)
 logger.setLevel(logging.INFO)
 
-# Instantiate the .env file loader to read the RO Vault TOken
+# Instantiate the .env file loader to read the RO Vault Token
 load_dotenv()
 
 # Initialize Vault client
@@ -427,6 +427,7 @@ def run_getip(launch_id):
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found42 = True
+                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
         
     if found42 == False:
@@ -439,6 +440,7 @@ def run_getip(launch_id):
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
                                 if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                     return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
