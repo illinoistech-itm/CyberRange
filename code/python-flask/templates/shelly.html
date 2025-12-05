@@ -96,18 +96,18 @@
             <!-- Submit button -->
           <input type="submit" value="Grade Lab">
         </form>
-        <div id="grade">
+        <div id="grade"></div>
           <script>
            const ca = "{{ t }}";
            const noa = " {{ noa }}";
            const grade = document.getElementById("grade");
            grade.textContent += "There were "+ noa + "questions...\n";
            grade.textContent += "You answered " + ca +"correctly...\n";
-           grade.textContent += "Your grade is: " (ca/noa) + "...\n";
+           grade.textContent += "Your grade is: " + (ca/noa) + "...\n";
           </script>
           <br />
           <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link">Destroy Lab and Return to Dashboard</a>
-        </div>    
+           
 
       </aside>
     </main>
