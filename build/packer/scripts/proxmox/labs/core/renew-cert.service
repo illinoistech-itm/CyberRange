@@ -1,0 +1,11 @@
+# /etc/systemd/system/renew-cert.service
+[Unit]
+Description=Run renew-cert.service at boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/myscript.sh
+
+[Install]
+WantedBy=multi-user.target
