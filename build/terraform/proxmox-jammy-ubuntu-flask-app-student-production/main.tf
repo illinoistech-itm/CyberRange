@@ -20,7 +20,7 @@ resource "random_shuffle" "nodename" {
 # getting confused on rebuilds
 variable "mac_addresses" {
   type    = list(string)
-  default = ["bc:24:11:88:00:00", "bc:24:11:88:00:01", "bc:24:11:88:00:02", "bc:24:11:88:00:03", "bc:24:11:88:00:04"]
+  default = ["bc:24:11:88:00:00", "bc:24:11:88:00:01", "bc:24:11:88:00:02", "bc:24:11:88:00:03", "bc:24:11:88:00:04", "bc:24:11:88:00:05"]
 }
 
 ##############################################################################
@@ -403,6 +403,7 @@ resource "proxmox_vm_qemu" "backend-database" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
+    macaddr = var.mac_addresses[5]
   }
 
   disks {
