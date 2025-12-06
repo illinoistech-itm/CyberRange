@@ -17,6 +17,13 @@ resource "random_shuffle" "nodename" {
   result_count = 1
 }
 
+# Set static Mac address so the gossip network always gets the same IPs -- this will help with Consul 
+# getting confused on rebuilds
+variable "mac_addresses" {
+  type    = list(string)
+  default = ["bc:24:11:88:00:05"]
+}
+
 ##############################################################################
 # Connecting Vault with Secrets for Terraform
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/generic_secret
@@ -84,6 +91,7 @@ resource "proxmox_vm_qemu" "apiserver" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
+    macaddr = var.mac_addresses[0]
   }
 
   disks {
