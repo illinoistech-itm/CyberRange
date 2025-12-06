@@ -21,7 +21,7 @@ resource "random_shuffle" "nodename" {
 # getting confused on rebuilds
 variable "mac_addresses" {
   type    = list(string)
-  default = ["bc:24:11:88:00:05"]
+  default = ["bc:24:11:88:00:06"]
 }
 
 ##############################################################################
