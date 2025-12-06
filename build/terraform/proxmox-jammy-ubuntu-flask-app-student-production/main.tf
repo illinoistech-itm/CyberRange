@@ -303,7 +303,7 @@ resource "proxmox_vm_qemu" "log-server" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
-    mac-addr = var.mac_addresses[4]
+    macaddr = var.mac_addresses[4]
   }
 
   disks {
