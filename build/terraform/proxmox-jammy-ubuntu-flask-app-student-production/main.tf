@@ -93,7 +93,7 @@ resource "proxmox_vm_qemu" "load-balancer" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
-    mac-addr = var.mac_addresses[3]
+    macaddr = var.mac_addresses[3]
   }
 
   disks {
@@ -202,7 +202,7 @@ resource "proxmox_vm_qemu" "frontend-webserver" {
     id     = 2
     model  = "virtio"
     bridge = "vmbr2"
-    mac-addr = var.mac_addresses[count.index]
+    macaddr = var.mac_addresses[count.index]
   }
 
   disks {
