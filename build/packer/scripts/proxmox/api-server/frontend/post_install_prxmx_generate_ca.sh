@@ -42,6 +42,7 @@ sudo step ca certificate system57.rice.iit.edu \
     CAcr.crt \
     CAcr.key \
     --token "$TOKEN" \
+    --not-after "672h" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt 
 
