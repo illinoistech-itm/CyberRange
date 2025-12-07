@@ -42,6 +42,7 @@ echo "Token generated successfully"
 sudo step ca certificate *.rice.iit.edu \
     nginx-signed.crt \
     nginx-signed.key \
+    --not-after "672h" \
     --token "$TOKEN" \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
