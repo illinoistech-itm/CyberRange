@@ -154,6 +154,27 @@ build {
   sources = ["source.proxmox-iso.frontend-apiserver42","source.proxmox-iso.frontend-apiserver41"]
 
   #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/renew-cert.timer"
+    destination = "/home/vagrant/renew-cert.timer"
+  }
+  
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/renew-cert.service"
+    destination = "/home/vagrant/renew-cert.service"
+  }
+  #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Copy the configured config file to the ~/.ssh directory so you can clone 
   # your GitHub account to the server
@@ -335,7 +356,8 @@ build {
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ca.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_setup_cert_renewal.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
     only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
   }
