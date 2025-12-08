@@ -317,7 +317,7 @@ def destroy_lab():
     # Call to the API functions broken down into multiple small functions for
     # better debugging
     # t_id for task id
-    t_id = run_cmd(launch_id, lab_number, action)
+    t_id = run_cmd(launch_id.replace("-",""), lab_number, action)
     return render_template("dashboard.html", uid=session['uid'], email=session['email'] ) # Go back to the Dashboard
 
 ##############################################################################

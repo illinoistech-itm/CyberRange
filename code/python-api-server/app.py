@@ -176,7 +176,7 @@ def prepare_destroy_command():
     tf_cmd_str = " ".join(cmd)
     # Create string of command to issue the terraform destroy to send to the Celery worker tasks
     cmd_tf_destroy = "cd " + dest_after_copy + "; VAULT_ADDR=" + vault_addr_build_server + " VAULT_TOKEN=" + vault_token_build_server +" VAULT_SKIP_VERIFY=" + vault_skip_verify_build_server + " " + tf_cmd_str
-    logger.info("Constructing command to terraform destroy..." + cmd_tf_destroy)
+    logger.info("Constructing command to terraform destroy: " + cmd_tf_destroy)
     list_of_commands = [cmd_tf_destroy]
     
     # Pass the constructed command to the Celery Task
