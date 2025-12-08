@@ -79,63 +79,6 @@ CORS(app, resources={r"/*": {"origins": ["https://system60.rice.iit.edu"]}})
 ##############################################################################
 
 ##############################################################################
-# Helper function to get the IP address of the edge server when user launches
-# a lab -- need to take the launch_uuid and search the tags for the VM with
-# with that value along with the edge_node tag
-##############################################################################
-def run_getip(launch_id):
-    TOKEN = CR_TOKEN_ID.split('!')
-    FQDN = CR_PROXMOX_URL.replace("https://", "")
-    proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
-
-    prxmx42 = proxmox.nodes("system42").qemu.get()
-    prxmx41 = proxmox.nodes("system41").qemu.get()
-
-    found42 = False
-    found41 = False
-
-    runningvms = []
-    runningwithtagsvms = []
-    # Loop through the first node to get all of the nodes that are of status
-    # running and that have the tag of the user for vm in prxmx42:
-    # and that they have the tag 'edge' meaning they are the edge node
-    for vm in prxmx42:
-        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-            runningvms.append(vm)
-
-            for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                for x in range(len(runningwithtagsvms)):
-                    for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            found42 = True
-                            return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-        
-    if found42 == False:
-        for vm in prxmx41:
-            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-                runningvms.append(vm)
-
-                for vm in runningvms:
-                    runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                    for x in range(len(runningwithtagsvms)):
-                            for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                    return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
-
-    return None
-
-##############################################################################
-# Fabric SSH helper function
-# This function uses Fabric on top of Paramiko in Python to make SSH
-# connections to remote system. In this case it will be the 'cr' account on
-# the buildserver to launch terraform plans.
-##############################################################################
-def create_and_run_copy_terraform_plan_command():
-
-    return 1
-
-##############################################################################
 # This route is more generic and will capture the commands and return one
 # at a time -- making things easier to debug
 ##############################################################################
@@ -178,11 +121,14 @@ def prepare_command():
     task = run_fabric_command.delay(list_of_commands)
     return jsonify({"task_id": task.id}), 202
 
+##############################################################################
 
 @app.route("/status/<task_id>")
 def status(task_id):
     progress = get_task_progress(task_id)
     return jsonify(progress)
+
+##############################################################################
 
 @app.route("/stream/<task_id>")
 def stream(task_id):
@@ -229,8 +175,9 @@ def prepare_destroy_command():
 
     tf_cmd_str = " ".join(cmd)
     # Create string of command to issue the terraform destroy to send to the Celery worker tasks
-    cmd_tf_apply = "cd " + dest_after_copy + "; VAULT_ADDR=" + vault_addr_build_server + " VAULT_TOKEN=" + vault_token_build_server +" VAULT_SKIP_VERIFY=" + vault_skip_verify_build_server + " " + tf_cmd_str
-    list_of_commands = [cmd_tf_apply]
+    cmd_tf_destroy = "cd " + dest_after_copy + "; VAULT_ADDR=" + vault_addr_build_server + " VAULT_TOKEN=" + vault_token_build_server +" VAULT_SKIP_VERIFY=" + vault_skip_verify_build_server + " " + tf_cmd_str
+    logger.info("Constructing command to terraform destroy..." + cmd_tf_destroy)
+    list_of_commands = [cmd_tf_destroy]
     
     # Pass the constructed command to the Celery Task
     task = run_fabric_command.delay(list_of_commands)
