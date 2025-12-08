@@ -241,10 +241,11 @@ def run_cmd(runtime_uuid, lab_num,action):
     
     if action == "run":
         url = FLASK_API_SERVER + "/run"
+        payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
     else:
         url = FLASK_API_SERVER + "/destroy"
-
-    payload = {'runtime_uuid': runtime_uuid.hex, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
+        payload = {'runtime_uuid': runtime_uuid, 'email': session['email'],'lab_number': lab_num } # took out {} from session email
+    
     # Using internal self-signed generated Certs so need to disable verify
     response = requests.post(url, json=payload,verify=False)
     # Parse JSON body
