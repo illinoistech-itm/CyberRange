@@ -539,6 +539,30 @@ build {
   sources = ["source.proxmox-iso.frontend-webserver42","source.proxmox-iso.log-server42","source.proxmox-iso.log-server41","source.proxmox-iso.backend-database42","source.proxmox-iso.load-balancer42","source.proxmox-iso.frontend-webserver41","source.proxmox-iso.backend-database41","source.proxmox-iso.load-balancer41"]
 
   #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/three-tier/frontend/renew-cert.timer"
+    destination = "/home/vagrant/renew-cert.timer"
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+  }
+  
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/three-tier/frontend/renew-cert.service"
+    destination = "/home/vagrant/renew-cert.service"
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+  }
+
+  #############################################################################
   # Using the file provisioner to SCP the root_ca.crt into the system to accept
   # our signed certs
   #############################################################################
@@ -731,9 +755,11 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
+    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ca.sh",
+                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
+                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh",
+                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_setup_cert_renewal.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
     only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
   }
