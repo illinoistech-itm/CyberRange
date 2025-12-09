@@ -48,7 +48,7 @@ sudo step ca certificate *.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
 # Check if files were created successfully
-if [ ! -f "flask-signed.crt" ] || [ ! -f "flask-signed.key" ]; then
+if [ ! -f "signed.crt" ] || [ ! -f "signed.key" ]; then
     echo "Error: Certificate files were not created..."
     exit 1
 fi
