@@ -539,6 +539,16 @@ build {
   sources = ["source.proxmox-iso.frontend-webserver42","source.proxmox-iso.log-server42","source.proxmox-iso.log-server41","source.proxmox-iso.backend-database42","source.proxmox-iso.load-balancer42","source.proxmox-iso.frontend-webserver41","source.proxmox-iso.backend-database41","source.proxmox-iso.load-balancer41"]
 
   #############################################################################
+  # Using the file provisioner to SCP the root_ca.crt into the system to accept
+  # our signed certs
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
+    destination = "/home/vagrant/root_ca.crt"
+  }
+
+  #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Copy the configured config file to the ~/.ssh directory so you can clone 
   # your GitHub account to the server
