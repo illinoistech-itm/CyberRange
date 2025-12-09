@@ -154,6 +154,16 @@ build {
   sources = ["source.proxmox-iso.frontend-apiserver42","source.proxmox-iso.frontend-apiserver41"]
 
   #############################################################################
+  # Using the file provisioner to SCP the root_ca.crt into the system to accept
+  # our signed certs
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
+    destination = "/home/vagrant/root_ca.crt"
+  }
+  
+  #############################################################################
   # Using the file provisioner to SCP the timer and service file into the
   # virtual machine so that the service to renew the cert each week takes 
   # place
@@ -283,7 +293,8 @@ build {
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
     "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
-    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh",
+    "../scripts/proxmox/core-jammy/post_install_prxmx_setup_root_crt.sh"]
   }
 
   #############################################################################

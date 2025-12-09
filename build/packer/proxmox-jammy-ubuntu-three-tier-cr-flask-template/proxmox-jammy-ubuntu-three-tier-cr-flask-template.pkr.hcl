@@ -659,7 +659,8 @@ build {
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
     "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
-    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh",
+    "../scripts/proxmox/core-jammy/post_install_prxmx_setup_root_crt.sh"]
   }
 
   #############################################################################
@@ -720,8 +721,7 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ss_cert.sh",
+    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
