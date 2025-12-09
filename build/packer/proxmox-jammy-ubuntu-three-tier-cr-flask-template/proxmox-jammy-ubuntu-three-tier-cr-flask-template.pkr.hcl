@@ -755,11 +755,11 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ca.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
+    scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_flask_server.sh",
-                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_setup_cert_renewal.sh"]
+                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_setup_cert_renewal.sh",
+                        "../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ca.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
     only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
   }
