@@ -44,7 +44,6 @@ sudo step ca certificate *.rice.iit.edu \
     signed.key \
     --not-after "672h" \
     --token "$TOKEN" \
-    --san *.service.consul \
     --ca-url https://system36.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
