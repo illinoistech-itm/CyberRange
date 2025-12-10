@@ -57,6 +57,9 @@ fi
 sudo mv signed.crt /home/flaskuser/signed.crt || { echo "Failed to move cert"; exit 1; }
 sudo mv signed.key /home/flaskuser/signed.key || { echo "Failed to move key"; exit 1; }
 
+sudo chown flaskuser:flaskuser /home/flaskuser/signed.crt
+sudo chown flaskuser:flaskuser /home/flaskuser/signed.key
+
 sudo chmod 600 provisioner-password.txt
 
 echo "Certificate and unencrypted key successfully created..."
