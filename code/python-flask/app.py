@@ -352,7 +352,7 @@ def shelly():
     loaded_lab_steps = load_lab_steps(lab_id)
     #steps = loaded_lab_steps.get("questions")
     
-    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
+    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id,API_SERVER=FLASK_API_SERVER)
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN

@@ -177,11 +177,21 @@ def prepare_destroy_command():
     # Create string of command to issue the terraform destroy to send to the Celery worker tasks
     cmd_tf_destroy = "cd " + dest_after_copy + "; VAULT_ADDR=" + vault_addr_build_server + " VAULT_TOKEN=" + vault_token_build_server +" VAULT_SKIP_VERIFY=" + vault_skip_verify_build_server + " " + tf_cmd_str
     logger.info("Constructing command to terraform destroy: " + cmd_tf_destroy)
-    list_of_commands = [cmd_tf_destroy]
+    cmd_rm_tmp_dir = "rm -rf " + dest_after_copy 
+    logger.info("Constructing command rm /tmp dir created for lab launch: " + cmd_rm_tmp_dir)
+    list_of_commands = [cmd_tf_destroy,cmd_rm_tmp_dir]
     
     # Pass the constructed command to the Celery Task
     task = run_fabric_command.delay(list_of_commands)
     return jsonify({"task_id": task.id}), 202
+
+##############################################################################
+# Route to grade lab submission
+##############################################################################
+@app.route("/grade_lab", methods=['POST'])
+def grade_lab():
+    logger.info("The lab_id passed is: %s", request.form['lab_id'])
+    return 1
 
 ##############################################################################
 # Route to handle 404 errors
