@@ -186,14 +186,6 @@ def prepare_destroy_command():
     return jsonify({"task_id": task.id}), 202
 
 ##############################################################################
-# Route to grade lab submission
-##############################################################################
-@app.route("/grade_lab", methods=['POST'])
-def grade_lab():
-    logger.info("The lab_id passed is: %s", request.form['lab_id'])
-    return 1
-
-##############################################################################
 # Route to handle 404 errors
 # https://copilot.microsoft.com/shares/sA2qT1ngFCwKdEwaExa4R
 ##############################################################################
