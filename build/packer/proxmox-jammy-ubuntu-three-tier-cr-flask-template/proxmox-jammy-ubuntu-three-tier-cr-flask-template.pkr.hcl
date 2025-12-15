@@ -547,7 +547,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.timer"
     destination = "/home/vagrant/renew-cert.timer"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.log-server42","proxmox-iso.log-server41"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
   }
   
   #############################################################################
@@ -559,7 +559,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.service"
     destination = "/home/vagrant/renew-cert.service"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.log-server42","proxmox-iso.log-server41"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
   }
 
   #############################################################################
