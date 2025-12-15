@@ -77,12 +77,12 @@ class Users(db.Model):
 class Labs(db.Model):
     __tablename__ = 'Labs'  # trying to explicitly set the table name so there is no lowercase
     # id = db.Column(db.String(36), unique=True, nullable=False)
-    id = Column(CHAR(36), server_default=func.uuid()) # new id declaration
-    lab_number = db.Column(db.Integer, nullable=False)
-    lab_complete = db.Column(db.Integer, nullable=False)
-    grade = db.Column(db.Integer, nullable=False)
+    id = Column(CHAR(36), server_default=func.uuid(), unique=True) # new id declaration
+    lab_number = db.Column(db.Integer, primary_key=True)
+    lab_complete = db.Column(db.Integer, nullable=False, default=0)
+    grade = db.Column(db.Integer, nullable=True)
     last_attempt = db.Column(db.DateTime, nullable=False)
-    email = db.Column(db.String, primary_key=True)
+    email = db.Column(db.String(255), primary_key=True)
 
 ##############################################################################
 # Create Helper functions for DB access
@@ -103,7 +103,12 @@ def select_filtered(model, **filters):
     return db.session.scalars(stmt).all()
 
 def create_lab_entry(email,lab_number):
-    new_lab = Labs(lab_number=lab_number,email=email)
+    new_lab = Labs(
+        lab_number=lab_number,
+        email=email,
+        last_attempt=datetime.now(timezone.utc),
+        lab_complete=0
+    )
     db.session.add(new_lab)
     db.session.commit()
     return new_lab
@@ -397,16 +402,29 @@ def grade_lab():
     # Could this possibly be put into Session to save a function call?
     loaded_lab_steps = load_lab_steps(data.get('lab_id'))
 
-    # Call database function to insert data here
-        
+    # Call database function to insert data here    
     # Do something with the data (e.g., log, process, return response)
+
+    # Calculate the grade percentage
+    grade_percentage = 0
+    if numberOfAnswers > 0:
+        grade_percentage = round((total / numberOfAnswers) * 100)
+
+    # Update the lab entry in the database
+    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], lab_number=data.get('lab_id')).first()
+    if lab_to_update:
+        lab_to_update.grade = grade_percentage
+        lab_to_update.lab_complete = 1
+        lab_to_update.last_attempt = datetime.now(timezone.utc)
+        db.session.commit()
+
     return render_template(
         "shelly.html",
         t=total,
         noa=numberOfAnswers,
         loaded_lab_steps=loaded_lab_steps,
         user_email=session['email'],
-        edge_node_ip=session['ip'],
+        edge_node_ip=session['edge_node_ip'],
         launch_id=session['launch_id']
     )
 
