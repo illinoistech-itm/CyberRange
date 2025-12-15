@@ -371,11 +371,11 @@ def getFqdn(ip_address):
 ##############################################################################
 @app.route("/grade_lab", methods=['POST'])
 def grade_lab():
-    #logger.info("The lab_id passed is: %s", request.form['lab_id'])
-    data = request.get_json()
-    logger.info("The form data passed is: %s", request.get_json())
-    logger.info("The lab_id passed is: %s", data['lab_id'])
-    correct_answers = load_answer_steps(data['lab_id'])
+    data = request.form
+    logger.info("The lab_id passed is: %s", request.form['lab_id'])
+    logger.info("The form data passed is: %s", data)
+    
+    correct_answers = load_answer_steps(data.get('lab_id'))
     answers = correct_answers.get("answers")
     numberOfAnswers = len(correct_answers)
     total = 0
@@ -386,7 +386,7 @@ def grade_lab():
     for answer in answers:
         for value in values_list:
             # Check to do nothing for the lab_id value
-            if value == data['lab_id']:
+            if value == data.get('lab_id'):
                 pass
             if answer == value:
                 total += 1
@@ -459,5 +459,5 @@ def run_getip(launch_id):
 def bad_request(e):
     body = request.get_data(as_text=True)
     headers = dict(request.headers)
-    app.logger.info("400 Error: Headers: %s Body: %s", headers, body)
+    logger.info("400 Error: Headers: %s Body: %s", headers, body)
     return "Bad Request", 400

@@ -86,7 +86,7 @@
       <div class="instructions-titlebar">Steps / Instructions for {{ lab_id }}</div>
         
         <form action="{{ url_for('grade_lab') }}" method="post">
-          <input type="hidden" name="{{ lab_id }}" value="{{ lab_id }}">
+          <input type="hidden" name="lab_id" value="{{ lab_id }}">
           <br />
           {% for key, value in loaded_lab_steps["questions"].items() %}
             <!-- Text input box -->
