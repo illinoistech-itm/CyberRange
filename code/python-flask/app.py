@@ -384,7 +384,7 @@ def grade_lab():
     
     correct_answers = load_answer_steps(data.get('lab_id'))
     answers = correct_answers.get("answers")
-    numberOfAnswers = len(correct_answers)
+    numberOfAnswers = len(answers)
     total = 0
     
     # Grab the a list of the form values
@@ -422,6 +422,7 @@ def grade_lab():
         "shelly.html",
         t=total,
         noa=numberOfAnswers,
+        grade_percent=grade_percentage,
         loaded_lab_steps=loaded_lab_steps,
         user_email=session['email'],
         edge_node_ip=session['edge_node_ip'],

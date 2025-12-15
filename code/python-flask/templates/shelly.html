@@ -99,14 +99,17 @@
         </form>
         <div id="grade"></div>
           <script>
-           let ca = "{{ t }}";
-           let noa = " {{ noa }}";
-           let grade = document.getElementById("grade");
-           if (!isNaN(ca) || !isNaN(noa)) {
-             grade.textContent += "There were "+ noa + "questions...\n";
-             grade.textContent += "You answered " + ca +"correctly...\n";
-             grade.textContent += "Your grade is: " + (ca/noa) + "...\n";  
-           }
+            const gradeDiv = document.getElementById("grade");
+            const totalCorrect = "{{ t }}";
+            const numQuestions = "{{ noa }}";
+            const gradePercent = "{{ grade_percent }}";
+
+            if (gradePercent) { 
+                gradeDiv.innerHTML = 
+                    `<p>Number of Questions: ${numQuestions}</p>` +
+                    `<p>Number of Correct Answers: ${totalCorrect}</p>` +
+                    `<p><strong>Your Grade is: ${gradePercent}%</strong></p>`;
+            }
           </script>
           <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link">Destroy Lab and Return to Dashboard</a>
            
