@@ -87,11 +87,12 @@
         
         <form action="{{ url_for('grade_lab') }}" method="post">
           <input type="hidden" name="lab_id" value="{{ lab_id }}">
-          <br />
           {% for key, value in loaded_lab_steps["questions"].items() %}
-            <!-- Text input box -->
-            <label for="{{ key }}">{{ value }} :</label><br /> 
-            <input type="text" id="{{ key }}" name="{{ key }}" required><br />
+            <div class="form-group">
+              <!-- Text input box -->
+              <label for="{{ key }}">{{ value }} :</label>
+              <input type="text" id="{{ key }}" name="{{ key }}" required>
+            </div>
           {% endfor %}
             <!-- Submit button -->
           <button type="submit">Grade Lab</button>
@@ -107,7 +108,6 @@
              grade.textContent += "Your grade is: " + (ca/noa) + "...\n";  
            }
           </script>
-          <br />
           <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link">Destroy Lab and Return to Dashboard</a>
            
 
