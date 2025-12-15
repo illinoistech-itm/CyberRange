@@ -425,3 +425,8 @@ body.lab-page {
     gap: 10px;
     flex-wrap: wrap; 
 }
+
+.lab-form-group {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

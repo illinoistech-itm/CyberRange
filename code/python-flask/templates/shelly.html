@@ -12,7 +12,7 @@
   <header class="lab-toolbar">
     <div class="dropdown">
       <button class="dropbtn">View</button>
-        <div class="view-dropdown-content">
+        <div class="dropdown-content">
           <a href="#">Zoom In</a>
           <a href="#">Zoom Out</a>
           <a href="#">Full Screen</a>
@@ -88,7 +88,7 @@
         <form action="{{ url_for('grade_lab') }}" method="post">
           <input type="hidden" name="lab_id" value="{{ lab_id }}">
           {% for key, value in loaded_lab_steps["questions"].items() %}
-            <div class="form-group">
+            <div class="lab-form-group">
               <!-- Text input box -->
               <label for="{{ key }}">{{ value }} :</label>
               <input type="text" id="{{ key }}" name="{{ key }}" required>
