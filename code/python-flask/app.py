@@ -351,8 +351,10 @@ def shelly():
     # Returns .toml file as a dictionary
     loaded_lab_steps = load_lab_steps(lab_id)
     #steps = loaded_lab_steps.get("questions")
-    
-    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id,API_SERVER=FLASK_API_SERVER)
+    # Set session variable for launch_id so we don't have to pass it around via POST
+    session['launch_id']=launch_id
+    session['edge_node_ip']=ip
+    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN
@@ -391,16 +393,22 @@ def grade_lab():
             if answer == value:
                 total += 1
 
+    # Re-process the questions to send back to the rendered shelly.html...
+    # Could this possibly be put into Session to save a function call?
+    loaded_lab_steps = load_lab_steps(data.get('lab_id'))
+
     # Call database function to insert data here
         
     # Do something with the data (e.g., log, process, return response)
     return render_template(
         "shelly.html",
         t=total,
-        noa=numberOfAnswers
+        noa=numberOfAnswers,
+        loaded_lab_steps=loaded_lab_steps,
+        user_email=session['email'],
+        edge_node_ip=session['ip'],
+        launch_id=session['launch_id']
     )
-
-    #return f"Grand Total of {total} points out of {numberOfAnswers} points..."
 
 ##############################################################################
 # Helper function to get the IP address of the edge server when user launches
