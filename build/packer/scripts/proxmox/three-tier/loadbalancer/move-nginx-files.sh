@@ -9,6 +9,6 @@
 sudo cp -v /home/vagrant/CyberRange/code/nginx/nginx.conf /etc/nginx/
 sudo cp -v /home/vagrant/CyberRange/code/nginx/default /etc/nginx/sites-available/
 # This connects the TLS certs built in this script with the instances
-sudo cp -v /home/vagrant/CyberRange/code/nginx/self-signed.conf /etc/nginx/snippets/
+sudo cp -v /home/vagrant/CyberRange/code/nginx/signed.conf /etc/nginx/snippets/
 
 sudo systemctl daemon-reload

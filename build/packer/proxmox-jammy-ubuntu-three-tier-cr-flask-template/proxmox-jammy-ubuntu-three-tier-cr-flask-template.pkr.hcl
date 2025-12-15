@@ -547,7 +547,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.timer"
     destination = "/home/vagrant/renew-cert.timer"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.log-server42","proxmox-iso.log-server41"]
   }
   
   #############################################################################
@@ -559,7 +559,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.service"
     destination = "/home/vagrant/renew-cert.service"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.log-server42","proxmox-iso.log-server41"]
   }
 
   #############################################################################
@@ -782,9 +782,11 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts = ["../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load-balancer-firewall-open-ports.sh",
+    scripts = ["../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_generate_signed_certs.sh",
+      "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load-balancer-firewall-open-ports.sh",
       "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load_balancer.sh",
-    "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh"]
+    "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh",
+    "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_setup_cert_renewal.sh"]
     only = ["proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
   }
 

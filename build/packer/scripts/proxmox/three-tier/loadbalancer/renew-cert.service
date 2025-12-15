@@ -1,0 +1,7 @@
+# /etc/systemd/system/renew-cert.service
+[Unit]
+Description=Run script to renew CA cert
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/step ca renew /home/flaskuser/CAcr.crt /home/flaskuser/CAcr.key --ca-url https://system36.rice.iit.edu --root /root/.step/certs/root_ca.crt --force
