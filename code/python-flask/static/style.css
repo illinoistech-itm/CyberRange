@@ -329,7 +329,7 @@ body.lab-page {
     display: inline-block;
 }
 
-.lab-toolbar .dropdown { 
+.lab-toolbar .dropdown-content { 
     display: none;
     position: absolute;
     background-color: #F9F9F9;
@@ -429,4 +429,25 @@ body.lab-page {
 .lab-form-group {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+#destroy-link {
+    display: block; 
+    margin: 20px; 
+    padding: 10px 20px;
+    background-color: #E0AC87;
+    color: #994040;
+    border: 2px solid #D98845;
+    border-radius: 8px;
+    text-decoration: none; 
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
+}
+
+#destroy-link:hover {
+    background-color: #994040;
+    color: #F2EBEB;
 }
