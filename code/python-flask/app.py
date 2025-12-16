@@ -17,6 +17,8 @@ from sqlalchemy.dialects.mysql import CHAR # adding imports that specifically br
 from sqlalchemy.dialects.postgresql import UUID # adding uuid()
 from sqlalchemy import Column, String, func # different syntax to explicitly call for the uuid() func
 import toml # Import TOML library from Python standard lib 3.11 or <
+import urllib3
+import socket
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 # Initialize logging object to send logs to the journal
@@ -480,6 +482,150 @@ def run_getip(launch_id):
                                     return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+SUBNET_WANTED = "10.110.36."   # your target subnet prefix
+
+def split_tags(tags: str) -> set[str]:
+    # you used ';' here — keep it consistent with your environment
+    return {t.strip() for t in (tags or "").split(";") if t.strip()}
+
+def extract_ipv4s(agent_interfaces: dict) -> list[str]:
+    ips = []
+    for iface in agent_interfaces.get("result", []):
+        for ipinfo in iface.get("ip-addresses", []):
+            if ipinfo.get("ip-address-type") == "ipv4":
+                ip = ipinfo.get("ip-address")
+                if ip:
+                    ips.append(ip)
+    return ips
+
+def reverse_dns(ip: str):
+    """Return PTR hostname for an IP if available."""
+    try:
+        host, _, _ = socket.gethostbyaddr(ip)
+        return host
+    except Exception:
+        return None
+
+def get_ips_by_role(
+    proxmox: ProxmoxAPI,
+    tag_filter: str = None,  # Make optional
+    nodes=("system42", "system41"),
+    include_templates=False,
+    want_subnet_prefix=SUBNET_WANTED,
+    do_reverse_dns=True,
+):
+    results = {"edge": [], "non_edge": []}
+    subnet_hits = []  # ALL VMs in the target subnet
+
+    print("\nSearching running VMs")
+    if tag_filter:
+        print("Tag filter for edge:", tag_filter)
+    print("Nodes:", ", ".join(nodes))
+    print("Subnet to report:", want_subnet_prefix)
+
+    for node in nodes:
+        print("\nChecking node:", node)
+
+        vms = proxmox.nodes(node).qemu.get()
+        running_vms = [vm for vm in vms if vm.get("status") == "running"]
+        print("Running VMs found:", len(running_vms))
+
+        for vm in running_vms:
+            vmid = vm.get("vmid")
+            name = vm.get("name", "")
+            tags = split_tags(vm.get("tags", ""))
+
+            if not include_templates and vm.get("template") == 1:
+                continue
+
+            print("\nVMID", vmid, f"({name})")
+            print("  Tags:", ", ".join(tags) if tags else "None")
+
+            try:
+                interfaces = proxmox.nodes(node).qemu(vmid).agent("network-get-interfaces").get()
+            except Exception as e:
+                print("  Warning: QEMU agent unavailable:", e)
+                continue
+
+            ips = extract_ipv4s(interfaces)
+            if not ips:
+                print("  Warning: no IPv4 addresses found")
+                continue
+
+            role = "edge" if "edge" in tags else "non_edge"
+            print("  Role:", role)
+
+            for ip in ips:
+                dns = reverse_dns(ip) if do_reverse_dns else None
+                dns_part = f" | DNS: {dns}" if dns else ""
+
+                print(f"  IP found: {ip}{dns_part}")
+
+                entry = {
+                    "node": node,
+                    "vmid": vmid,
+                    "name": name,
+                    "ip": ip,
+                    "dns": dns,
+                    "tags": sorted(tags),
+                    "role": role,  # Add role to the entry
+                }
+
+                # Track ALL VMs in the target subnet (edge or not)
+                if want_subnet_prefix and ip.startswith(want_subnet_prefix):
+                    subnet_hits.append(entry)
+                    print(f"  ✓ Matches target subnet!")
+
+                # Also track edge VMs separately (for backwards compatibility)
+                if tag_filter and tag_filter in tags:
+                    results[role].append(entry)
+
+    return results, subnet_hits
+
+
+if __name__ == "__main__":
+    print("Starting Proxmox edge tracker (running VMs only)")
+
+    proxmox = ProxmoxAPI(
+        FQDN,
+        user=TOKEN[0],
+        token_name=TOKEN[1],
+        token_value=CR_TOKEN_VALUE, 
+        verify_ssl=False
+    )
+
+    results, subnet_hits = get_ips_by_role(
+        proxmox,
+        tag_filter="edge",  # Still track edge-tagged VMs
+        want_subnet_prefix="10.110.36.",
+        do_reverse_dns=True
+    )
+
+    print("\n" + "="*60)
+    print("ALL VMs in subnet 10.110.36.* (Edge and Non-Edge):")
+    print("="*60)
+    if subnet_hits:
+        edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
+        non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
+        
+        if edge_vms:
+            print("\nEdge VMs:")
+            for vm in edge_vms:
+                dns_part = f" | {vm['dns']}" if vm.get("dns") else ""
+                print(f"  {vm['name']}: {vm['ip']}{dns_part}")
+        
+        if non_edge_vms:
+            print("\nNon-Edge VMs (no edge tag):")
+            for vm in non_edge_vms:
+                dns_part = f" | {vm['dns']}" if vm.get("dns") else ""
+                print(f"  {vm['name']}: {vm['ip']}{dns_part}")
+    else:
+        print("  None found")
+
+    print("\nEdge tracking complete")
 
 ##############################################################################
 @app.errorhandler(400)
