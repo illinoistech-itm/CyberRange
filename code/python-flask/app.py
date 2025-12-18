@@ -361,7 +361,41 @@ def shelly():
     # Set session variable for launch_id so we don't have to pass it around via POST
     session['launch_id']=launch_id
     session['edge_node_ip']=ip
-    return render_template('shelly.html', lab_id=lab_id, launch_id=launch_id,loaded_lab_steps=loaded_lab_steps, edge_node_ip=ip, user_email=user_id)
+
+    #Adds IPs to session variable for use in the shelly.html template
+    TOKEN = CR_TOKEN_ID.split('!')
+    FQDN = CR_PROXMOX_URL.replace("https://", "")
+    proxmox = ProxmoxAPI(
+        FQDN,
+        user=TOKEN[0],
+        token_name=TOKEN[1],
+        token_value=CR_TOKEN_VALUE,
+        verify_ssl=False
+    )
+    
+    # Get all VMs in the lab's subnet
+    results, subnet_hits = get_ips_by_role(
+        proxmox,
+        tag_filter=launch_id.replace("-",""),  # Filter by this lab's launch_id
+        want_subnet_prefix="10.110.36.",
+        do_reverse_dns=True
+    )
+    
+    # Separate by role
+    edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
+    non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
+
+    return render_template('shelly.html',
+                            lab_id=lab_id,
+                            launch_id=launch_id,
+                            loaded_lab_steps=loaded_lab_steps,
+                            edge_node_ip=ip,
+                            user_email=user_id,
+                            edgevms=edge_vms,
+                            nonedgevms=non_edge_vms,
+                            subnet=SUBNET_WANTED)
+
+#Test to see if it works, reverse if it doesnt
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN
@@ -586,46 +620,37 @@ def get_ips_by_role(
     return results, subnet_hits
 
 
-if __name__ == "__main__":
-    print("Starting Proxmox edge tracker (running VMs only)")
-
+# Flask route to display edge IPs
+@app.route('/edge-ips')
+def get_edge_ips():
+    """Return lists of edge and non-edge IPs."""
+    TOKEN = CR_TOKEN_ID.split('!')
+    FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(
         FQDN,
         user=TOKEN[0],
         token_name=TOKEN[1],
-        token_value=CR_TOKEN_VALUE, 
+        token_value=CR_TOKEN_VALUE,
         verify_ssl=False
     )
-
+    
     results, subnet_hits = get_ips_by_role(
         proxmox,
-        tag_filter="edge",  # Still track edge-tagged VMs
+        tag_filter="edge",
         want_subnet_prefix="10.110.36.",
         do_reverse_dns=True
     )
-
-    print("\n" + "="*60)
-    print("ALL VMs in subnet 10.110.36.* (Edge and Non-Edge):")
-    print("="*60)
-    if subnet_hits:
-        edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
-        non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
-        
-        if edge_vms:
-            print("\nEdge VMs:")
-            for vm in edge_vms:
-                dns_part = f" | {vm['dns']}" if vm.get("dns") else ""
-                print(f"  {vm['name']}: {vm['ip']}{dns_part}")
-        
-        if non_edge_vms:
-            print("\nNon-Edge VMs (no edge tag):")
-            for vm in non_edge_vms:
-                dns_part = f" | {vm['dns']}" if vm.get("dns") else ""
-                print(f"  {vm['name']}: {vm['ip']}{dns_part}")
-    else:
-        print("  None found")
-
-    print("\nEdge tracking complete")
+    
+    # Separate by role
+    edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
+    non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
+    
+    return render_template(
+        'edge_ips.html',
+        edge_vms=edge_vms,
+        non_edge_vms=non_edge_vms,
+        subnet=SUBNET_WANTED
+    )
 
 ##############################################################################
 @app.errorhandler(400)
