@@ -3,3 +3,7 @@
 [questions]
 step_one = "Using nmap report the first port open: "
 step_two = "Using nmap report the second port open: "
+
+[instructions]
+description = "Lab to find open/exposed ports with Nmap on a network."
+instructions = "Using Nmap scan the listed Lab Node IP addresses to determine the open ports. You do not have sudo access in this lab."

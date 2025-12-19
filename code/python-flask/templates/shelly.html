@@ -74,10 +74,20 @@
           console.groupEnd();
         });
 
-
       </script>
     </section>
-
+    <div name="instructions">
+          {# Section to determine if lab will print out IPs as expected, remove if fails #}
+          Lab Instructions: {{ loaded_lab_steps["instructions"].instructions }}
+          <br />
+          Edge VM: {% for vm in edge_vms %}
+              <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
+              {% endfor %}
+            Lab Nodes:
+              {% for vm in non_edge_vms %}
+              <code> {{ vm.name }}</code>: <code>{{ vm.ip }}</code>
+              {% endfor %}
+    </div>
     {# f you want to avoid accessing keys via info.key, you can unpack the dict:
     return render_template("index.html", **data)
     Now in the template, you can use {{ hostname }} directly. #}
@@ -111,22 +121,7 @@
                     `<p><strong>Your Grade is: ${gradePercent}%</strong></p>`;
             }
           </script>
-          {# Section to determine if lab will print out IPs as expected, remove if fails #}
-          <div style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
-          <h4>Lab VM IP Addresses:</h4>
-          <p><strong>Edge VMs:</strong></p>
-            <ul>
-              {% for vm in edge_vms %}
-              <li>{{ vm.name }}: <code>{{ vm.ip }}</code></li>
-              {% endfor %}
-            </ul>
-            <p><strong>Other VMs:</strong></p>
-            <ul>
-              {% for vm in non_edge_vms %}
-              <li>{{ vm.name }}: <code>{{ vm.ip }}</code></li>
-              {% endfor %}
-            </ul>
-          </div>
+
           <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link">Destroy Lab and Return to Dashboard</a>
            
 
