@@ -554,18 +554,18 @@ def get_ips_by_role(
     results = {"edge": [], "non_edge": []}
     subnet_hits = []  # ALL VMs in the target subnet
 
-    print("\nSearching running VMs")
+    logger.info("Searching running VMs...")
     if tag_filter:
-        print("Tag filter for edge:", tag_filter)
-    print("Nodes:", ", ".join(nodes))
-    print("Subnet to report:", want_subnet_prefix)
+        logger.info("Tag filter for edge:", tag_filter)
+    logger.info("Nodes:", ", ".join(nodes))
+    logger.info("Subnet to report:", want_subnet_prefix)
 
     for node in nodes:
-        print("\nChecking node:", node)
+        logger.info("Checking node:", node)
 
         vms = proxmox.nodes(node).qemu.get()
         running_vms = [vm for vm in vms if vm.get("status") == "running"]
-        print("Running VMs found:", len(running_vms))
+        logger.info("Running VMs found:", len(running_vms))
 
         for vm in running_vms:
             vmid = vm.get("vmid")
@@ -575,28 +575,28 @@ def get_ips_by_role(
             if not include_templates and vm.get("template") == 1:
                 continue
 
-            print("\nVMID", vmid, f"({name})")
-            print("  Tags:", ", ".join(tags) if tags else "None")
+            logger.info("VMID", vmid, f"({name})")
+            logger.info("  Tags:", ", ".join(tags) if tags else "None")
 
             try:
                 interfaces = proxmox.nodes(node).qemu(vmid).agent("network-get-interfaces").get()
             except Exception as e:
-                print("  Warning: QEMU agent unavailable:", e)
+                logger.info("Warning: QEMU agent unavailable:", e)
                 continue
 
             ips = extract_ipv4s(interfaces)
             if not ips:
-                print("  Warning: no IPv4 addresses found")
+                logger.info("  Warning: no IPv4 addresses found")
                 continue
 
             role = "edge" if "edge" in tags else "non_edge"
-            print("  Role:", role)
+            logger.info("  Role:", role)
 
             for ip in ips:
                 dns = reverse_dns(ip) if do_reverse_dns else None
                 dns_part = f" | DNS: {dns}" if dns else ""
 
-                print(f"  IP found: {ip}{dns_part}")
+                logger.info(f"  IP found: {ip}{dns_part}")
 
                 entry = {
                     "node": node,
@@ -609,9 +609,11 @@ def get_ips_by_role(
                 }
 
                 # Track ALL VMs in the target subnet (edge or not)
-                if want_subnet_prefix and ip.startswith(want_subnet_prefix):
+                # If subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list
+                # Append that to the list of subnet_hits
+                if ip.startswith(want_subnet_prefix) and tag_filter in tags and "edge" not in tags:
                     subnet_hits.append(entry)
-                    print(f"  ✓ Matches target subnet!")
+                    logger.info(f"  ✓ subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list...")
 
                 # Also track edge VMs separately (for backwards compatibility)
                 if tag_filter and tag_filter in tags:
