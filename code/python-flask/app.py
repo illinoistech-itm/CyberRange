@@ -415,7 +415,7 @@ def getFqdn(ip_address):
 @app.route("/grade_lab", methods=['POST'])
 def grade_lab():
     data = request.form
-    logger.info("The lab_id passed is: %s", request.form['lab_id'])
+    logger.info("The lab_id passed is: %s", data.get('lab_id'))
     logger.info("The form data passed is: %s", data)
     
     correct_answers = load_answer_steps(data.get('lab_id'))
