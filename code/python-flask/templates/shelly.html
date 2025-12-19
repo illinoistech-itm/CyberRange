@@ -76,18 +76,6 @@
 
       </script>
     </section>
-    <div name="instructions">
-          {# Section to determine if lab will print out IPs as expected, remove if fails #}
-          Lab Instructions: {{ loaded_lab_steps["instructions"].instructions }}
-          <br />
-          Edge VM: {% for vm in edge_vms %}
-              <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
-              {% endfor %}
-            Lab Nodes:
-              {% for vm in non_edge_vms %}
-              <code> {{ vm.name }}</code>: <code>{{ vm.ip }}</code>
-              {% endfor %}
-    </div>
     {# f you want to avoid accessing keys via info.key, you can unpack the dict:
     return render_template("index.html", **data)
     Now in the template, you can use {{ hostname }} directly. #}
@@ -126,6 +114,18 @@
            
 
       </aside>
+      <div name="instructions">
+          {# Section to determine if lab will print out IPs as expected, remove if fails #}
+          Lab Instructions: {{ loaded_lab_steps["instructions"].instructions }}
+          <br />
+          Edge VM: {% for vm in edge_vms %}
+              <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
+              {% endfor %}
+            Lab Nodes:
+              {% for vm in non_edge_vms %}
+              <code> {{ vm.name }}</code>: <code>{{ vm.ip }}</code>
+              {% endfor %}
+    </div>
     </main>
 </body>
 </html>
