@@ -377,7 +377,7 @@ def shelly():
     results, subnet_hits = get_ips_by_role(
         proxmox,
         tag_filter=launch_id.replace("-",""),  # Filter by this lab's launch_id
-        want_subnet_prefix="10.110.36.",
+        want_subnet_prefix="10.110.",
         do_reverse_dns=True
     )
     
