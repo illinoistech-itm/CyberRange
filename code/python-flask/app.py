@@ -391,8 +391,8 @@ def shelly():
                             loaded_lab_steps=loaded_lab_steps,
                             edge_node_ip=ip,
                             user_email=user_id,
-                            edgevms=edge_vms,
-                            nonedgevms=non_edge_vms,
+                            edge_vms=edge_vms,
+                            non_edge_vms=non_edge_vms,
                             subnet=SUBNET_WANTED)
 
 #Test to see if it works, reverse if it doesnt
