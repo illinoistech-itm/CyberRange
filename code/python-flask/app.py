@@ -519,7 +519,7 @@ def run_getip(launch_id):
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-SUBNET_WANTED = "10.110.36."   # your target subnet prefix
+SUBNET_WANTED = "10.110."   # your target subnet prefix
 
 def split_tags(tags: str) -> set[str]:
     # you used ';' here — keep it consistent with your environment
