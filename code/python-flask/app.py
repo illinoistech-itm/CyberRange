@@ -430,7 +430,7 @@ def grade_lab():
         for value in values_list:
             # Check to do nothing for the lab_id value
             if value == data.get('lab_id'):
-                pass
+                continue
             if answer == value:
                 total += 1
 
@@ -447,7 +447,7 @@ def grade_lab():
         grade_percentage = round((total / numberOfAnswers) * 100)
 
     # Update the lab entry in the database
-    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], lab_number=data.get('lab_id')).first()
+    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['launch_id'])
     if lab_to_update:
         lab_to_update.grade = grade_percentage
         lab_to_update.lab_complete = 1
