@@ -513,9 +513,10 @@ def run_getip(launch_id):
                                     return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
-
+##############################################################################
+# Functions to return the IPs of the edge node and all lab nodes (1+n)
+##############################################################################
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 SUBNET_WANTED = "10.110."   # your target subnet prefix
 
 def split_tags(tags: str) -> set[str]:
