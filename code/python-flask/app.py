@@ -441,7 +441,8 @@ def grade_lab():
     grade_percentage = 0
     if numberOfAnswers > 0:
         grade_percentage = (total / numberOfAnswers) * 100
-
+        logger.info("Logging Grade percentage: " + grade_percentage + "...")
+    
     # Update the lab entry in the database
     lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['launch_id'])
     if lab_to_update:
