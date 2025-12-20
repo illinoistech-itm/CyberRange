@@ -82,7 +82,7 @@ class Labs(db.Model):
     id = Column(CHAR(36), server_default=func.uuid(), unique=True) # new id declaration
     lab_number = db.Column(db.Integer, primary_key=True)
     lab_complete = db.Column(db.Integer, nullable=False, default=0)
-    grade = db.Column(db.Integer, nullable=True)
+    grade = db.Column(db.Float, nullable=True)
     last_attempt = db.Column(db.DateTime, nullable=False)
     email = db.Column(db.String(255), primary_key=True)
 
@@ -444,7 +444,7 @@ def grade_lab():
     # Calculate the grade percentage
     grade_percentage = 0
     if numberOfAnswers > 0:
-        grade_percentage = round((total / numberOfAnswers) * 100)
+        grade_percentage = (total / numberOfAnswers) * 100
 
     # Update the lab entry in the database
     lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['launch_id'])
