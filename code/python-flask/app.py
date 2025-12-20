@@ -387,7 +387,7 @@ def shelly():
                             loaded_lab_steps=loaded_lab_steps,
                             edge_node_ip=ip,
                             user_email=user_id,
-                            edge_vm=subnet_edge_hits[0],
+                            edge_vm=subnet_edge_hits,
                             non_edge_vms=non_edge_vms,
                             subnet=SUBNET_WANTED)
 
@@ -423,6 +423,8 @@ def grade_lab():
     for answer in answers:
         for value in values_list:
             # Check to do nothing for the lab_id value
+            logger.info("Value: "  + value + "...")
+            logger.info("Answer: " + answer + "...")
             if value == data.get('lab_id'):
                 continue
             elif answer == value:
