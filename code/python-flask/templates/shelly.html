@@ -118,7 +118,7 @@
           {# Section to determine if lab will print out IPs as expected, remove if fails #}
           Lab Instructions: {{ loaded_lab_steps["instructions"].instructions }}
           <br />
-          Edge VM: {% for vm in edge_vms %}
+          Edge VM: {% for vm in edge_vm %}
               <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
               {% endfor %}
             Lab Nodes:

@@ -374,16 +374,12 @@ def shelly():
     )
     
     # Get all VMs in the lab's subnet
-    results, subnet_hits = get_ips_by_role(
+    results, non_edge_vms, subnet_edge_hits  = get_ips_by_role(
         proxmox,
         tag_filter=launch_id.replace("-",""),  # Filter by this lab's launch_id
         want_subnet_prefix="10.110.",
         do_reverse_dns=True
     )
-    
-    # Separate by role
-    edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
-    non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
 
     return render_template('shelly.html',
                             lab_id=lab_id,
@@ -391,11 +387,9 @@ def shelly():
                             loaded_lab_steps=loaded_lab_steps,
                             edge_node_ip=ip,
                             user_email=user_id,
-                            edge_vms=edge_vms,
+                            edge_vm=subnet_edge_hits[0],
                             non_edge_vms=non_edge_vms,
                             subnet=SUBNET_WANTED)
-
-#Test to see if it works, reverse if it doesnt
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN
@@ -552,7 +546,8 @@ def get_ips_by_role(
     do_reverse_dns=True,
 ):
     results = {"edge": [], "non_edge": []}
-    subnet_hits = []  # ALL VMs in the target subnet
+    subnet_hits = []  # lab node VMs in the target subnet
+    subnet_edge_hits = [] # edge node VM in the target subnet
 
     logger.info("Searching running VMs...")
     if tag_filter:
@@ -608,52 +603,26 @@ def get_ips_by_role(
                     "role": role,  # Add role to the entry
                 }
 
-                # Track ALL VMs in the target subnet (edge or not)
                 # If subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list
                 # Append that to the list of subnet_hits
                 if ip.startswith(want_subnet_prefix) and tag_filter in tags and "edge" not in tags:
                     subnet_hits.append(entry)
                     logger.info(f"  ✓ subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list...")
 
+                # If subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list
+                # Append that to the list of subnet_hits
+                if ip.startswith(want_subnet_prefix) and tag_filter in tags and "edge" in tags:
+                    subnet_edge_hits.append(entry)
+                    logger.info(f"  ✓ subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list...")
+                
+
                 # Also track edge VMs separately (for backwards compatibility)
                 if tag_filter and tag_filter in tags:
                     results[role].append(entry)
 
-    return results, subnet_hits
-
-
-# Flask route to display edge IPs
-@app.route('/edge-ips')
-def get_edge_ips():
-    """Return lists of edge and non-edge IPs."""
-    TOKEN = CR_TOKEN_ID.split('!')
-    FQDN = CR_PROXMOX_URL.replace("https://", "")
-    proxmox = ProxmoxAPI(
-        FQDN,
-        user=TOKEN[0],
-        token_name=TOKEN[1],
-        token_value=CR_TOKEN_VALUE,
-        verify_ssl=False
-    )
-    
-    results, subnet_hits = get_ips_by_role(
-        proxmox,
-        tag_filter="edge",
-        want_subnet_prefix="10.110.36.",
-        do_reverse_dns=True
-    )
-    
-    # Separate by role
-    edge_vms = [vm for vm in subnet_hits if vm['role'] == 'edge']
-    non_edge_vms = [vm for vm in subnet_hits if vm['role'] == 'non_edge']
-    
-    return render_template(
-        'edge_ips.html',
-        edge_vms=edge_vms,
-        non_edge_vms=non_edge_vms,
-        subnet=SUBNET_WANTED
-    )
-
+    return results, subnet_hits, subnet_edge_hits
+##############################################################################
+# Flask custom handler of HTTP 400 errors
 ##############################################################################
 @app.errorhandler(400)
 def bad_request(e):
