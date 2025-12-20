@@ -425,7 +425,7 @@ def grade_lab():
             # Check to do nothing for the lab_id value
             if value == data.get('lab_id'):
                 continue
-            if answer == value:
+            elif answer == value:
                 total += 1
 
     # Re-process the questions to send back to the rendered shelly.html...
