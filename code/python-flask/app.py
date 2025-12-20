@@ -374,12 +374,15 @@ def shelly():
     )
     
     # Get all VMs in the lab's subnet
-    results, non_edge_vms, subnet_edge_hits  = get_ips_by_role(
+    results, subnet_hits, subnet_edge_hits  = get_ips_by_role(
         proxmox,
         tag_filter=launch_id.replace("-",""),  # Filter by this lab's launch_id
         want_subnet_prefix="10.110.",
         do_reverse_dns=True
     )
+
+    session['subnet_hits'] = subnet_hits
+    session['subnet_edge_hits'] = subnet_edge_hits
 
     return render_template('shelly.html',
                             lab_id=lab_id,
@@ -388,7 +391,7 @@ def shelly():
                             edge_node_ip=ip,
                             user_email=user_id,
                             edge_vm=subnet_edge_hits,
-                            non_edge_vms=non_edge_vms,
+                            non_edge_vms=subnet_hits,
                             subnet=SUBNET_WANTED)
 
 ##############################################################################
@@ -459,7 +462,10 @@ def grade_lab():
         loaded_lab_steps=loaded_lab_steps,
         user_email=session['email'],
         edge_node_ip=session['edge_node_ip'],
-        launch_id=session['launch_id']
+        launch_id=session['launch_id'],
+        edge_vm=session['subnet_edge_hits'],
+        non_edge_vms=session['subnet_hits'],
+
     )
 
 ##############################################################################
