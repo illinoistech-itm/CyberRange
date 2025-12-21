@@ -420,7 +420,8 @@ def grade_lab():
     grade_percentage = 0
 
     # Grab a list of the lab_answer values
-    answers_list = list(correct_answers.values())
+    answers_list = correct_answers.values()
+    logger.info(type(answers_list))
     numberOfAnswers = len(answers_list)
 
     # Grab a list of the form values
