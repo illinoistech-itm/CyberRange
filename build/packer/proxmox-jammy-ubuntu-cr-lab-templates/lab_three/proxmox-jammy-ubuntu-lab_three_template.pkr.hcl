@@ -279,18 +279,12 @@ source "proxmox-iso" "lab_three_node_41_alpha" {
 # This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_42_beta" {
-  boot_command = [
-    "e<wait>",
-    "<down><down><down>",
-    "<end><bs><bs><bs><bs><wait>",
-    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
-    "<f10><wait>"
-  ]
+  boot_command            = ["<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg<enter>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>"]
   boot_iso {
     type="scsi"
-    iso_file="local:iso/${var.local_iso_name}"
+    iso_file="local:iso/${var.alma_local_iso_name}"
     unmount=true
-    iso_checksum="${var.iso_checksum}"
+    iso_checksum="${var.alma_iso_checksum}"
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
@@ -335,7 +329,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template for CR lab_node lab_three"
+  template_description     = "An Almalinux template for CR lab_node lab_three"
   vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
@@ -343,19 +337,13 @@ source "proxmox-iso" "lab_three_node_42_beta" {
 ###########################################################################################
 # This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
-source "proxmox-iso" "lab_three_node_41_beta" {
-  boot_command = [
-    "e<wait>",
-    "<down><down><down>",
-    "<end><bs><bs><bs><bs><wait>",
-    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
-    "<f10><wait>"
-  ]
+source "proxmox-iso" "lab_three_node_42_beta" {
+  boot_command            = ["<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg<enter>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>"]
   boot_iso {
     type="scsi"
-    iso_file="local:iso/${var.local_iso_name}"
+    iso_file="local:iso/${var.alma_local_iso_name}"
     unmount=true
-    iso_checksum="${var.iso_checksum}"
+    iso_checksum="${var.alma_iso_checksum}"
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
@@ -400,7 +388,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template for CR lab_node lab_three"
+  template_description     = "An Almalinux template for CR lab_node lab_three"
   vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
@@ -416,6 +404,26 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/jammy-services/config.alloy"
     destination = "/home/vagrant/config.alloy"
+  }
+
+  #############################################################################
+  # Copying the file to set the ssh banner in the node beta for SSH connections
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/lab_three/set-ssh-banner.conf"
+    destination = "/home/vagrant/set-ssh-banner.conf"
+    only=["proxmox-iso.lab_three_node_42_beta","proxmox-iso.lab_three_node_41_beta"]
+  }
+  
+  #############################################################################
+  # Copying the ssh banner to display on connection for the lab three beta node
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/lab_three/sshd-banner"
+    destination = "/home/vagrant/sshd-banner"
+    only=["proxmox-iso.lab_three_node_42_beta","proxmox-iso.lab_three_node_41_beta"]
   }
 
   #############################################################################
@@ -575,14 +583,13 @@ build {
   }
 
   #############################################################################
-  # Install the lab elements on the node(s)
+  # Install the move the file to configure the ssh banner on connection
   #############################################################################
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/lab_three/install-lab-elements-alpha-node.sh",
-    "../../scripts/proxmox/labs/lab_three/post_install_prxmx_lab_node-open-ports.sh"]
-    only=["proxmox-iso.lab_three_node_42_alpha","proxmox-iso.lab_three_node_41_alpha"]
+    scripts         = ["../../scripts/proxmox/labs/lab_three/move-set-ssh-banner.sh"]
+    only=["proxmox-iso.lab_three_node_42_beta","proxmox-iso.lab_three_node_41_beta"]
   }
 
 }

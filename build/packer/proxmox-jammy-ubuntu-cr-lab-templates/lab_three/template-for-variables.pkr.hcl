@@ -84,6 +84,11 @@ variable "iso_checksum" {
   default = "file:https://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/SHA256SUMS"
 }
 
+variable "alma_iso_checksum" {
+  type    = string
+  default = "file:https://mirror.grid.uchicago.edu/pub/linux/alma/10.1/isos/x86_64/CHECKSUM"
+}
+
 variable "iso_urls" {
   type    = list(string)
   default = ["http://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/ubuntu-22.04.5-live-server-amd64.iso"]
@@ -92,6 +97,11 @@ variable "iso_urls" {
 variable "local_iso_name" {
   type    = string
   default = "ubuntu-22.04.5-live-server-amd64.iso"
+}
+
+variable "alma_local_iso_name" {
+  type    = string
+  default = "AlmaLinux-10.1-x86_64-minimal.iso"
 }
 
 variable "TAGS" {
