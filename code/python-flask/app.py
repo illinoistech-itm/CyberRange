@@ -81,6 +81,7 @@ class Labs(db.Model):
     # id = db.Column(db.String(36), unique=True, nullable=False)
     id = Column(CHAR(36), server_default=func.uuid(), unique=True) # new id declaration
     lab_number = db.Column(db.Integer, primary_key=True)
+    launch_id = db.Column(CHAR(36),nullable=False,default=0)
     lab_complete = db.Column(db.Integer, nullable=False, default=0)
     grade = db.Column(db.Float, nullable=True)
     last_attempt = db.Column(db.DateTime, nullable=False)
@@ -104,9 +105,10 @@ def select_filtered(model, **filters):
     stmt = select(model).filter_by(**filters)
     return db.session.scalars(stmt).all()
 
-def create_lab_entry(email,lab_number):
+def create_lab_entry(email,lab_number,launch_id):
     new_lab = Labs(
         lab_number=lab_number,
+        launch_id=launch_id,
         email=email,
         last_attempt=datetime.now(timezone.utc),
         lab_complete=0
@@ -298,7 +300,7 @@ def launch_lab():
     session['uuid_with_dashes'] = runtime_uuid
     action = "run"
     # Call SQL Alchemy Helper Function to create a lab record
-    new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
+    new_lab=create_lab_entry(session['email'],lab_number,session['uuid_with_dashes']) # took curly brackets out, doesn't like that a set was being used as a key
     
     # Call to the API functions broken down into multiple small functions for better debugging
     # t_id for task id
@@ -452,7 +454,8 @@ def grade_lab():
         logger.info("Logging Grade percentage: " + str(grade_percentage) + "...")
     
     # Update the lab entry in the database
-    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['uuid_with_dashes'])
+    logger.info(session['uuid_with_dashes'])
+    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], launch_id=session['uuid_with_dashes'])
     if lab_to_update:
         lab_to_update.grade = grade_percentage
         lab_to_update.lab_complete = 1
