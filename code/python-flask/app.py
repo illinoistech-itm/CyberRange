@@ -419,7 +419,8 @@ def grade_lab():
     answers_list = correct_answers.get("answers")
     numberOfAnswers = len(answers_list)
     total = 0
-    
+    grade_percentage = 0
+
     # Grab the a list of the form values
     values_list = list(data.values())
     # removes the lab_id from the first elements and leaves only the posted
@@ -427,10 +428,10 @@ def grade_lab():
     del values_list[0]
 
     for i in range(len(values_list)):
-      logger.info("Value: "  + values_list[i] + "...")
-      logger.info("Answer: " + answers_list[i] + "...")
+      logger.info("Value: "  + str(values_list[i]) + "...")
+      logger.info("Answer: " + str(answers_list[i]) + "...")
       # If posted value and answer match give +1 point
-      if values_list[i] == answers_list[i]:
+      if str(values_list[i]) == str(answers_list[i]):
         total += 1
 
     # Re-process the questions to send back to the rendered shelly.html...
@@ -441,7 +442,6 @@ def grade_lab():
     # Do something with the data (e.g., log, process, return response)
 
     # Calculate the grade percentage
-    grade_percentage = 0
     if numberOfAnswers > 0:
         grade_percentage = (total / numberOfAnswers) * 100
         logger.info("Logging Grade percentage: " + str(grade_percentage) + "...")
