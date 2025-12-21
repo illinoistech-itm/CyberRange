@@ -121,6 +121,7 @@
           Edge VM: {% for vm in edge_vm %}
               <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
               {% endfor %}
+              <br />
             Lab Nodes:
               {% for vm in non_edge_vms %}
               <code> {{ vm.name }}</code>: <code>{{ vm.ip }}</code>
