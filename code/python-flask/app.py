@@ -417,11 +417,12 @@ def grade_lab():
     
     correct_answers = load_answer_steps(data.get('lab_id'))
     total = 0
-    grade_percentage = 0
+    # This value is being stored as a float in the database so we initialize 
+    # it as 0.0
+    grade_percentage = 0.0
 
-    # Grab a list of the lab_answer values
-    answers_list = correct_answers.values()
-    logger.info(type(answers_list))
+    # Grab a list of the lab_answer values from the correct_answers dict
+    answers_list = list(correct_answers['answers'].values())
     numberOfAnswers = len(answers_list)
 
     # Grab a list of the form values
