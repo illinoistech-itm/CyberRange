@@ -337,7 +337,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
 ###########################################################################################
 # This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
-source "proxmox-iso" "lab_three_node_42_beta" {
+source "proxmox-iso" "lab_three_node_41_beta" {
   boot_command            = ["<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg<enter>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>"]
   boot_iso {
     type="scsi"
