@@ -295,6 +295,7 @@ def launch_lab():
     lab_number = request.args.get('lab_id')
     # Generate a UUID to identify this running of the lab
     runtime_uuid = uuid.uuid4()
+    session['uuid_with_dashes'] = runtime_uuid
     action = "run"
     # Call SQL Alchemy Helper Function to create a lab record
     new_lab=create_lab_entry(session['email'],lab_number) # took curly brackets out, doesn't like that a set was being used as a key
@@ -451,7 +452,7 @@ def grade_lab():
         logger.info("Logging Grade percentage: " + str(grade_percentage) + "...")
     
     # Update the lab entry in the database
-    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['launch_id'])
+    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['uuid_with_dashes'])
     if lab_to_update:
         lab_to_update.grade = grade_percentage
         lab_to_update.lab_complete = 1
