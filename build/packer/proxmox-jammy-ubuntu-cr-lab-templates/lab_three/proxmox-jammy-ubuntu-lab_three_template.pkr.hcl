@@ -16,9 +16,9 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 # https://github.com/burkeazbill/ubuntu-22-04-packer-fusion-workstation/blob/master/ubuntu-2204-daily.pkr.hcl
 
 ###########################################################################################
-# This is a Packer build template the edge server for lab_two
+# This is a Packer build template the edge node for lab_three
 ###########################################################################################
-source "proxmox-iso" "lab_two_edge_server_41" {
+source "proxmox-iso" "lab_three_edge_server_41" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -75,15 +75,145 @@ source "proxmox-iso" "lab_two_edge_server_41" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template for CR edge_node lab_two" 
+  template_description     = "A Packer template for CR edge_node lab_three" 
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 ###########################################################################################
-# This is a Packer build template the lab_node for lab_two
+# This is a Packer build template the edge node for lab_three
 ###########################################################################################
-source "proxmox-iso" "lab_two_node_41" {
+source "proxmox-iso" "lab_three_edge_server_42" {
+  boot_command = [
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+  boot_iso {
+    type="scsi"
+    iso_file="local:iso/${var.local_iso_name}"
+    unmount=true
+    iso_checksum="${var.iso_checksum}"
+  }
+  boot_wait = "12s"
+  cores     = "${var.NUMBEROFCORES}"
+  node      = "${local.NODENAME2}"
+  username  = "${local.USERNAME}"
+  token     = "${local.PROXMOX_TOKEN}"
+  cpu_type  = "host"
+  disks {
+    disk_size    = "${var.DISKSIZE}"
+    storage_pool = "${var.STORAGEPOOL}"
+    type         = "virtio"
+    io_thread    = true
+    format       = "raw"
+  }
+  http_directory    = "subiquity/http"
+  http_bind_address = "10.110.0.45"
+  http_port_max    = 9200
+  http_port_min    = 9001
+  memory           = "${var.MEMORY}"
+
+  network_adapters {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr1"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr2"
+    model  = "virtio"
+  }
+
+  os                       = "l26"
+  proxmox_url              = "${local.URL}"
+  insecure_skip_tls_verify = true
+  qemu_agent               = true
+  cloud_init               = true
+  cloud_init_storage_pool  = "local"
+  # io thread option requires virtio-scsi-single controller
+  scsi_controller          = "virtio-scsi-single"
+  ssh_password             = "${local.SSHPW}"
+  ssh_username             = "${local.SSHUSER}"
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template for CR edge_node lab_three"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
+}
+
+###########################################################################################
+# This is a Packer build template the lab_node alpha for lab_three
+###########################################################################################
+source "proxmox-iso" "lab_three_node_42_alpha" {
+  boot_command = [
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+  boot_iso {
+    type="scsi"
+    iso_file="local:iso/${var.local_iso_name}"
+    unmount=true
+    iso_checksum="${var.iso_checksum}"
+  }
+  boot_wait = "5s"
+  cores     = "${var.NUMBEROFCORES}"
+  node      = "${local.NODENAME2}"
+  username  = "${local.USERNAME}"
+  token     = "${local.PROXMOX_TOKEN}"
+  cpu_type  = "host"
+  disks {
+    disk_size    = "${var.DISKSIZE}"
+    storage_pool = "${var.STORAGEPOOL}"
+    type         = "virtio"
+    io_thread    = true
+    format       = "raw"
+  }
+  http_directory    = "subiquity/http"
+  http_bind_address = "10.110.0.45"
+  http_port_max    = 9200
+  http_port_min    = 9001
+  memory           = "${var.MEMORY}"
+
+  network_adapters {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr1"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr2"
+    model  = "virtio"
+  }
+
+  os                       = "l26"
+  proxmox_url              = "${local.URL}"
+  insecure_skip_tls_verify = true
+  qemu_agent               = true
+  cloud_init               = true
+  cloud_init_storage_pool  = "local"
+  # io thread option requires virtio-scsi-single controller
+  scsi_controller          = "virtio-scsi-single"
+  ssh_password             = "${local.SSHPW}"
+  ssh_username             = "${local.SSHUSER}"
+  ssh_timeout              = "22m"
+  template_description     = "A Packer template CR lab_three lab node" 
+  vm_name                  = "${var.LN-alpha-VMNAME}"
+  tags                     = "${var.TAGS}"
+}
+
+###########################################################################################
+# This is a Packer build template a lab_node for lab_three alpha
+###########################################################################################
+source "proxmox-iso" "lab_three_node_41_alpha" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -140,15 +270,15 @@ source "proxmox-iso" "lab_two_node_41" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template CR lab_two lab node" 
-  vm_name                  = "${var.LN-VMNAME}"
+  template_description     = "A Packer template CR lab_three lab node beta" 
+  vm_name                  = "${var.LN-alpha-VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 ###########################################################################################
-# This is a Packer build template the edge server for lab_two
+# This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
-source "proxmox-iso" "lab_two_edge_server_42" {
+source "proxmox-iso" "lab_three_node_42_beta" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -205,15 +335,15 @@ source "proxmox-iso" "lab_two_edge_server_42" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template for CR edge_node lab_two"
-  vm_name                  = "${var.VMNAME}"
+  template_description     = "A Packer template for CR lab_node lab_three"
+  vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 ###########################################################################################
-# This is a Packer build template the lab_node for lab_two
+# This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
-source "proxmox-iso" "lab_two_node_42" {
+source "proxmox-iso" "lab_three_node_41_beta" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -229,7 +359,7 @@ source "proxmox-iso" "lab_two_node_42" {
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
-  node      = "${local.NODENAME2}"
+  node      = "${local.NODENAME}"
   username  = "${local.USERNAME}"
   token     = "${local.PROXMOX_TOKEN}"
   cpu_type  = "host"
@@ -270,13 +400,13 @@ source "proxmox-iso" "lab_two_node_42" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Packer template for CR lab_node lab_two"
-  vm_name                  = "${var.LN-VMNAME}"
+  template_description     = "A Packer template for CR lab_node lab_three"
+  vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 build {
-  sources = ["source.proxmox-iso.lab_two_edge_server_42","source.proxmox-iso.lab_two_edge_server_41","source.proxmox-iso.lab_two_node_42","source.proxmox-iso.lab_two_node_41"]
+  sources = ["source.proxmox-iso.lab_three_edge_server_42","source.proxmox-iso.lab_three_edge_server_41","source.proxmox-iso.lab_three_node_42_alpha","source.proxmox-iso.lab_three_node_41_alpha","source.proxmox-iso.lab_three_node_42_beta","source.proxmox-iso.lab_three_node_41_beta"]
 
   ##############################################################################
   # Copying the custom configuration for Alloy to be setup to send systemd logs
@@ -394,7 +524,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/pyxtermjs.service"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_two_edge_server_42","proxmox-iso.lab_two_edge_server_41"]  
+    only=["proxmox-iso.lab_three_edge_server_42","proxmox-iso.lab_three_edge_server_41"]  
     }
 
   ########################################################################################################################
@@ -404,7 +534,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/nginx/default"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_two_edge_server_42","proxmox-iso.lab_two_edge_server_41"]  
+    only=["proxmox-iso.lab_three_edge_server_42","proxmox-iso.lab_three_edge_server_41"]  
     }
 
   ########################################################################################################################
@@ -414,7 +544,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/nginx/signed.conf"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_two_edge_server_42","proxmox-iso.lab_two_edge_server_41"]  
+    only=["proxmox-iso.lab_three_edge_server_42","proxmox-iso.lab_three_edge_server_41"]  
     }
 
   ########################################################################################################################
@@ -424,7 +554,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_generate_ca.sh"]
-    only=["proxmox-iso.lab_two_edge_server_42","proxmox-iso.lab_two_edge_server_41"]
+    only=["proxmox-iso.lab_three_edge_server_42","proxmox-iso.lab_three_edge_server_41"]
   }
 
 
@@ -441,7 +571,7 @@ build {
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nmap.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
-    only=["proxmox-iso.lab_two_edge_server_42","proxmox-iso.lab_two_edge_server_41"]
+    only=["proxmox-iso.lab_three_edge_server_42","proxmox-iso.lab_three_edge_server_41"]
   }
 
   #############################################################################
@@ -450,9 +580,9 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../../scripts/proxmox/labs/lab_two/install-lab-elements.sh",
-    "../../scripts/proxmox/labs/lab_two/post_install_prxmx_lab_node-open-ports.sh"]
-    only=["proxmox-iso.lab_two_node_42","proxmox-iso.lab_two_node_41"]
+    scripts         = ["../../scripts/proxmox/labs/lab_three/install-lab-elements-alpha-node.sh",
+    "../../scripts/proxmox/labs/lab_three/post_install_prxmx_lab_node-open-ports.sh"]
+    only=["proxmox-iso.lab_three_node_42_alpha","proxmox-iso.lab_three_node_41_alpha"]
   }
 
 }
