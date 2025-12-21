@@ -416,15 +416,17 @@ def grade_lab():
     logger.info("The form data passed is: %s", data)
     
     correct_answers = load_answer_steps(data.get('lab_id'))
-    answers_list = correct_answers.get("answers")
-    numberOfAnswers = len(answers_list)
     total = 0
     grade_percentage = 0
 
-    # Grab the a list of the form values
+    # Grab a list of the lab_answer values
+    answers_list = list(correct_answers.values())
+    numberOfAnswers = len(answers_list)
+
+    # Grab a list of the form values
     values_list = list(data.values())
-    # removes the lab_id from the first elements and leaves only the posted
-    # question answers in the list
+    # remove the lab_id from the first elements and leave only the posted
+    # question answers in this list
     del values_list[0]
 
     for i in range(len(values_list)):
