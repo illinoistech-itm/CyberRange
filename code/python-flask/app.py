@@ -416,22 +416,22 @@ def grade_lab():
     logger.info("The form data passed is: %s", data)
     
     correct_answers = load_answer_steps(data.get('lab_id'))
-    answers = correct_answers.get("answers")
-    numberOfAnswers = len(answers)
+    answers_list = correct_answers.get("answers")
+    numberOfAnswers = len(answers_list)
     total = 0
     
     # Grab the a list of the form values
     values_list = list(data.values())
-    
-    for answer in answers:
-        for value in values_list:
-            # Check to do nothing for the lab_id value
-            logger.info("Value: "  + value + "...")
-            logger.info("Answer: " + answer + "...")
-            if value == data.get('lab_id'):
-                continue
-            elif answer == value:
-                total += 1
+    # removes the lab_id from the first elements and leaves only the posted
+    # question answers in the list
+    del values_list[0]
+
+    for i in range(len(values_list)):
+      logger.info("Value: "  + values_list[i] + "...")
+      logger.info("Answer: " + answers_list[i] + "...")
+      # If posted value and answer match give +1 point
+      if values_list[i] == answers_list[i]:
+        total += 1
 
     # Re-process the questions to send back to the rendered shelly.html...
     # Could this possibly be put into Session to save a function call?
@@ -444,7 +444,7 @@ def grade_lab():
     grade_percentage = 0
     if numberOfAnswers > 0:
         grade_percentage = (total / numberOfAnswers) * 100
-        logger.info("Logging Grade percentage: " + grade_percentage + "...")
+        logger.info("Logging Grade percentage: " + str(grade_percentage) + "...")
     
     # Update the lab entry in the database
     lab_to_update = db.session.query(Labs).filter_by(email=session['email'], id=session['launch_id'])
