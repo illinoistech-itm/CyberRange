@@ -279,13 +279,12 @@ source "proxmox-iso" "lab_three_node_41_alpha" {
 # This is a Packer build template the lab_node for lab_three beta
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_42_beta" {
-  #boot_command            = ["<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg<enter>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>", "<wait10><wait10><wait10>"]
   boot_command = [
-  "<esc><wait>",
-  "<tab><wait>",
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg",
-  " inst.text",
-  "<enter>"
+  "<up><wait>",                           # highlight 'Install AlmaLinux 10'
+  "<e><wait>",                            # edit GRUB entry
+  # Now Packer is typing inside the GRUB editor
+  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10 inst.text",
+  "<f10>"                                 # boot with edited kernel args
 ]
   boot_iso {
     type="scsi"
@@ -346,11 +345,11 @@ source "proxmox-iso" "lab_three_node_42_beta" {
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_41_beta" {
   boot_command = [
-  "<esc><wait>",
-  "<tab><wait>",
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10.cfg",
-  " inst.text",
-  "<enter>"
+  "<up><wait>",                           # highlight 'Install AlmaLinux 10'
+  "<e><wait>",                            # edit GRUB entry
+  # Now Packer is typing inside the GRUB editor
+  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/almalinux10 inst.text",
+  "<f10>"                                 # boot with edited kernel args
 ]
   boot_iso {
     type="scsi"
