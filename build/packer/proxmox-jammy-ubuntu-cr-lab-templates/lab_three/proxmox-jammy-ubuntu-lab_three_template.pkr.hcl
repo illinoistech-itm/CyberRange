@@ -283,7 +283,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   "<up><wait>",   # highlight 'Install AlmaLinux'
   "<tab><wait><end><wait>",
   # Now Packer is typing inside the GRUB editor
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/alma10.cfg inst.text",
+  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
   "<enter>"        # boot with edited kernel args
 ]
   boot_iso {
@@ -348,7 +348,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
   "<up><wait>",   # highlight 'Install AlmaLinux'
   "<tab><wait><end><wait>",
   # Now Packer is typing inside the GRUB editor
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/alma10.cfg inst.text",
+  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
   "<enter>"        # boot with edited kernel args
 ]
   boot_iso {
