@@ -455,8 +455,9 @@ def grade_lab():
     
     # Update the lab entry in the database
     logger.info(session['uuid_with_dashes'])
-    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], launch_id=session['uuid_with_dashes'])
+    lab_to_update = db.session.query(Labs).filter_by(email=session['email'], launch_id=session['uuid_with_dashes']).first()
     if lab_to_update:
+        logger.info("Inside lab_to_update...")
         lab_to_update.grade = grade_percentage
         lab_to_update.lab_complete = 1
         lab_to_update.last_attempt = datetime.now(timezone.utc)
