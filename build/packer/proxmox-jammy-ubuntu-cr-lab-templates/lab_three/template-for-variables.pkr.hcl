@@ -101,7 +101,7 @@ variable "local_iso_name" {
 
 variable "alma_local_iso_name" {
   type    = string
-  default = "AlmaLinux-10.1-x86_64-boot.iso"
+  default = "AlmaLinux-10.1-x86_64-minimal.iso"
 }
 
 variable "TAGS" {
