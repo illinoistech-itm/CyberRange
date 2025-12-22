@@ -416,6 +416,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/jammy-services/config.alloy"
     destination = "/home/vagrant/config.alloy"
+    except=["proxmox-iso.lab_three_node_42_beta","proxmox-iso.lab_three_node_41_beta"]
   }
 
   #############################################################################
