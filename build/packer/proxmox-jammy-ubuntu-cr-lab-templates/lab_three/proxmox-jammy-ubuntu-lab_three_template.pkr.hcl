@@ -300,7 +300,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   node      = "${local.NODENAME2}"
   username  = "${local.USERNAME}"
   token     = "${local.PROXMOX_TOKEN}"
-  cpu_type  = "x86‑64‑v2"
+  cpu_type  = "x86-64-v2"
   disks {
     disk_size    = "${var.DISKSIZE}"
     storage_pool = "${var.STORAGEPOOL}"
@@ -368,7 +368,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
   node      = "${local.NODENAME}"
   username  = "${local.USERNAME}"
   token     = "${local.PROXMOX_TOKEN}"
-  cpu_type  = "x86‑64‑v2"
+  cpu_type  = "x86-64-v2"
   disks {
     disk_size    = "${var.DISKSIZE}"
     storage_pool = "${var.STORAGEPOOL}"
