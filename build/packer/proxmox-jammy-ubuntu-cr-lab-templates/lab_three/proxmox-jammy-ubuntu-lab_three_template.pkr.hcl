@@ -286,7 +286,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   # Now Packer is typing inside the GRUB editor
   " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/",
   "<wait>",
-  "almalinux10.cfg inst.text",
+  "alma10.cfg inst.text",
   "<f10>"                                 # boot with edited kernel args
 ]
   boot_iso {
@@ -354,7 +354,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
   # Now Packer is typing inside the GRUB editor
   " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks/",
   "<wait>",
-  "almalinux10.cfg inst.text",
+  "alma10.cfg inst.text",
   "<f10>"                                 # boot with edited kernel args
 ]
   boot_iso {
