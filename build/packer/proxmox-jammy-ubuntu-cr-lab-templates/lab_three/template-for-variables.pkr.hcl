@@ -86,7 +86,7 @@ variable "iso_checksum" {
 
 variable "alma_iso_checksum" {
   type    = string
-  default = "file:https://mirror.grid.uchicago.edu/pub/linux/alma/10.1/isos/x86_64/CHECKSUM"
+  default = "file:https://mirror.grid.uchicago.edu/pub/linux/alma/9.7/isos/x86_64/CHECKSUM"
 }
 
 variable "iso_urls" {
@@ -101,7 +101,7 @@ variable "local_iso_name" {
 
 variable "alma_local_iso_name" {
   type    = string
-  default = "AlmaLinux-10.1-x86_64-minimal.iso"
+  default = "AlmaLinux-9.7-x86_64-minimal.iso"
 }
 
 variable "TAGS" {
