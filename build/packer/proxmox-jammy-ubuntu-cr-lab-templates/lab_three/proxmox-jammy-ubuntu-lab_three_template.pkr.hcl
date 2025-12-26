@@ -17,6 +17,8 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
 ###########################################################################################
 # This is a Packer build template the edge node for lab_three
+# Syntax here: https://developer.hashicorp.com/packer/integrations/hashicorp/proxmox
+# Choose: https://developer.hashicorp.com/packer/integrations/hashicorp/proxmox/latest/components/builder/iso
 ###########################################################################################
 source "proxmox-iso" "lab_three_edge_server_41" {
   boot_command = [
@@ -64,6 +66,7 @@ source "proxmox-iso" "lab_three_edge_server_41" {
     model  = "virtio"
   }
 
+  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
@@ -129,6 +132,7 @@ source "proxmox-iso" "lab_three_edge_server_42" {
     model  = "virtio"
   }
 
+  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
