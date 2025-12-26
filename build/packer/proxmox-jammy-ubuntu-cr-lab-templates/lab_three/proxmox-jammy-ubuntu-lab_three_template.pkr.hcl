@@ -66,7 +66,6 @@ source "proxmox-iso" "lab_three_edge_server_41" {
     model  = "virtio"
   }
 
-  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
@@ -132,7 +131,6 @@ source "proxmox-iso" "lab_three_edge_server_42" {
     model  = "virtio"
   }
 
-  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
@@ -328,6 +326,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
     model  = "virtio"
   }
 
+  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
@@ -393,6 +392,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
     model  = "virtio"
   }
 
+  bios                     = "ovmf"
   os                       = "l26"
   proxmox_url              = "${local.URL}"
   insecure_skip_tls_verify = true
