@@ -282,11 +282,12 @@ source "proxmox-iso" "lab_three_node_41_alpha" {
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_42_beta" {
   boot_command = [
-  "<up><wait>",   # highlight 'Install AlmaLinux'
-  "<tab><wait><end><wait>",
-  # Now Packer is typing inside the GRUB editor
+  "<up><wait>",                 # highlight 'Install AlmaLinux'
+  "<e><wait>",                  # edit GRUB entry
+  "<down><down><end>",          # move to end of linux line
   " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
-  "<enter>"        # boot with edited kernel args
+  "<f10>"                       # boot
+ 
 ]
   boot_iso {
     type="scsi"
