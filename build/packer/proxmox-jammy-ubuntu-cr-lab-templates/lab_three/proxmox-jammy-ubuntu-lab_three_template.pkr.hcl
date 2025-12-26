@@ -287,7 +287,6 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   "<down><down><end>",          # move to end of linux line
   " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
   "<f10>"                       # boot
- 
 ]
   boot_iso {
     type="scsi"
