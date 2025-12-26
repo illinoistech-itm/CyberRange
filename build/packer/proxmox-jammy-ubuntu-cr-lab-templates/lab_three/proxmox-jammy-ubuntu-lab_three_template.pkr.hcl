@@ -282,17 +282,21 @@ source "proxmox-iso" "lab_three_node_41_alpha" {
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_42_beta" {
   boot_command = [
-  "<up><wait>",                 # highlight 'Install AlmaLinux'
+  "<down><wait>",               # highlight "Install"
+  "<enter><wait4s>",            # enter the installer boot menu
   "<e><wait>",                  # edit GRUB entry
-  "<down><down><end>",          # move to end of linux line
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
-  "<f10>"                       # boot
+  "<down><down><end>",          # go to end of linux line
+  " auto=true priority=critical ",
+  " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+  " debian-installer=en_US locale=en_US ",
+  "<f10>"                       # boot with edited args
+
 ]
   boot_iso {
     type="scsi"
-    iso_file="local:iso/${var.alma_local_iso_name}"
+    iso_file="local:iso/${var.debian_local_iso_name}"
     unmount=true
-    iso_checksum="${var.alma_iso_checksum}"
+    iso_checksum="${var.debian_iso_checksum}"
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
@@ -307,7 +311,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
     io_thread    = true
     format       = "raw"
   }
-  http_directory    = "ks"
+  http_directory    = "autoinstall"
   http_bind_address = "10.110.0.45"
   http_port_max    = 9200
   http_port_min    = 9001
@@ -338,7 +342,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "An Almalinux template for CR lab_node lab_three"
+  template_description     = "A Debian template for CR lab_node lab_three"
   vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
