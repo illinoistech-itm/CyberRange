@@ -89,6 +89,11 @@ variable "alma_iso_checksum" {
   default = "file:https://mirror.grid.uchicago.edu/pub/linux/alma/9.7/isos/x86_64/CHECKSUM"
 }
 
+variable "debian_iso_checksum" {
+  type    = string
+  default = "https://mirrors.bloomu.edu/debian-cd/13.2.0/amd64/iso-cd/SHA256SUMS"
+}
+
 variable "iso_urls" {
   type    = list(string)
   default = ["http://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/ubuntu-22.04.5-live-server-amd64.iso"]
@@ -97,6 +102,11 @@ variable "iso_urls" {
 variable "local_iso_name" {
   type    = string
   default = "ubuntu-22.04.5-live-server-amd64.iso"
+}
+
+variable "debian_local_iso_name" {
+  type    = string
+  default = "debian-13.2.0-amd64-netinst.iso"
 }
 
 variable "alma_local_iso_name" {
