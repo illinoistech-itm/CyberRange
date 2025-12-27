@@ -282,21 +282,17 @@ source "proxmox-iso" "lab_three_node_41_alpha" {
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_42_beta" {
   boot_command = [
-  "<down><wait>",               # highlight "Install"
-  "<enter><wait4s>",            # enter the installer boot menu
-  "<e><wait>",                  # edit GRUB entry
-  "<down><down><end>",          # go to end of linux line
-  " auto=true priority=critical ",
-  " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
-  " debian-installer=en_US locale=en_US ",
-  "<f10>"                       # boot with edited args
-
-]
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
   boot_iso {
     type="scsi"
-    iso_file="local:iso/${var.debian_local_iso_name}"
+    iso_file="local:iso/${var.local_iso_name}"
     unmount=true
-    iso_checksum="${var.debian_iso_checksum}"
+    iso_checksum="${var.iso_checksum}"
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
@@ -311,7 +307,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
     io_thread    = true
     format       = "raw"
   }
-  http_directory    = "autoinstall"
+  http_directory    = "subiquity/http"
   http_bind_address = "10.110.0.45"
   http_port_max    = 9200
   http_port_min    = 9001
@@ -342,7 +338,7 @@ source "proxmox-iso" "lab_three_node_42_beta" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "A Debian template for CR lab_node lab_three"
+  template_description     = "A Packer template CR lab_three lab node beta" 
   vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
@@ -352,17 +348,17 @@ source "proxmox-iso" "lab_three_node_42_beta" {
 ###########################################################################################
 source "proxmox-iso" "lab_three_node_41_beta" {
   boot_command = [
-  "<up><wait>",   # highlight 'Install AlmaLinux'
-  "<tab><wait><end><wait>",
-  # Now Packer is typing inside the GRUB editor
-  " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/alma9.cfg inst.text",
-  "<enter>"        # boot with edited kernel args
-]
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
   boot_iso {
     type="scsi"
-    iso_file="local:iso/${var.alma_local_iso_name}"
+    iso_file="local:iso/${var.local_iso_name}"
     unmount=true
-    iso_checksum="${var.alma_iso_checksum}"
+    iso_checksum="${var.iso_checksum}"
   }
   boot_wait = "12s"
   cores     = "${var.NUMBEROFCORES}"
@@ -377,11 +373,11 @@ source "proxmox-iso" "lab_three_node_41_beta" {
     io_thread    = true
     format       = "raw"
   }
-  http_directory    = "ks"
+  http_directory    = "subiquity/http"
   http_bind_address = "10.110.0.45"
-  http_port_max    = 9200
-  http_port_min    = 9001
-  memory           = "${var.MEMORY}"
+  http_port_max     = 9200
+  http_port_min     = 9001
+  memory            = "${var.MEMORY}"
 
   network_adapters {
     bridge = "vmbr0"
@@ -408,7 +404,7 @@ source "proxmox-iso" "lab_three_node_41_beta" {
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "22m"
-  template_description     = "An Almalinux template for CR lab_node lab_three"
+  template_description     = "A Packer template CR lab_three lab node beta" 
   vm_name                  = "${var.LN-beta-VMNAME}"
   tags                     = "${var.TAGS}"
 }
