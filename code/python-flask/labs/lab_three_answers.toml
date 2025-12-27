@@ -1,0 +1,5 @@
+# lab_one.toml
+# Enter the Questions for each lab here
+[answers]
+step_one = "linux"
+step_two = "Ubuntu Server"

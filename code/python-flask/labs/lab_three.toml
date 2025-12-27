@@ -1,0 +1,9 @@
+# lab_one.toml
+# Enter the Q&A for each lab here 
+[questions]
+step_one = "Using nmap report the guessed operating system of the alpha node: "
+step_two = "Using other tools native to your Edge OS, tell us what the operating system of the Beta node is: "
+
+[instructions]
+description = "This Lab contains two nodes. Using Nmap and other methods you will find different required facts about each node..."
+instructions = "Using Nmap and other tools scan the listed Lab Node IP addresses to determine information about each node. You do not have sudo access in this lab."
