@@ -18,7 +18,9 @@ variable "desc" {}
 
 variable "template_to_clone" {}
 
-variable "ln_template_to_clone" {}
+variable "ln_template_beta_to_clone" {}
+
+variable "ln_template_alpha_to_clone" {}
 
 variable "memory" {}
 
