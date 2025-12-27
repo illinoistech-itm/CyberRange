@@ -159,7 +159,7 @@ resource "proxmox_vm_qemu" "lab_two_alpha_node" {
   desc  = var.desc
   #target_node = data.vault_generic_secret.target_node.data[random_shuffle.nodename.result[0]]
   target_node = random_shuffle.nodename.result[0]
-  clone       = var.ln_template_to_clone
+  clone       = var.ln_template_alpha_to_clone
   os_type     = "cloud-init"
   memory      = var.memory
   cpu {
@@ -261,7 +261,7 @@ resource "proxmox_vm_qemu" "lab_two_beta_node" {
   desc  = var.desc
   #target_node = data.vault_generic_secret.target_node.data[random_shuffle.nodename.result[0]]
   target_node = random_shuffle.nodename.result[0]
-  clone       = var.ln_template_to_clone
+  clone       = var.ln_template_beta_to_clone
   os_type     = "cloud-init"
   memory      = var.memory
   cpu {
