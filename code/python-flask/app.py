@@ -621,7 +621,7 @@ def get_ips_by_role(
                     "tags": sorted(tags),
                     "role": role,  # Add role to the entry
                 }
-
+                
                 # If subnet range matches, tag_filter (the launch_id) and the tag edge is not in the tags list
                 # Append that to the list of subnet_hits
                 if ip.startswith(want_subnet_prefix) and tag_filter in tags and "edge" not in tags:
