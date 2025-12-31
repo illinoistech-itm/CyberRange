@@ -7,7 +7,7 @@ resource "random_id" "id" {
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle#example-usage
 resource "random_shuffle" "datadisk" {
-  input        = ["cyberrange"]
+  input        = ["rangedeploydisk"]
   result_count = 1
 }
 # data.vault_generic_secret.target_node.data
