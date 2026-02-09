@@ -12,3 +12,14 @@
 The ITM CyberRange, also known as the **TRYGSTAD** - The Range for Year-round Gurus Studying Technology And Design was designed out a semester long independent study project focusing on creating a working Cyber Range prototype from first principals.  
 
 Every component is an opensource or source available software and we have constructed the entire cloud platform on top of being able to isolate and create various Cyber labs for end users.
+
+## SPRING 2026 Iteration 
+### Lab Section
+ITMT-430-01/ITMT-430-L01
+
+### Team Members
+- Henry Zeng
+- Tracy Dang
+- Thein Han
+- Ana Rosiles
+- Cedric Nartey
