@@ -8,11 +8,11 @@ We will rotate every sprint.
 
 Sprint 1:
 
-PM - Ana
-Dev 1 - Cedric
-Dev 2 - Henry
-UI/UX - Thein
-IT Ops - Tracy
+PM - Tracy
+Dev 1 - Ana
+Dev 2 - Cedric
+UI/UX - Henry
+IT Ops - Thein
 
 ## How work will flow
 
