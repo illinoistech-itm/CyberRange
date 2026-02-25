@@ -12,10 +12,10 @@ resource "random_shuffle" "datadisk" {
   result_count = 1
 }
 
-resource "random_shuffle" "nodename" {
-  input        = [data.vault_generic_secret.target_node.data["SYSTEM42"], data.vault_generic_secret.target_node.data["SYSTEM41"]]
-  result_count = 1
-}
+#resource "random_shuffle" "nodename" {
+#  input        = [data.vault_generic_secret.target_node.data["NODENAME1"], data.vault_generic_secret.target_node.data["NODENAME2"], data.vault_generic_secret.target_node.data["NODENAME3"]]
+#  result_count = 1
+#}
 
 ##############################################################################
 # Connecting Vault with Secrets for Terraform
@@ -24,26 +24,27 @@ resource "random_shuffle" "nodename" {
 # https://github.com/hashicorp/terraform/issues/16457
 ##############################################################################
 data "vault_generic_secret" "pm_api_url" {
-  path = "secret/team00-url"
+  path = "secret/URL"
 }
 
 data "vault_generic_secret" "pm_api_token_id" {
-  path = "secret/team00-username-tf-system"
+  path = "secret/ACCESSKEY"
 }
 
 data "vault_generic_secret" "pm_api_token_secret" {
-  path = "secret/team00-token-tf-system"
+  path = "secret/SECRETKEY"
 }
 
 data "vault_generic_secret" "target_node" {
-  path = "secret/team00-NODENAME"
+  path = "secret/NODENAME"
 }
 
 resource "proxmox_vm_qemu" "vanilla-server" {
   count       = var.numberofvms
   name        = "${var.yourinitials}-vm${count.index}.service.consul"
   desc        = var.desc
-  target_node = random_shuffle.nodename.result[0]
+  #target_node = random_shuffle.nodename.result[0]
+  target_node = data.vault_generic_secret.target_node.data["NODENAME1"]
   clone       = var.template_to_clone
   os_type     = "cloud-init"
   memory      = var.memory
@@ -101,7 +102,7 @@ resource "proxmox_vm_qemu" "vanilla-server" {
       "sudo sed -i 's/replace-name/${var.yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.yourinitials}-vm${count.index}/' /etc/hosts",
       "sudo sed -i 's/FQDN/${var.yourinitials}-vm${count.index}.service.consul/' /etc/update-motd.d/999-consul-dns-message",
-      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"rice-dc-1\"/' /etc/consul.d/consul.hcl",
+      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"mies-dc-1\"/' /etc/consul.d/consul.hcl",
       "echo 'retry_join = [\"${var.consulip-240-prod-system28}\",\"${var.consulip-240-student-system41}\",\"${var.consulip-242-room}\"]' | sudo tee -a /etc/consul.d/consul.hcl",
       "sudo systemctl daemon-reload",
       "sudo systemctl restart consul.service",
