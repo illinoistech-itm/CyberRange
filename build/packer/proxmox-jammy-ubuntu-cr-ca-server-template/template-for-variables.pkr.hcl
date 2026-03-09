@@ -118,3 +118,9 @@ variable "TAGS" {
   type = string
   default  = "ca;cr"
 }
+
+# This is the IP address that the Packer HTTP server will bind to when serving the autoinstall config to the VM during the build process
+variable "BIND_ADDRESS" {
+  type    = string
+  default = "10.110.0.98"
+}

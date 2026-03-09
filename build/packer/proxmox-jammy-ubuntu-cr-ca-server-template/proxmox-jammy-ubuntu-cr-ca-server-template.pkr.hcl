@@ -46,7 +46,7 @@ source "proxmox-iso" "frontend-caserver41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -111,7 +111,7 @@ source "proxmox-iso" "frontend-caserver42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}" 
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
