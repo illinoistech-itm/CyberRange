@@ -34,7 +34,7 @@ source "proxmox-iso" "frontend-caserver41" {
   }
   boot_wait = "5s"
   cores     = "${var.NUMBEROFCORES}"
-  node      = "${local.NODENAME}"
+  node      = "${local.NODENAME1}"
   username  = "${local.USERNAME}"
   token     = "${local.PROXMOX_TOKEN}"
   cpu_type  = "host"

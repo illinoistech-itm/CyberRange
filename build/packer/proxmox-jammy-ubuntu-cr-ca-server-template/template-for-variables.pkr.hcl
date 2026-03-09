@@ -5,11 +5,19 @@
 
 # This is the name of the node in the Cloud Cluster where to deploy the virtual instances
 locals {
-  NODENAME = vault("/secret/data/NODENAME","SYSTEM41")
+  NODENAME1 = vault("/secret/data/NODENAME","NODENAME1")
 }
 
 locals {
-  NODENAME2 = vault("/secret/data/NODENAME","SYSTEM42")
+  NODENAME2 = vault("/secret/data/NODENAME","NODENAME2")
+}
+
+locals {
+  NODENAME3 = vault("/secret/data/NODENAME","NODENAME3")
+}
+
+locals {
+  NODENAME4 = vault("/secret/data/NODENAME","NODENAME4")
 }
 
 locals {
@@ -21,7 +29,7 @@ locals {
 }
 
 locals {
-  URL = vault("/secret/data/URL","S41")
+  URL = vault("/secret/data/URL","NODE1")
 }
 
 locals {
