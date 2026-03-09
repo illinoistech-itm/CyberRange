@@ -21,11 +21,11 @@ locals {
 }
 
 locals {
-  USERNAME = vault("/secret/data/SECRETKEY","PK-USERNAME")
+  USERNAME = vault("/secret/data/SECRETKEY","PK-TOKEN")
 }
 
 locals {
-  PROXMOX_TOKEN = vault("/secret/data/ACCESSKEY","PK-TOKEN")
+  PROXMOX_TOKEN = vault("/secret/data/ACCESSKEY","PK-USERNAME")
 }
 
 locals {
