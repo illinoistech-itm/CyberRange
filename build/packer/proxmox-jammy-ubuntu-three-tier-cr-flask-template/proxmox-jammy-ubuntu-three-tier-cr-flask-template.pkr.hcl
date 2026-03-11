@@ -1006,7 +1006,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/flask-app.service"
     destination = "/home/vagrant/"
-    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42", "proxmox-iso.frontend-webserver43"]
   }
 
   ########################################################################################################################
@@ -1021,7 +1021,7 @@ build {
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_setup_cert_renewal.sh",
                         "../scripts/proxmox/three-tier/frontend/post_install_prxmx_generate_ca.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}"]
-    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only             = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42", "proxmox-iso.frontend-webserver43"]
   }
 
   ########################################################################################################################
@@ -1033,7 +1033,7 @@ build {
     scripts = ["../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-firewall-open-ports.sh",
     "../scripts/proxmox/three-tier/backend/post_install_prxmx_backend-database.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "IPRANGE=${local.CONNECTIONFROMIPRANGE}", "DBPASS=${local.DBPASS}"]
-    only             = ["proxmox-iso.backend-database41", "proxmox-iso.backend-database42"]
+    only             = ["proxmox-iso.backend-database41", "proxmox-iso.backend-database42", "proxmox-iso.backend-database43"]
   }
 
   ########################################################################################################################
@@ -1047,7 +1047,7 @@ build {
       "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_load_balancer.sh",
     "../scripts/proxmox/three-tier/loadbalancer/move-nginx-files.sh",
     "../scripts/proxmox/three-tier/loadbalancer/post_install_prxmx_setup_cert_renewal.sh"]
-    only = ["proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
+    only = ["proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42", "proxmox-iso.load-balancer43"]
   }
 
   ########################################################################################################################
@@ -1058,7 +1058,7 @@ build {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts = ["../scripts/proxmox/three-tier/logserver/post_install_prxmx_logserver-firewall-open-ports.sh",
       "../scripts/proxmox/three-tier/logserver/post_install_prxmx_logserver.sh"]
-    only=["proxmox-iso.log-server42","proxmox-iso.log-server41"]
+    only=["proxmox-iso.log-server42","proxmox-iso.log-server41","proxmox-iso.log-server43"]
   }
 
   ########################################################################################################################
@@ -1077,7 +1077,7 @@ build {
    provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../scripts/proxmox/three-tier/frontend/post_install_prxmx_ubuntu_install_proxmoxer_fe.sh"]
-    only            = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only            = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42", "proxmox-iso.frontend-webserver43"]
   }
 
 
