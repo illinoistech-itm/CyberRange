@@ -20,7 +20,7 @@ uuid -F SIV -o password.txt
 
 # initializing step-ca 
 # have to pass through variables
-step ca init --deployment-type=standalone --name=CyberRangeCA --dns=system36.rice.iit.edu --address=:443 --provisioner=vagrant@system36.rice.iit.edu --password-file=password.txt
+step ca init --deployment-type=standalone --name=CyberRangeCA --dns=system22h134.itm.iit.edu --address=:443 --provisioner=vagrant@system22h134.itm.iit.edu --password-file=password.txt
 
 # adding ACME provisioner support
 step ca provisioner add acme --type ACME

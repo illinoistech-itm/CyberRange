@@ -69,7 +69,7 @@ resource "proxmox_vm_qemu" "cyberrange_ca_server" {
     id     = 0
     model  = "virtio"
     bridge = "vmbr0"
-    macaddr = "04:9F:15:00:00:06"
+    macaddr = "bc:24:11:00:00:2E"
   }
 
   network {
