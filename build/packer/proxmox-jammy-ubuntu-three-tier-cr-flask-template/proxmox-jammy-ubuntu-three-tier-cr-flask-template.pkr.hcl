@@ -46,7 +46,7 @@ source "proxmox-iso" "backend-database41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -111,7 +111,7 @@ source "proxmox-iso" "frontend-webserver41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -176,7 +176,7 @@ source "proxmox-iso" "load-balancer41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -241,7 +241,7 @@ source "proxmox-iso" "backend-database42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -306,7 +306,7 @@ source "proxmox-iso" "frontend-webserver42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -371,7 +371,7 @@ source "proxmox-iso" "load-balancer42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -436,7 +436,7 @@ source "proxmox-iso" "log-server41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -501,7 +501,7 @@ source "proxmox-iso" "log-server42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
