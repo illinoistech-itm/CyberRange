@@ -27,11 +27,11 @@ data "vault_generic_secret" "pm_api_url" {
 }
 
 data "vault_generic_secret" "pm_api_token_id" {
-  path = "secret/SECRETKEY"
+  path = "secret/ACCESSKEY"
 }
 
 data "vault_generic_secret" "pm_api_token_secret" {
-  path = "secret/ACCESSKEY"
+  path = "secret/SECRETKEY"
 }
 
 data "vault_generic_secret" "target_node" {
