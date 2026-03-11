@@ -807,7 +807,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.timer"
     destination = "/home/vagrant/renew-cert.timer"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42", "proxmox-iso.frontend-webserver43","proxmox-iso.load-balancer43"]
   }
   
   #############################################################################
@@ -819,7 +819,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/three-tier/frontend/renew-cert.service"
     destination = "/home/vagrant/renew-cert.service"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42","proxmox-iso.load-balancer41", "proxmox-iso.load-balancer42", "proxmox-iso.frontend-webserver43","proxmox-iso.load-balancer43"]
   }
 
   #############################################################################
@@ -864,7 +864,7 @@ build {
   provisioner "file" {
     source      = "./id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node"
     destination = "/home/vagrant/.ssh/id_ed25519_paramiko_connect_key_from_flask_app_to_lab_edge_node"
-    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42"]
+    only = ["proxmox-iso.frontend-webserver41", "proxmox-iso.frontend-webserver42", "proxmox-iso.frontend-webserver43"]
   }
 
   #############################################################################
@@ -886,7 +886,7 @@ build {
   provisioner "file" {
     source      = "../scripts/proxmox/jammy-services/config.yml"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.log-server42","proxmox-iso.log-server41"]
+    only=["proxmox-iso.log-server42","proxmox-iso.log-server41","proxmox-iso.log-server43"]
   }
 
   #############################################################################
