@@ -104,25 +104,25 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "frontend-VMNAME" {
   type    = string
-  default = "cyberrange-fe-template"
+  default = ""
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "backend-VMNAME" {
   type    = string
-  default = "cyberrange-be-template"
+  default = ""
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "loadbalancer-VMNAME" {
   type    = string
-  default = "cyberrange-lb-template"
+  default = ""
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "LOGS-VMNAME" {
   type    = string
-  default = "cyberrange-logs-template"
+  default = ""
 }
 
 variable "iso_checksum" {
