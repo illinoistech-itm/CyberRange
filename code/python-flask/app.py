@@ -128,7 +128,7 @@ login_manager.login_view = 'login'
 # OAuth configuration
 authorization_base_url = 'https://accounts.google.com/o/oauth2/auth'
 token_url = 'https://accounts.google.com/o/oauth2/token'
-redirect_uri = 'https://system60.rice.iit.edu/callback'
+redirect_uri = 'https://system22h115.itm.iit.edu/callback'
 scope = ['profile', 'email']
 
 ##########################
