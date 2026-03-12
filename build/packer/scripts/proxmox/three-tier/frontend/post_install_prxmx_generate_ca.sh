@@ -16,7 +16,7 @@ sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint 21f9
 #sudo step certificate install --all /etc/step-ca/certs/root_ca.crt
 sudo step certificate install --all /root/.step/certs/root_ca.crt
 #echo "158234246165263303871269841982826793299" > password.txt <--commented out to test alternative, add back in if fails
-echo "176820514074201284967811592992451421160" > provisioner-password.txt
+echo "31114761131684679873814338481701857437" > provisioner-password.txt
 
 # explaining the flags https://smallstep.com/docs/step-cli/reference/ca/token/
 #TOKEN=$(sudo step ca token system36.rice.iit.edu --ca-url=system36.rice.iit.edu --provisioner-password-file=password.txt --root=/etc/step-ca/certs/root_ca.crt --kid=2lK2ZHwu-0wqHlrK6YflrcELu9WkaF8T7CDvu-NQwGs)
