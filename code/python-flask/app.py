@@ -33,7 +33,7 @@ load_dotenv()
 
 # Initialize Vault client
 # Added Verify=False, remove hardcoded token for production use
-client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
+client = hvac.Client(url='https://cyberrange-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
 
 ##############################################################################
 # Read run time access secrets from the CR vault key-pair
