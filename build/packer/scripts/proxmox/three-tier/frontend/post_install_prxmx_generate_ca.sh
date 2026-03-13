@@ -42,7 +42,7 @@ echo "Token generated successfully"
 sudo step ca certificate *.itm.iit.edu \
     signed.crt \
     signed.key \
-    --not-after "672h" \
+    --not-after "24h" \
     --token "$TOKEN" \
     --ca-url https://system22h134.itm.iit.edu \
     --root /root/.step/certs/root_ca.crt
