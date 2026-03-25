@@ -37,10 +37,10 @@ frontend-template_to_clone = "cyberrange-fe-template" # The name of the template
 backend-template_to_clone  = "cyberrange-be-template" # The name of the template to clone
 lb-template_to_clone       = "cyberrange-lb-template" # The name of the template to clone
 logserver-template_to_clone = "cyberrange-logs-template" # The name of the template to clone
-fe-tags                    = "cr, frontend" # Tags separated by commas: fe,team00
-lb-tags                    = "cr, loadbalancer" # Tags separated by commas: lb,team00
-be-tags                    = "cr, backend" # Tags separated by commas: be,team00
-ls-tags                    = "cr, loki" # Tags separated by commas: ls,team00
+fe-tags                    = "cr,frontend" # Tags separated by commas: fe,team00
+lb-tags                    = "cr,loadbalancer" # Tags separated by commas: lb,team00
+be-tags                    = "cr,backend" # Tags separated by commas: be,team00
+ls-tags                    = "cr,loki" # Tags separated by commas: ls,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
