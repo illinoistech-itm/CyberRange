@@ -11,8 +11,8 @@ sudo dpkg -i step-cli_amd64.deb
 
 # have to find a way to dynamically get the password and fingerprint from the CA server
 #sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint 095ecc2996e06e9c84d4d1ff211fefb545e4097a3cde68249ecb04cfe231a1b7 
-#sudo step ca bootstrap --ca-url https://system36.rice.iit.edu --fingerprint 81834205d8387947c53adb24a4ca6f6eca1c54e7602f30ebfd584cae62cc9c4c
-sudo step ca bootstrap --ca-url https://system22h134.rice.iit.edu --fingerprint $FINGERPRINT
+sudo step ca bootstrap --ca-url https://system22h134.itm.iit.edu --fingerprint 21f95a2e578fe5c5b8247cc2c9cdb283119b04e9e3b0574a31d7fb6df7c81e6a
+#sudo step ca bootstrap --ca-url https://system22h134.rice.iit.edu --fingerprint $FINGERPRINT
 #sudo step certificate install --all /etc/step-ca/certs/root_ca.crt
 sudo step certificate install --all /root/.step/certs/root_ca.crt
 #echo "158234246165263303871269841982826793299" > password.txt <--commented out to test alternative, add back in if fails
@@ -23,6 +23,8 @@ echo "31114761131684679873814338481701857437" > provisioner-password.txt
 # 8544 hours is 1 year in hours
 TOKEN=$(sudo step ca token *.itm.iit.edu \
  --ca-url=system22h134.rice.iit.edu \
+ --san "*.itm.iit.edu" \
+ --san "itm.iit.edu" \
  --provisioner-password-file provisioner-password.txt \
  --provisioner "vagrant@system22h134.rice.iit.edu" \
  --root /root/.step/certs/root_ca.crt \
@@ -42,7 +44,7 @@ sudo step ca certificate *.itm.iit.edu \
     CAcr.crt \
     CAcr.key \
     --token "$TOKEN" \
-    --not-after "672h" \
+    --not-after "24h" \
     --ca-url https://system22h134.rice.iit.edu \
     --root /root/.step/certs/root_ca.crt 
 
