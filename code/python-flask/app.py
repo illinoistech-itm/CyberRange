@@ -487,11 +487,13 @@ def run_getip(launch_id):
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
 
-    prxmx42 = proxmox.nodes("system42").qemu.get()
-    prxmx41 = proxmox.nodes("system41").qemu.get()
+    prxmx84 = proxmox.nodes("system22h084").qemu.get()
+    prxmx83 = proxmox.nodes("system22h083").qemu.get()
+    prxmx82 = proxmox.nodes("system22h082").qemu.get()
 
-    found42 = False
-    found41 = False
+    found84 = False
+    found83 = False
+    found82 = False
     # This replaces the '-' in the launch_id, we removed them when we added them
     # as a tag in Terraform. Terraform doesn't support '-' 
     launch_id=launch_id.replace("-","")
@@ -501,29 +503,44 @@ def run_getip(launch_id):
     # Loop through the first node to get all of the nodes that are of status
     # running and that have the tag of the user for vm in prxmx42:
     # and that they have the tag 'edge' meaning they are the edge node
-    for vm in prxmx42:
+    for vm in prxmx84:
         if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
             runningvms.append(vm)
 
             for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system42").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            found42 = True
+                            found84 = True
                             logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-        
-    if found42 == False:
-        for vm in prxmx41:
+    
+    if found83 == False:
+        for vm in prxmx83:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            found83 = True
+                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+    
+    if found82 == False:
+        for vm in prxmx82:
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
 
                 for vm in runningvms:
-                    runningwithtagsvms.append(proxmox.nodes("system41").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
                                 if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    found82 = True
                                     logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                     return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
@@ -559,7 +576,7 @@ def reverse_dns(ip: str):
 def get_ips_by_role(
     proxmox: ProxmoxAPI,
     tag_filter: str = None,  # Make optional
-    nodes=("system42", "system41"),
+    nodes=("system22h082", "system22h083", "system22h084"),
     include_templates=False,
     want_subnet_prefix=SUBNET_WANTED,
     do_reverse_dns=True,
