@@ -5,23 +5,31 @@
 
 # This is the name of the node in the Cloud Cluster where to deploy the virtual instances
 locals {
-  NODENAME = vault("/secret/data/NODENAME","SYSTEM41")
+  NODENAME1 = vault("/secret/data/NODENAME","NODENAME1")
 }
 
 locals {
-  NODENAME2 = vault("/secret/data/NODENAME","SYSTEM42")
+  NODENAME2 = vault("/secret/data/NODENAME","NODENAME2")
 }
 
 locals {
-  USERNAME = vault("/secret/data/SECRETKEY","PK-USERNAME")
+  NODENAME3 = vault("/secret/data/NODENAME","NODENAME3")
 }
 
 locals {
-  PROXMOX_TOKEN = vault("/secret/data/ACCESSKEY","PK-TOKEN")
+  NODENAME4 = vault("/secret/data/NODENAME","NODENAME4")
 }
 
 locals {
-  URL = vault("/secret/data/URL","S41")
+  USERNAME = vault("/secret/data/ACCESSKEY","PK-USERNAME")
+}
+
+locals {
+  PROXMOX_TOKEN = vault("/secret/data/SECRETKEY","PK-TOKEN")
+}
+
+locals {
+  URL = vault("/secret/data/URL","NODE1")
 }
 
 locals {
@@ -88,7 +96,7 @@ variable "DISKSIZE" {
 # Proxmox cloud -- No need to edit this
 variable "STORAGEPOOL" {
   type    = string
-  default = "datadisk1"
+  default = "templatedisk"
 }
 
 variable "NUMBEROFCORES" {
@@ -99,19 +107,19 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "frontend-VMNAME" {
   type    = string
-  default = ""
+  default = "cyberrange-fe-template"
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "backend-VMNAME" {
   type    = string
-  default = ""
+  default = "cyberrange-be-template"
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "loadbalancer-VMNAME" {
   type    = string
-  default = ""
+  default = "cyberrange-lb-template"
 }
 
 variable "iso_checksum" {
@@ -131,16 +139,22 @@ variable "local_iso_name" {
 
 variable "FE-TAGS" {
   type = string
-  default  = "frontend;team00"
+  default  = "frontend;cr"
 }
 
 variable "BE-TAGS" {
   type = string
-  default  = "backend;team00"
+  default  = "backend;cr"
 }
 
 # Use the tags for your team name and what type of artifact this is
 variable "LB-TAGS" {
   type = string
-  default  = "loadbalancer;team00"
+  default  = "loadbalancer;cr"
+}
+
+# This is the IP address that the Packer HTTP server will bind to when serving the autoinstall config to the VM during the build process
+variable "BIND_ADDRESS" {
+  type    = string
+  default = "10.110.0.98"
 }

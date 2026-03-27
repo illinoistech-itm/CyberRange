@@ -34,7 +34,7 @@ source "proxmox-iso" "frontend-apiserver41" {
   }
   boot_wait = "5s"
   cores     = "${var.NUMBEROFCORES}"
-  node      = "${local.NODENAME}"
+  node      = "${local.NODENAME1}"
   username  = "${local.USERNAME}"
   token     = "${local.PROXMOX_TOKEN}"
   cpu_type  = "host"
@@ -46,7 +46,7 @@ source "proxmox-iso" "frontend-apiserver41" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -74,7 +74,7 @@ source "proxmox-iso" "frontend-apiserver41" {
   scsi_controller          = "virtio-scsi-single"
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
-  ssh_timeout              = "26m"
+  ssh_timeout              = "28m"
   template_description     = "A Packer template Python Flask API Server"
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
@@ -111,7 +111,7 @@ source "proxmox-iso" "frontend-apiserver42" {
     format       = "raw"
   }
   http_directory    = "subiquity/http"
-  http_bind_address = "10.110.0.45"
+  http_bind_address = "${var.BIND_ADDRESS}"
   http_port_max    = 9200
   http_port_min    = 9001
   memory           = "${var.MEMORY}"
@@ -144,14 +144,84 @@ source "proxmox-iso" "frontend-apiserver42" {
   scsi_controller          = "virtio-scsi-single"
   ssh_password             = "${local.SSHPW}"
   ssh_username             = "${local.SSHUSER}"
-  ssh_timeout              = "20m"
+  ssh_timeout              = "28m"
+  template_description     = "A Packer template Python Flask API Server"
+  vm_name                  = "${var.VMNAME}"
+  tags                     = "${var.TAGS}"
+}
+
+###########################################################################################
+# This is a Packer build template for the frontend webserver
+###########################################################################################
+source "proxmox-iso" "frontend-apiserver43" {
+  boot_command = [
+    "e<wait>",
+    "<down><down><down>",
+    "<end><bs><bs><bs><bs><wait>",
+    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
+    "<f10><wait>"
+  ]
+  boot_iso {
+    type="scsi"
+    iso_file="local:iso/${var.local_iso_name}"
+    unmount=true
+    iso_checksum="${var.iso_checksum}"
+  }
+  boot_wait = "15s"
+  cores     = "${var.NUMBEROFCORES}"
+  node      = "${local.NODENAME3}"
+  username  = "${local.USERNAME}"
+  token     = "${local.PROXMOX_TOKEN}"
+  cpu_type  = "host"
+  disks {
+    disk_size    = "${var.DISKSIZE}"
+    storage_pool = "${var.STORAGEPOOL}"
+    type         = "virtio"
+    io_thread    = true
+    format       = "raw"
+  }
+  http_directory    = "subiquity/http"
+  http_bind_address = "${var.BIND_ADDRESS}"
+  http_port_max    = 9200
+  http_port_min    = 9001
+  memory           = "${var.MEMORY}"
+
+  network_adapters {
+    bridge = "vmbr0"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr1"
+    model  = "virtio"
+  }
+  network_adapters {
+    bridge = "vmbr2"
+    model  = "virtio"
+  }
+
+  #network_adapters {
+  #  bridge = "crvlan"
+  #  model  = "virtio"
+  #}
+
+  os                       = "l26"
+  proxmox_url              = "${local.URL}"
+  insecure_skip_tls_verify = true
+  qemu_agent               = true
+  cloud_init               = true
+  cloud_init_storage_pool  = "local"
+  # io thread option requires virtio-scsi-single controller
+  scsi_controller          = "virtio-scsi-single"
+  ssh_password             = "${local.SSHPW}"
+  ssh_username             = "${local.SSHUSER}"
+  ssh_timeout              = "28m"
   template_description     = "A Packer template Python Flask API Server"
   vm_name                  = "${var.VMNAME}"
   tags                     = "${var.TAGS}"
 }
 
 build {
-  sources = ["source.proxmox-iso.frontend-apiserver42","source.proxmox-iso.frontend-apiserver41"]
+  sources = ["source.proxmox-iso.frontend-apiserver43","source.proxmox-iso.frontend-apiserver42","source.proxmox-iso.frontend-apiserver41"]
 
   #############################################################################
   # Using the file provisioner to SCP the root_ca.crt into the system to accept
@@ -370,7 +440,7 @@ build {
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_setup_cert_renewal.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
-    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42"]
+    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42", "proxmox-iso.frontend-apiserver43"]
   }
 
   ########################################################################################################################
