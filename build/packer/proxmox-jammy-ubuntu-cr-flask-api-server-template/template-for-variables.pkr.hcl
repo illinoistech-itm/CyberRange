@@ -122,6 +122,12 @@ variable "loadbalancer-VMNAME" {
   default = "cyberrange-lb-template"
 }
 
+# This is the name of the Virtual Machine Template you want to create
+variable "flaskapi-VMNAME" {
+  type    = string
+  default = "cyberrange-fa-template"
+}
+
 variable "iso_checksum" {
   type    = string
   default = "file:https://mirrors.edge.kernel.org/ubuntu-releases/22.04.5/SHA256SUMS"
@@ -151,6 +157,11 @@ variable "BE-TAGS" {
 variable "LB-TAGS" {
   type = string
   default  = "loadbalancer;cr"
+}
+
+variable "FAPI-TAGS" {
+  type = string
+  default  = "flaskapi;cr"
 }
 
 # This is the IP address that the Packer HTTP server will bind to when serving the autoinstall config to the VM during the build process

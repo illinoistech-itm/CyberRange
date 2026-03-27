@@ -76,8 +76,8 @@ source "proxmox-iso" "frontend-apiserver41" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "28m"
   template_description     = "A Packer template Python Flask API Server"
-  vm_name                  = "${var.VMNAME}"
-  tags                     = "${var.TAGS}"
+  vm_name                  = "${var.flaskapi-VMNAME}"
+  tags                     = "${var.FAPI-TAGS}"
 }
 
 ###########################################################################################
@@ -146,8 +146,8 @@ source "proxmox-iso" "frontend-apiserver42" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "28m"
   template_description     = "A Packer template Python Flask API Server"
-  vm_name                  = "${var.VMNAME}"
-  tags                     = "${var.TAGS}"
+  vm_name                  = "${var.flaskapi-VMNAME}"
+  tags                     = "${var.FAPI-TAGS}"
 }
 
 ###########################################################################################
@@ -216,8 +216,8 @@ source "proxmox-iso" "frontend-apiserver43" {
   ssh_username             = "${local.SSHUSER}"
   ssh_timeout              = "28m"
   template_description     = "A Packer template Python Flask API Server"
-  vm_name                  = "${var.VMNAME}"
-  tags                     = "${var.TAGS}"
+  vm_name                  = "${var.flaskapi-VMNAME}"
+  tags                     = "${var.FAPI-TAGS}"
 }
 
 build {
