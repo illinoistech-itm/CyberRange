@@ -125,7 +125,7 @@ variable "loadbalancer-VMNAME" {
 # This is the name of the Virtual Machine Template you want to create
 variable "flaskapi-VMNAME" {
   type    = string
-  default = "cyberrange-fa-template"
+  default = "cyberrange-flask-api-template"
 }
 
 variable "iso_checksum" {
