@@ -41,7 +41,7 @@ logger.setLevel(logging.INFO)
 load_dotenv()
 
 # Initialize Vault client
-client = hvac.Client(url='https://jrh-vault-instance-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
+client = hvac.Client(url='https://cyberrange-vault-vm0.service.consul:8200', token=os.getenv('TOKEN'), verify=False)
 # Added Verify=False, remove hardcoded token for production use
 
 ##############################################################################
@@ -58,7 +58,7 @@ CR_TOKEN_VALUE = creds['data']['data']['CR_TOKEN_VALUE']
 CR_PROXMOX_URL = creds['data']['data']['CR_PROXMOX_URL']
 VAULT_TOKEN = creds['data']['data']['APP_VAULTTOKEN']
 vault_token_build_server = creds['data']['data']['APP_VAULTTOKEN']
-vault_addr_build_server = 'https://jrh-vault-instance-vm0.service.consul:8200'
+vault_addr_build_server = 'https://cyberrange-vault-vm0.service.consul:8200'
 vault_skip_verify_build_server = "true"
 
 celery = Celery("tasks", broker="redis://localhost:6379/", backend="redis://localhost:6379/")
