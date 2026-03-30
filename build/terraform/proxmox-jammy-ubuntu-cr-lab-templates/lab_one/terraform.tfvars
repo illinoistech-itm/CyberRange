@@ -15,21 +15,21 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 # This is a variable to append to your cloud instances so they have a unique
 # FQDN -- this is needed for the gossip based DNS to work
 ###############################################################################
-#yourinitials                     = ""                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+yourinitials                     = "cyberrange-lab-one"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
 numberofvms                      = 1                      # quantity of that template to launch
-desc                             = ""                     # What is the purpose of the TF template
+desc                             = "Edge server for lab one"                     # What is the purpose of the TF template
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy
 # instances from
 ###############################################################################
-template_to_clone = "" # The name of the template to clone
-ln_template_to_clone = "" # The name of the template to clone
-#tags              = "" # Tags separated by commas: be,team00
+template_to_clone = "cyberrange-lab-one-edge-server-template" # The name of the template to clone
+ln_template_to_clone = "cyberrange-lab-one-node-template" # The name of the template to clone
+tags              = "cr,lab-one" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
-memory    = 2048  # Memory size of a VM
+memory    = 4096  # Memory size of a VM
 cores     = 1     # vCPU = cores * sockets
 sockets   = 1     # vCPU = cores * sockets
 disk_size = "30G" # Disk size of a VM - min size must equal to the disk size of your clone image

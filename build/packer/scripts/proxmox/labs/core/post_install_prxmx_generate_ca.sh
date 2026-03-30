@@ -40,25 +40,22 @@ echo "Token generated successfully"
 
 #sudo step ca certificate --token $TOKEN system36.rice.iit.edu CAcr.crt CAcr.key <---commented out to test alternative, add back in if fails
 sudo step ca certificate *.itm.iit.edu \
-    signed.crt \
-    signed.key \
+    nginx-signed.crt \
+    nginx-signed.key \
     --not-after "24h" \
     --token "$TOKEN" \
     --ca-url https://system22h134.itm.iit.edu \
     --root /root/.step/certs/root_ca.crt
 
 # Check if files were created successfully
-if [ ! -f "signed.crt" ] || [ ! -f "signed.key" ]; then
+if [ ! -f "nginx-signed.crt" ] || [ ! -f "nginx-signed.key" ]; then
     echo "Error: Certificate files were not created..."
     exit 1
 fi
 
 # Move the generated files to the flaskuser's home directory
-sudo mv signed.crt /home/flaskuser/signed.crt || { echo "Failed to move cert"; exit 1; }
-sudo mv signed.key /home/flaskuser/signed.key || { echo "Failed to move key"; exit 1; }
-
-sudo chown flaskuser:flaskuser /home/flaskuser/signed.crt
-sudo chown flaskuser:flaskuser /home/flaskuser/signed.key
+sudo mv nginx-signed.crt /etc/ssl/certs/nginx-signed.crt || { echo "Failed to move cert"; exit 1; }
+sudo mv nginx-signed.key /etc/ssl/private/nginx-signed.key || { echo "Failed to move key"; exit 1; }
 
 sudo chmod 600 provisioner-password.txt
 
