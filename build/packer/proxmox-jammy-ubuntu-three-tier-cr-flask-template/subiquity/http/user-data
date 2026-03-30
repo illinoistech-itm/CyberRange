@@ -33,7 +33,7 @@ autoinstall:
     primary:
       - arches: [amd64]
         #uri: "http://10.0.0.40/ubuntu"
-        uri: "http://us.archive.ubuntu.com/ubuntu/"
+          
   network:
     network:
       version: 2
