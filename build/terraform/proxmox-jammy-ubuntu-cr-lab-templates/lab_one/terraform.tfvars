@@ -2,7 +2,7 @@
 # These are your proxmox API token credentials (not username and password)
 # That will be provided to you
 ###############################################################################
-keypath = "name-of-your-private-key" # The name to the private key you need to communicate with your instances
+keypath = "id_ed25519_cr_connect_key" # The name to the private key you need to communicate with your instances
 ###############################################################################
 # Debugging information settings
 # No need to change these values
