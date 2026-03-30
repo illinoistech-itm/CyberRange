@@ -72,13 +72,13 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "VMNAME" {
   type    = string
-  default = "lab-one-edge-server-template"
+  default = "cyberrange-lab-one-edge-server-template"
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "LN-VMNAME" {
   type    = string
-  default = "lab-one-node-template"
+  default = "cyberrange-lab-one-node-template"
 }
 
 variable "iso_checksum" {
