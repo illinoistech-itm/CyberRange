@@ -7,12 +7,12 @@ resource "random_id" "id" {
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle#example-usage
 resource "random_shuffle" "datadisk" {
-  input        = ["rangedeploydisk"]
+  input        = ["datadisk2", "datadisk3", "datadisk4"]
   result_count = 1
 }
 # data.vault_generic_secret.target_node.data
 resource "random_shuffle" "nodename" {
-  input        = [data.vault_generic_secret.target_node.data["SYSTEM42"], data.vault_generic_secret.target_node.data["SYSTEM41"]]
+  input        = [data.vault_generic_secret.target_node.data["NODENAME1"], data.vault_generic_secret.target_node.data["NODENAME2"], data.vault_generic_secret.target_node.data["NODENAME3"]]
   result_count = 1
 }
 
@@ -36,11 +36,11 @@ data "vault_generic_secret" "pm_api_url" {
 }
 
 data "vault_generic_secret" "pm_api_token_id" {
-  path = "secret/SECRETKEY"
+  path = "secret/ACCESSKEY"
 }
 
 data "vault_generic_secret" "pm_api_token_secret" {
-  path = "secret/ACCESSKEY"
+  path = "secret/SECRETKEY"
 }
 
 data "vault_generic_secret" "target_node" {
@@ -123,7 +123,7 @@ resource "proxmox_vm_qemu" "lab_one_edge_server" {
       "sudo sed -i 's/replace-name/${var.yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.yourinitials}-vm${count.index}/' /etc/hosts",
       "sudo sed -i 's/FQDN/${var.yourinitials}-vm${count.index}.service.consul/' /etc/update-motd.d/999-consul-dns-message",
-      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"rice-dc-1\"/' /etc/consul.d/consul.hcl",
+      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"mies-dc-1\"/' /etc/consul.d/consul.hcl",
       "echo 'retry_join = [\"${var.consulip-240-prod-system28}\",\"${var.consulip-240-student-system41}\",\"${var.consulip-242-room}\"]' | sudo tee -a /etc/consul.d/consul.hcl",
       "sudo systemctl daemon-reload",
       "sudo systemctl restart consul.service",
@@ -225,7 +225,7 @@ resource "proxmox_vm_qemu" "lab_one_node" {
       "sudo sed -i 's/replace-name/${var.ln_yourinitials}-vm${count.index}/' /etc/consul.d/system.hcl",
       "sudo sed -i 's/ubuntu-server/${var.ln_yourinitials}-vm${count.index}/' /etc/hosts",
       "sudo sed -i 's/FQDN/${var.ln_yourinitials}-vm${count.index}.service.consul/' /etc/update-motd.d/999-consul-dns-message",
-      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"rice-dc-1\"/' /etc/consul.d/consul.hcl",
+      "sudo sed -i 's/#datacenter = \"my-dc-1\"/datacenter = \"mies-dc-1\"/' /etc/consul.d/consul.hcl",
       "echo 'retry_join = [\"${var.consulip-240-prod-system28}\",\"${var.consulip-240-student-system41}\",\"${var.consulip-242-room}\"]' | sudo tee -a /etc/consul.d/consul.hcl",
       "sudo systemctl daemon-reload",
       "sudo systemctl restart consul.service",
