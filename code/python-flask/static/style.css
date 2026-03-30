@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans&family=BioRhyme&family=Raleway&display=swap');
 
-/* Base styles */
-body.index-page {
-  min-height: 100vh; 
-  background-color: #944040;
-  opacity: 0.9;
-  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #944040 29px ), repeating-linear-gradient( #D9884555, #D98845 );
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 body {
   margin: 0;
   padding: 0;
@@ -36,7 +26,7 @@ body {
 
 /* Centered welcome message */
 h1 {
-  font-family: 'BioRhyme', serif;
+  font-family: 'Alegreya Sans', sans-serif;
   font-size: 2.5rem;
   text-align: center;
   margin-top: 120px;
@@ -74,7 +64,6 @@ button:hover {
   display: flex;
   align-items: center;
   padding: 10px 40px;
-  background-color: #E0AC87;
 }
 
 .header-left, .header-right {
@@ -91,9 +80,8 @@ button:hover {
 }
 
 .dashboard-title {
-  font-family: 'BioRhyme', serif;
+  font-family: 'Alegreya Sans', sans-serif;
   font-size: 2.5rem;
-  color: #994040;
   margin: 0;
   text-align: center;
 }
@@ -110,174 +98,88 @@ button:hover {
     font-size: 1rem;
 }
 
-/* Dashboard main content */
-body.dashboard-bkgrd {
-  min-height: 100vh;
-  background-color: #D98845;
-  opacity: 0.9;
-  background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #D98845 29px ), repeating-linear-gradient( #E0AC8755, #E0AC87 );
+/* Dashboard */
+
+.dashboard-bkgrd {
+  background-color: #f0f2f5; 
+  background-image: none; 
 }
 
-.dashboard-main {
+.dashboard-header {
+  background-color: #d10000; 
+  color: white;
+  padding: 15px 30px;
+}
+
+.dashboard-title {
+  color: white;
+  font-size: 1.8rem;
+}
+
+.labs-grid {
   display: grid;
-  grid-template-areas:
-    "progress labs-and-grades"
-    "sandbox labs-and-grades";
-  grid-template-columns: 1fr 2fr;
-  gap: 20px;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 25px;
   padding: 40px;
-  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Progress section */
-.progress-section {
-  grid-area: progress;
+/* Card Styling */
+.lab-card {
+  background: white;
+  border-radius: 12px;
   padding: 20px;
-  border: 2px solid #D98845;
-  border-radius: 8px;
-  background-color: #F8E8D9;
-}
-
-.progress-section h2 {
-  color: #994040;
-  font-family: 'BioRhyme', serif;
-  margin-top: 0;
-}
-
-.progress-section ul {
-  list-style: none;
-  padding: 0;
-  font-family: 'Alegreya Sans', sans-serif;
-  color: #994040;
-}
-
-/* Sandbox button styling */
-.sandbox-section {
-  grid-area: sandbox;
-  padding: 20px 0;
-}
-
-.sandbox-link {
-  display: inline-block;
-}
-
-.sandbox-button {
-  font-family: 'Alegreya Sans', sans-serif;
-  background-color: #E0AC87;
-  border: 2px solid #D98845;
-  color: #994040;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.sandbox-button:hover {
-  background-color: #D98845;
-  color: #F2EBEB;
-}
-
-/* Labs section */
-.labs-grades-container {
-  grid-area: labs-and-grades;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+}
+
+.card-header {
+  display: flex;
   justify-content: space-between;
-  /* align-items: center; */
-  height: 100%;
+  margin-bottom: 15px;
 }
 
-/* triangle layout */
-.labs-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  /* width: fit-content; */
-  margin: 0 auto;
-  justify-items: center;
-  align-items: center;
-  padding-top: 0; 
-  position: relative;
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
 }
 
-.lab-link {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  text-decoration: none;
-}
+.difficulty-tag-beginner { background: #e6f4ea; color: #1e7e34; }
+.difficulty-tag-int { background: #fff4e5; color: #b05d00; }
+.sandbox { background: #69a1f5; color: #1157bf; }
 
-/* Lab circle buttons */
-.lab-buttons {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background-color: #F2EBEB;
-  color: #994040;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2em;
-  border: 2px solid #D98845;
-  cursor: pointer;
+.lab-id { color: #ff9900; font-size: 3rem; margin: 0; }
+.lab-title { margin: 5px 0; font-size: 1.4rem; color: #333; }
+.lab-subtitle { color: #777; font-size: 0.9rem; margin-bottom: 20px; }
+
+/* Skills List */
+.skills-section p { font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+.skills-section ul { list-style: none; padding: 0; margin-top: 0; margin-bottom: 10px; }
+.skills-section li::before { content: "• "; color: #ccc; }
+.skills-section li { font-size: 0.9rem; color: #555; }
+
+
+/* Red Launch Buttons */
+.launch-btn {
+  background: #d10000;
+  color: white;
   text-align: center;
-  padding: 20px;
-  transition: background-color 0.3s ease;
-}
-
-.lab-buttons:hover {
-  background-color: #994040;
-  color: #F2EBEB;
-}
-
-#lab1-link {
-  grid-area: 1 / 1; /* Row 1, Column 1 (Top-left) */
-  z-index: 3;
-  margin-right: -100px; /* Adjust overlap */
-}
-
-#lab2-link {
-  grid-area: 1 / 3; /* Row 1, Column 3 (top-right) */
-  z-index: 2;
-  margin-left: -100px;
-}
-
-#lab3-link {
-  grid-area: 2 / 2; /* Row 2, Column 2 (Bottom-middle) */
-  z-index: 1;
-  margin-top: -100px;
-}
-
-/* Grades button */
-.grades-section {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  width: 100%;
-  padding-top: 50px;
-}
-
-.grades-link {
+  padding: 12px;
+  border-radius: 6px;
   text-decoration: none;
+  font-weight: bold;
+  margin-top: auto;
+  transition: opacity 0.2s;
 }
 
-.grades-button {
-  font-family: 'Alegreya Sans', sans-serif;
-  background-color: #E0AC87;
-  border: 2px solid #D98845;
-  color: #994040;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+.launch-btn:hover { opacity: 0.9; }
+.sandbox-btn { background: #d10000; }
+.sandbox-card { border-top: 4px solid #ff9900; background-color: #fffaf0; }
 
-.grades-button:hover {
-  background-color: #994040;
-  color: #F2EBEB;
-}
 
 /* Lab page section */
 body.lab-page {
