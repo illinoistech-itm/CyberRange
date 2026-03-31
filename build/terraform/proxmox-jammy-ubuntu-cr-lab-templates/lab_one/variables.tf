@@ -14,11 +14,7 @@ variable "pm_log_file" {}
 
 variable "numberofvms" {}
 
-variable "ln_numberofvms" {}
-
 variable "desc" {}
-
-variable "ln_desc" {}
 
 variable "template_to_clone" {}
 
@@ -31,15 +27,14 @@ variable "cores" {}
 variable "sockets" {}
 
 variable "disk_size" {}
-variable "keypath" {}
 
-variable "yourinitials" {}
+variable "keypath" {}
 
 variable "ln_yourinitials" {}
 
-variable "tags" {}
+variable "yourinitials" {}
 
-variable "ln_tags" {}
+variable "tags" {}
 
 variable "consul-service-tag-contact-email" {}
 
