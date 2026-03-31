@@ -14,7 +14,11 @@ variable "pm_log_file" {}
 
 variable "numberofvms" {}
 
+variable "ln_numberofvms" {}
+
 variable "desc" {}
+
+variable "ln_desc" {}
 
 variable "template_to_clone" {}
 
