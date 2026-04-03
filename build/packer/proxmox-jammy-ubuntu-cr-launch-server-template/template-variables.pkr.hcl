@@ -103,7 +103,7 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "VMNAME" {
   type    = string
-  default = "cyber-range-ca-template"
+  default = "cyber-range-launchserver-template"
 }
 
 

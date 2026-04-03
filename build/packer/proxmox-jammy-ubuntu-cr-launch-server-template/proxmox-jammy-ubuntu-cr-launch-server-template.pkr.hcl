@@ -16,9 +16,9 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 # https://github.com/burkeazbill/ubuntu-22-04-packer-fusion-workstation/blob/master/ubuntu-2204-daily.pkr.hcl
 
 ###########################################################################################
-# This is a Packer build template for the frontend webserver
+# This is a Packer build template for the launch webserver
 ###########################################################################################
-source "proxmox-iso" "frontend-caserver41" {
+source "proxmox-iso" "launch-caserver41" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -83,7 +83,7 @@ source "proxmox-iso" "frontend-caserver41" {
 ###########################################################################################
 # This is a Packer build template for the frontend webserver
 ###########################################################################################
-source "proxmox-iso" "frontend-caserver42" {
+source "proxmox-iso" "launch-caserver42" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -146,9 +146,9 @@ source "proxmox-iso" "frontend-caserver42" {
 }
 
 ###########################################################################################
-# This is a Packer build template for the frontend webserver
+# This is a Packer build template for the launch webserver
 ###########################################################################################
-source "proxmox-iso" "frontend-caserver43" {
+source "proxmox-iso" "launch-caserver43" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
