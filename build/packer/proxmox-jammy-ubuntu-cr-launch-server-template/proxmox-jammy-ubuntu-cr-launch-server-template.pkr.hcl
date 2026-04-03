@@ -18,7 +18,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 ###########################################################################################
 # This is a Packer build template for the launch webserver
 ###########################################################################################
-source "proxmox-iso" "launch-caserver41" {
+source "proxmox-iso" "launch-crserver41" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -83,7 +83,7 @@ source "proxmox-iso" "launch-caserver41" {
 ###########################################################################################
 # This is a Packer build template for the frontend webserver
 ###########################################################################################
-source "proxmox-iso" "launch-caserver42" {
+source "proxmox-iso" "launch-crserver42" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
@@ -148,7 +148,7 @@ source "proxmox-iso" "launch-caserver42" {
 ###########################################################################################
 # This is a Packer build template for the launch webserver
 ###########################################################################################
-source "proxmox-iso" "launch-caserver43" {
+source "proxmox-iso" "launch-crserver43" {
   boot_command = [
     "e<wait>",
     "<down><down><down>",
