@@ -19,6 +19,8 @@ from sqlalchemy import Column, String, func # different syntax to explicitly cal
 import toml # Import TOML library from Python standard lib 3.11 or <
 import urllib3
 import socket
+from minio import Minio
+from datetime import timedelta
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 # Initialize logging object to send logs to the journal
@@ -54,6 +56,10 @@ DBUSER = creds['data']['data']['DBUSER']
 DBPASS = creds['data']['data']['DBPASS']
 DBURL = creds['data']['data']['DBURL']
 DATABASENAME = creds['data']['data']['DATABASENAME']
+MINIO_ENDPOINT = creds['data']['data']['MINIO_ENDPOINT']
+MINIO_ACCESS_KEY = creds['data']['data']['MINIO_ACCESS_KEY']
+MINIO_SECRET_KEY = creds['data']['data']['MINIO_SECRET_KEY']
+MINIO_BUCKET = creds['data']['data']['MINIO_BUCKET']
 
 ##############################################################################
 # Instantiate application
@@ -86,6 +92,26 @@ class Labs(db.Model):
     grade = db.Column(db.Float, nullable=True)
     last_attempt = db.Column(db.DateTime, nullable=False)
     email = db.Column(db.String(255), primary_key=True)
+
+##############################################################################
+# Minio helper — returns a presigned GET URL for an object in the bucket
+# Self-signed cert on the Minio portal requires cert_check=False via a custom
+# urllib3 PoolManager (do NOT disable https)
+##############################################################################
+def get_presigned_url(object_name, expires_hours=24):
+    http_client = urllib3.PoolManager(cert_reqs='CERT_NONE', assert_hostname=False)
+    minio_client = Minio(
+        MINIO_ENDPOINT,
+        access_key=MINIO_ACCESS_KEY,
+        secret_key=MINIO_SECRET_KEY,
+        secure=True,
+        http_client=http_client,
+    )
+    return minio_client.presigned_get_object(
+        MINIO_BUCKET,
+        object_name,
+        expires=timedelta(hours=expires_hours),
+    )
 
 ##############################################################################
 # Create Helper functions for DB access
@@ -185,9 +211,9 @@ def index():
                 # if user_in_application is None:
                 # return redirect(url_for('.index')) 
                 # else:
-                return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
+                return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"], logo_url=get_presigned_url('logo.png'))
             else:
-                return render_template('index.html') #Render template instead?
+                return render_template('index.html', logo_url=get_presigned_url('logo.png')) #Render template instead?
         except TokenExpiredError:
             if 'refresh_token' in session['google_token']:
                 # Refresh expired token
@@ -199,11 +225,11 @@ def index():
                 )
                 session['google_token'] = token
                 #return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
-                return render_template('index.html')
+                return render_template('index.html', logo_url=get_presigned_url('logo.png'))
             else:
                 # Session expired
-                return render_template('index.html')#Where is the login page?
-    return render_template('index.html')
+                return render_template('index.html', logo_url=get_presigned_url('logo.png'))#Where is the login page?
+    return render_template('index.html', logo_url=get_presigned_url('logo.png'))
 
 @app.route('/login')
 def login():
