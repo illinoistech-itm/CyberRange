@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/code/python-flask/static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cyber Range</title>
   </head>
@@ -25,19 +25,19 @@
 
     <section class="feature-grid" aria-label="Cyber Range features">
       <article class="feature-card">
-        <h2>Real VM Infrastructure</h2>
+        <h2><span class="feature-icon" aria-hidden="true">☰</span>Real VM Infrastructure</h2>
         <p>Isolated Linux VMs provisioned on-demand via Terraform.</p>
-        <a href="https://github.com/illinoistech-itm/CyberRange/blob/main/presentations">No shared environments</a>
+        <a href="https://github.com/illinoistech-itm/CyberRange/blob/main/presentations"> No shared environments</a>
       </article>
       <article class="feature-card">
-        <h2>Hands-on Labs</h2>
+        <h2><span class="feature-icon" aria-hidden="true">>_</span>Hands-on Labs</h2>
         <p>Browser-based terminal with no local setup or VPN required.</p>
-        <a href="{{ url_for('login') }}">Just log in and start hacking</a>
+        <a href="{{ url_for('login') }}"> Just log in and start hacking</a>
       </article>
       <article class="feature-card">
-        <h2>Auto-Provisioned</h2>
+        <h2><span class="feature-icon" aria-hidden="true">⚡</span>Auto-Provisioned</h2>
         <p>Lab environments spin up and tear down automatically.</p>
-        <a href="https://discord.gg/5TdTGCNUGZ">Zero cleanup, zero cost waste</a>
+        <a href="https://discord.gg/5TdTGCNUGZ"> Zero cleanup, zero cost waste</a>
       </article>
     </section>
   </main>

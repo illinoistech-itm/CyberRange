@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
     <title>Cyber Range Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/code/python-flask/static/style.css">
 </head>
 <body class="dashboard-bkgrd">
   <header class="dashboard-header">
@@ -18,7 +18,7 @@
     </div>
   </header>
 
-  <main class="dashboard-main">
+  <main class="dashboard-main labs-grid">
     <div class="lab-card">
       <div class="card-header">
         <span class="difficulty-tag-beginner">BEGINNER</span>
@@ -58,10 +58,28 @@
       </div>
       <a href="{{ url_for('launch_lab', lab_id='lab_two') }}" class="launch-btn">Launch Lab →</a>
     </div>
-
-    <div class="unready-lab">
-       </div>
-
+<!--
+    <div class="lab-card not-ready-card">
+      <div class="card-header">
+        <span class="difficulty-tag-int">INTERMEDIATE</span>
+        <span class="status-tag">NOT STARTED</span>
+      </div>
+      <div class="card-body">
+        <h2 class="lab-id muted">03</h2>
+        <h3 class="lab-title">Coming Soon</h3>
+        <p class="lab-subtitle">Topic TBD</p>
+        <div class="skills-section">
+          <p>SKILLS</p>
+          <ul>
+            <li>TBD</li>
+            <li>TBD</li>
+            <li>TBD</li>
+          </ul>
+        </div>
+      </div>
+      <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
+    </div>
+  -->
     <div class="lab-card sandbox-card">
       <div class="card-header">
         <span class="badge sandbox">SANDBOX</span>
@@ -79,7 +97,6 @@
         </div>
       </div>
       <a href="/sandbox" class="launch-btn sandbox-btn">▶ Open Sandbox</a>
-    </div>
     </div>
 
   </main>
