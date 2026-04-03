@@ -211,7 +211,82 @@ source "proxmox-iso" "launch-crserver43" {
 }
 
 build {
-  sources = ["source.proxmox-iso.launch-crserver43", "source.proxmox-iso.launch-crserver41", "source.proxmox-iso.launch-crserver42"]
+  sources = ["source.proxmox-iso.launch-crserver43","source.proxmox-iso.launch-crserver42","source.proxmox-iso.launch-crserver41"]
+
+  #############################################################################
+  # Using the file provisioner to SCP the root_ca.crt into the system to accept
+  # our signed certs
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
+    destination = "/home/vagrant/root_ca.crt"
+  }
+  
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/renew-cert.timer"
+    destination = "/home/vagrant/renew-cert.timer"
+  }
+  
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/renew-cert.service"
+    destination = "/home/vagrant/renew-cert.service"
+  }
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the configured config file to the ~/.ssh directory so you can clone 
+  # your GitHub account to the server
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./config"
+    destination = "/home/vagrant/.ssh/config"
+  }
+
+  #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to clone your source code -- make sure the public
+  # key is in your GitHub account and you using a deploy key
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_github_key"
+    destination = "/home/vagrant/.ssh/id_ed25519_github_key"
+  }
+
+  ##############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to SSH into the build server so that when labs
+  # are launched, it can perform a terraform apply using Fabric (python SSH
+  # implementation)
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
+    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
+  }
+
+  ##############################################################################
+  # Copying the custom configuration for Alloy to be setup to send systemd logs
+  # to Loki
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/config.alloy"
+    destination = "/home/vagrant/config.alloy"
+  }
 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
@@ -256,15 +331,6 @@ build {
     destination = "/home/vagrant/"
   }
 
-  ########################################################################################################################
-  # Copying the step-ca service file into the VM
-  ########################################################################################################################
- 
-  provisioner "file" {
-    source      = "../scripts/proxmox/ca-server/step-ca.service"
-    destination = "/home/vagrant/"
-  }
-  
   #############################################################################
   # This is the script that will open firewall ports needed for a node to 
   # function on the the School Cloud Platform and create the default firewalld
@@ -286,7 +352,9 @@ build {
     scripts = ["../scripts/proxmox/core-jammy/post_install_prxmx_ubuntu_2204.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh"]
+    "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh",
+    "../scripts/proxmox/core-jammy/post_install_prxmx_setup_root_crt.sh"]
   }
 
   #############################################################################
@@ -326,6 +394,28 @@ build {
   # are creating
   #############################################################################
 
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh"]
+  }
+
+  ########################################################################################################################
+  # Copying the Flask App service file into the VM
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/flask-api.service"
+    destination = "/home/vagrant/"
+  }
+
+  ########################################################################################################################
+  # Copying the celery-workers service file into the VM
+  ########################################################################################################################
+ 
+  provisioner "file" {
+    source      = "../scripts/proxmox/api-server/frontend/celery-workers.service"
+    destination = "/home/vagrant/"
+  }
 
   ########################################################################################################################
   # This block executes scripts to open firewall ports, create self-signed certs, and install Python Flask
@@ -333,8 +423,24 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/ca-server/post_install_prxmx_ubuntu_ca_server_install.sh", 
-                        "../scripts/proxmox/ca-server/post_install_prxmx_ubuntu_firewall-additions.sh"]
+    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ca.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_setup_cert_renewal.sh"]
+    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
+    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42", "proxmox-iso.frontend-apiserver43"]
+  }
+
+  ########################################################################################################################
+  # This block executes scripts delete the Deploy Key and remove any uneeded zip files
+  ########################################################################################################################
+
+   provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/api-server/frontend/cleanup.sh"]
   }
 
 }
+

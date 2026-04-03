@@ -50,6 +50,14 @@ autoinstall:
         ens20:
           dhcp4: true
           dhcp6: false
+  user-data:
+    users:
+      - name: cr
+        gecos: "CyberRange User"
+        groups: sudo,adm,cdrom,dip,plugdev,lxd
+        lock_passwd: true
+        sudo: "ALL=(ALL) NOPASSWD:ALL"
+        shell: /bin/bash
   ssh:
     allow-pw: true
     install-server: true
