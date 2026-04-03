@@ -23,7 +23,7 @@ consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the 
 # Name the template your created via Packer for Terraform to use to deploy
 # instances from
 ###############################################################################
-template_to_clone = "cyber-range-launchserver-template" # The name of the template to clone
+template_to_clone = "cyberrange-launchserver-template" # The name of the template to clone
 tags              = "cyberrange,launchserver" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
