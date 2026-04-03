@@ -211,7 +211,7 @@ source "proxmox-iso" "launch-crserver43" {
 }
 
 build {
-  sources = ["source.proxmox-iso.frontend-caserver42","source.proxmox-iso.frontend-caserver41","source.proxmox-iso.frontend-caserver43"]
+  sources = ["source.proxmox-iso.launch-crserver43", "source.proxmox-iso.launch-crserver41", "source.proxmox-iso.launch-crserver42"]
 
 
   #############################################################################
