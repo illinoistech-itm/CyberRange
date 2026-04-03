@@ -266,6 +266,17 @@ build {
   }
   
   #############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to clone your source code -- make sure the public
+  # key is in your GitHub account and you using a deploy key
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
+    destination = "/home/vagrant/.ssh/id_ed25519_flask_api_to_buildserver_connect_key"
+  }
+
+  #############################################################################
   # This is the script that will open firewall ports needed for a node to 
   # function on the the School Cloud Platform and create the default firewalld
   # zones.
@@ -321,10 +332,13 @@ build {
   }
 
   #############################################################################
-  # Uncomment this block to add your own custom bash install scripts
-  # This block you can add your own shell scripts to customize the image you 
-  # are creating
+  # Script to clone team repo to server
   #############################################################################
+
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    scripts         = ["../scripts/proxmox/three-tier/clone-team-repo.sh"]
+  }
 
 
   ########################################################################################################################
