@@ -213,7 +213,6 @@ source "proxmox-iso" "launch-crserver43" {
 build {
   sources = ["source.proxmox-iso.launch-crserver43", "source.proxmox-iso.launch-crserver41", "source.proxmox-iso.launch-crserver42"]
 
-
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Add .hcl configuration file to register an instance with Consul for dynamic
