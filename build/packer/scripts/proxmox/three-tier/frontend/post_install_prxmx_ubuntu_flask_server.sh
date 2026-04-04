@@ -16,8 +16,8 @@ sudo apt install -y gunicorn python3-flask
 
 # Requirements for Flask app functionality
 # python3-toml is needed since we are using Ubuntu Server 22.04.5 which ships Python 3.10
-sudo apt install -y python3-flask-socketio python3-flask-login python3-requests python3-requests-oauthlib python3-hvac python3-dotenv python3-paramiko python3-jinja2 python3-metaconfig python3-flask-sqlalchemy python3-toml python3-pymysql libmysqlclient-dev python3-minio
-
+sudo apt install -y python3-flask-socketio python3-flask-login python3-requests python3-requests-oauthlib python3-hvac python3-dotenv python3-paramiko python3-jinja2 python3-metaconfig python3-flask-sqlalchemy python3-toml python3-pymysql libmysqlclient-dev
+sudo pip3 install minio
 # Install dependencies for application logging to the Journal
 sudo apt install -y libsystemd-dev python3-systemd
 
