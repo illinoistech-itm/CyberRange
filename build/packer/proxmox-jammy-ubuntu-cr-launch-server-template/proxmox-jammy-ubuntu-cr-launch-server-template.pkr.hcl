@@ -274,8 +274,8 @@ build {
   #############################################################################
 
   provisioner "file" {
-    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
-    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
+    source      = "./id_ed25519_cr_connect_key"
+    destination = "/home/vagrant/id_ed25519_cr_connect_key"
   }
 
   ##############################################################################
@@ -430,7 +430,7 @@ build {
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_setup_cert_renewal.sh"]
     environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
-    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42", "proxmox-iso.frontend-apiserver43"]
+    only             = ["proxmox-iso.launch-crserver41", "proxmox-iso.launch-crserver42", "proxmox-iso.launch-crserver43"]
   }
 
   ########################################################################################################################
