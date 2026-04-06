@@ -72,6 +72,7 @@ autoinstall:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINprm09CDWnGxWJumv83U7nM1gUK0SuRIeg90TEy2hLv adang7@buildserver'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAWouHkPbwkByZ5hlqJvvRGz6AdZKroi3BXV6bGOEDuD hzeng9@buildserver'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHcVsx74cfkRhMBCZ+gDFxYh4Q3zJpYatzllJ7rPxH07 cnartey1@buildserver'
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEfaamMiZhOWGgz9MYBOoq72VlIWNzXa0a8+et5T8c8l than10@buildserver'
   late-commands:
     - sed -i 's/^#*\(send dhcp-client-identifier\).*$/\1 = hardware;/' /target/etc/dhcp/dhclient.conf
     - "echo 'Defaults:vagrant !requiretty' > /target/etc/sudoers.d/vagrant"
