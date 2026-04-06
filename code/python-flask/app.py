@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template, session
+from flask import Flask, request, redirect, url_for, session, render_template, session, Response
 from flask_socketio import SocketIO, emit # Used to connect the lab SSH back to the Python Flask App
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from proxmoxer import ProxmoxAPI
@@ -211,9 +211,9 @@ def index():
                 # if user_in_application is None:
                 # return redirect(url_for('.index')) 
                 # else:
-                return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"], logo_url=get_presigned_url('logo.png'))
+                return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
             else:
-                return render_template('index.html', logo_url=get_presigned_url('logo.png')) #Render template instead?
+                return render_template('index.html') #Render template instead?
         except TokenExpiredError:
             if 'refresh_token' in session['google_token']:
                 # Refresh expired token
@@ -225,11 +225,11 @@ def index():
                 )
                 session['google_token'] = token
                 #return render_template('dashboard.html', lab_results=lab, uid = user_info["sub"], email=user_info["email"])
-                return render_template('index.html', logo_url=get_presigned_url('logo.png'))
+                return render_template('index.html')
             else:
                 # Session expired
-                return render_template('index.html', logo_url=get_presigned_url('logo.png'))#Where is the login page?
-    return render_template('index.html', logo_url=get_presigned_url('logo.png'))
+                return render_template('index.html')#Where is the login page?
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
@@ -250,6 +250,19 @@ def callback():
 def logout():
     session.pop('google_token', None)
     return redirect(url_for('.index'))
+
+@app.route('/logo')
+def logo():
+    http_client = urllib3.PoolManager(cert_reqs='CERT_NONE', assert_hostname=False)
+    minio_client = Minio(
+        MINIO_ENDPOINT,
+        access_key=MINIO_ACCESS_KEY,
+        secret_key=MINIO_SECRET_KEY,
+        secure=True,
+        http_client=http_client,
+    )
+    obj = minio_client.get_object(MINIO_BUCKET, 'logo.png')
+    return Response(obj.read(), mimetype='image/png')
 
 @app.route("/test")
 @login_required
