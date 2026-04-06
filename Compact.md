@@ -30,6 +30,20 @@ Dev 2 - Ana
 UI/UX - Cedric
 IT Ops - Henry
 
+Sprint 4:
+PM - Henry
+Dev 1 - Thein
+Dev 2 - Tracy
+UI/UX - Ana
+IT Ops - Cedric
+
+Sprint 5:
+PM - Cedric
+Dev 1 - Henry
+Dev 2 - Thein
+UI/UX - Tracy
+IT Ops - Ana
+
 ## How work will flow
 
 Project Manager will go over tasks that need to be completed for this current sprint. Each team member will provide suggestions/problems/ideas in regards to their role. 
