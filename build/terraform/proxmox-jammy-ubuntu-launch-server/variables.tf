@@ -18,8 +18,6 @@ variable "desc" {}
 
 variable "template_to_clone" {}
 
-variable "ln_template_to_clone" {}
-
 variable "memory" {}
 
 variable "cores" {}
@@ -27,10 +25,7 @@ variable "cores" {}
 variable "sockets" {}
 
 variable "disk_size" {}
-
 variable "keypath" {}
-
-variable "ln_yourinitials" {}
 
 variable "yourinitials" {}
 

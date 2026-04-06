@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template, session
+from flask import Flask, request, redirect, url_for, session, render_template, session, Response
 from flask_socketio import SocketIO, emit # Used to connect the lab SSH back to the Python Flask App
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from proxmoxer import ProxmoxAPI
@@ -19,6 +19,8 @@ from sqlalchemy import Column, String, func # different syntax to explicitly cal
 import toml # Import TOML library from Python standard lib 3.11 or <
 import urllib3
 import socket
+from minio import Minio
+from datetime import timedelta
 # https://copilot.microsoft.com/shares/vQLqNAfQEewvPxt7fUXph
 
 # Initialize logging object to send logs to the journal
@@ -54,6 +56,10 @@ DBUSER = creds['data']['data']['DBUSER']
 DBPASS = creds['data']['data']['DBPASS']
 DBURL = creds['data']['data']['DBURL']
 DATABASENAME = creds['data']['data']['DATABASENAME']
+MINIO_ENDPOINT = creds['data']['data']['MINIO_ENDPOINT']
+MINIO_ACCESS_KEY = creds['data']['data']['MINIO_ACCESS_KEY']
+MINIO_SECRET_KEY = creds['data']['data']['MINIO_SECRET_KEY']
+MINIO_BUCKET = creds['data']['data']['MINIO_BUCKET']
 
 ##############################################################################
 # Instantiate application
@@ -86,6 +92,26 @@ class Labs(db.Model):
     grade = db.Column(db.Float, nullable=True)
     last_attempt = db.Column(db.DateTime, nullable=False)
     email = db.Column(db.String(255), primary_key=True)
+
+##############################################################################
+# Minio helper — returns a presigned GET URL for an object in the bucket
+# Self-signed cert on the Minio portal requires cert_check=False via a custom
+# urllib3 PoolManager (do NOT disable https)
+##############################################################################
+def get_presigned_url(object_name, expires_hours=24):
+    http_client = urllib3.PoolManager(cert_reqs='CERT_NONE', assert_hostname=False)
+    minio_client = Minio(
+        MINIO_ENDPOINT,
+        access_key=MINIO_ACCESS_KEY,
+        secret_key=MINIO_SECRET_KEY,
+        secure=True,
+        http_client=http_client,
+    )
+    return minio_client.presigned_get_object(
+        MINIO_BUCKET,
+        object_name,
+        expires=timedelta(hours=expires_hours),
+    )
 
 ##############################################################################
 # Create Helper functions for DB access
@@ -224,6 +250,19 @@ def callback():
 def logout():
     session.pop('google_token', None)
     return redirect(url_for('.index'))
+
+@app.route('/logo')
+def logo():
+    http_client = urllib3.PoolManager(cert_reqs='CERT_NONE', assert_hostname=False)
+    minio_client = Minio(
+        MINIO_ENDPOINT,
+        access_key=MINIO_ACCESS_KEY,
+        secret_key=MINIO_SECRET_KEY,
+        secure=True,
+        http_client=http_client,
+    )
+    obj = minio_client.get_object(MINIO_BUCKET, 'logo.png')
+    return Response(obj.read(), mimetype='image/png')
 
 @app.route("/test")
 @login_required

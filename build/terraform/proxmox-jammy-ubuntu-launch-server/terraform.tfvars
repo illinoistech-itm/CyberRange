@@ -2,7 +2,7 @@
 # These are your proxmox API token credentials (not username and password)
 # That will be provided to you
 ###############################################################################
-keypath = "id_ed25519_cr_connect_key" # The name to the private key you need to communicate with your instances
+keypath = "id_ed255519_flask_api_to_buildserver_connect_key" # The name to the private key you need to communicate with your instances
 ###############################################################################
 # Debugging information settings
 # No need to change these values
@@ -15,20 +15,20 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 # This is a variable to append to your cloud instances so they have a unique
 # FQDN -- this is needed for the gossip based DNS to work
 ###############################################################################
-yourinitials                  = "cyberrange-lab-one"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
-numberofvms                   = 1                      # quantity of that template to launch
-desc                          = "Edge Server for Lab one"                     # What is the purpose of the TF template
+yourinitials                     = "cyberrange-launch-server"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+numberofvms                      = 1                      # quantity of that template to launch
+desc                             = "Launch server for cyberrange ITMT 430 spring project"                     # What is the purpose of the TF template
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy
 # instances from
 ###############################################################################
-template_to_clone = "cyberrange-lab-one-edge-server-template" # The name of the template to clone
-tags = "cr,lab-one" # Tags separated by commas: be,team00
+template_to_clone = "cyberrange-launchserver-template" # The name of the template to clone
+tags              = "cr,launchserver" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
-memory    = 4096  # Memory size of a VM
+memory    = 2048  # Memory size of a VM
 cores     = 1     # vCPU = cores * sockets
 sockets   = 1     # vCPU = cores * sockets
 disk_size = "30G" # Disk size of a VM - min size must equal to the disk size of your clone image

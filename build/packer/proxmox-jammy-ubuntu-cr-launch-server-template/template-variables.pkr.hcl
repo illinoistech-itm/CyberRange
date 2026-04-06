@@ -103,7 +103,7 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "VMNAME" {
   type    = string
-  default = "cyber-range-ca-template"
+  default = "cyberrange-launchserver-template"
 }
 
 
@@ -124,7 +124,7 @@ variable "local_iso_name" {
 
 variable "TAGS" {
   type = string
-  default  = "ca;cr"
+  default  = "launchserver;cr"
 }
 
 # This is the IP address that the Packer HTTP server will bind to when serving the autoinstall config to the VM during the build process

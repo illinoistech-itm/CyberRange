@@ -16,6 +16,7 @@ sudo apt install -y gunicorn python3-flask
 
 # Requirements for Flask app functionality
 sudo apt install -y python3-flask-socketio python3-requests python3-hvac python3-dotenv python3-proxmoxer python3-flask-sqlalchemy python3-fabric python3-paramiko python3-metaconfig python3-flask-cors
+sudo pip3 install minio
 # Install dependencies for application logging to the Journal
 sudo apt install -y libsystemd-dev python3-systemd
 

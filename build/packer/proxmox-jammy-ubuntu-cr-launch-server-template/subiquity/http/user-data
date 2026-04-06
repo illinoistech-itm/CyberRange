@@ -32,7 +32,7 @@ autoinstall:
     preserve_sources_list: false
     primary:
       - arches: [amd64]
-        #uri: "http://10.0.0.40/ubuntu"
+        #uri: "http://10.0.0.135/ubuntu"
         uri: "http://us.archive.ubuntu.com/ubuntu/"
   network:
     network:
@@ -50,6 +50,14 @@ autoinstall:
         ens20:
           dhcp4: true
           dhcp6: false
+  user-data:
+    users:
+      - name: cr
+        gecos: "CyberRange User"
+        groups: sudo,adm,cdrom,dip,plugdev,lxd
+        lock_passwd: true
+        sudo: "ALL=(ALL) NOPASSWD:ALL"
+        shell: /bin/bash
   ssh:
     allow-pw: true
     install-server: true
@@ -57,11 +65,8 @@ autoinstall:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGTi1ciil8RrWQj1Vez1CLkaB4unBLUar/wPTg3wnI3Q palad@framework'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFySbeHD/IceceXlKbhIjN0MrNI49GD56Y9sohdtnV5Z griot@Macbook'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDp8IvmB3gyDvpdXN34J39ST7+PjQnVYwOnzyTJ1+38z hajek@newyorkphilharmonic'
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJcYxy32wQUn6z6aKDKJ5kXyS5+Aw4bRfL+AUcdrSOa4 palad@framework'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHn1Cq/d5r3ZqtgXHC5Uc9Iu3//wdRDWA1JV7Lp+sIxu rosil@sun_in_her_eyes'
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPIvr0CJ62x9Tmj3F8XdZ7UBDY8fPOKnPmHwFLfmShMg hajek@newyorkphilharmonic'
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMsZ30XMyVXaYfTueYnOKqZ3t5NTDbzw2K1BJwQ5I6+H hajek@newyorkphilharmonic'
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGPCYXZl31MqQrCa07xxzwVKoRIi8N+EDqZr1trmVFQI cr@newyorkphilharmonic'
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvnzpjZZ89FZKdKcfWFBswQ1ahZk8KNaVmScmbMi2jW hajek@newyorkphilharmonic'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvevohFkUY9dhkmltb32fbdChWFZ+zaYn8sHg5NY1jG than10@buildserver'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO0GLW0PTmPCByBdoj8zo5SWOiQ45xFoleyqP0A6g/2M arosiles@buildserver'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINprm09CDWnGxWJumv83U7nM1gUK0SuRIeg90TEy2hLv adang7@buildserver'

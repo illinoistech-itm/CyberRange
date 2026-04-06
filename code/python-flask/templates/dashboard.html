@@ -8,7 +8,9 @@
 <body class="dashboard-bkgrd">
   <header class="dashboard-header">
     <div class="header-left">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+      <div class="logo-wrap">
+        <div class="logo-badge"><img src="/logo" alt="Logo" class="logo"></div>
+      </div>
     </div>
     <div class="header-center">
       <h1 class="dashboard-title">Dashboard</h1>
@@ -18,7 +20,7 @@
     </div>
   </header>
 
-  <main class="dashboard-main">
+  <main class="dashboard-main labs-grid">
     <div class="lab-card">
       <div class="card-header">
         <span class="difficulty-tag-beginner">BEGINNER</span>
@@ -58,10 +60,28 @@
       </div>
       <a href="{{ url_for('launch_lab', lab_id='lab_two') }}" class="launch-btn">Launch Lab →</a>
     </div>
-
-    <div class="unready-lab">
-       </div>
-
+<!--
+    <div class="lab-card not-ready-card">
+      <div class="card-header">
+        <span class="difficulty-tag-int">INTERMEDIATE</span>
+        <span class="status-tag">NOT STARTED</span>
+      </div>
+      <div class="card-body">
+        <h2 class="lab-id muted">03</h2>
+        <h3 class="lab-title">Coming Soon</h3>
+        <p class="lab-subtitle">Topic TBD</p>
+        <div class="skills-section">
+          <p>SKILLS</p>
+          <ul>
+            <li>TBD</li>
+            <li>TBD</li>
+            <li>TBD</li>
+          </ul>
+        </div>
+      </div>
+      <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
+    </div>
+  -->
     <div class="lab-card sandbox-card">
       <div class="card-header">
         <span class="badge sandbox">SANDBOX</span>
@@ -79,7 +99,6 @@
         </div>
       </div>
       <a href="/sandbox" class="launch-btn sandbox-btn">▶ Open Sandbox</a>
-    </div>
     </div>
 
   </main>
