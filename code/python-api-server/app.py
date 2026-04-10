@@ -20,7 +20,7 @@ from tasks import run_fabric_command, get_task_progress
 
 
 # Path to your ed25519 private key
-ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_buildserver_connect_key"
+ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_launchserver_connect_key"
 
 HOST="cyberrange-launch-server-vm0.service.consul"
 USER="cr"
