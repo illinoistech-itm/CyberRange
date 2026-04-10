@@ -32,8 +32,8 @@ autoinstall:
     preserve_sources_list: false
     primary:
       - arches: [amd64]
-        #uri: "http://10.0.0.135/ubuntu"
-        uri: "http://us.archive.ubuntu.com/ubuntu/"
+        uri: "http://10.0.0.135/ubuntu"
+        #uri: "http://us.archive.ubuntu.com/ubuntu/"
   network:
     network:
       version: 2
@@ -58,6 +58,8 @@ autoinstall:
         lock_passwd: true
         sudo: "ALL=(ALL) NOPASSWD:ALL"
         shell: /bin/bash
+        ssh_authorized_keys:
+          #Add launch server keys(id_ed25519_flask_api_to_buildserver_connect_key.pub) here
   ssh:
     allow-pw: true
     install-server: true

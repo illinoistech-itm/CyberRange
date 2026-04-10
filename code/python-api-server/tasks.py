@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 # Path to your ed25519 private key
 ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_buildserver_connect_key"
 
-HOST="newyorkphilharmonic.service.consul"
+HOST="cyberrange-launch-server-vm0.service.consul"
 USER="cr"
 
 # Create the connection

@@ -427,6 +427,19 @@ build {
     destination = "/home/vagrant/"
   }
 
+  ##############################################################################
+  # Using the file provisioner to SCP this file to the instance 
+  # Copy the private key used to SSH into the build server so that when labs
+  # are launched, it can perform a terraform apply using Fabric (python SSH
+  # implementation)
+  #############################################################################
+
+  provisioner "file" {
+    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
+    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
+  }
+
+
   ########################################################################################################################
   # This block executes scripts to open firewall ports, create self-signed certs, and install Python Flask
   ########################################################################################################################

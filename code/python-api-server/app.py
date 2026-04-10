@@ -22,7 +22,7 @@ from tasks import run_fabric_command, get_task_progress
 # Path to your ed25519 private key
 ed25519_key_path = "/home/flaskuser/id_ed25519_flask_api_to_buildserver_connect_key"
 
-HOST="newyorkphilharmonic.service.consul"
+HOST="cyberrange-launch-server-vm0.service.consul"
 USER="cr"
 
 # Create the connection
@@ -67,7 +67,7 @@ VAULT_TOKEN = creds['data']['data']['APP_VAULTTOKEN']
 FLASK_API_AC_KEY = creds['data']['data']['FLASK_API_AC_KEY']
 FLASK_API_SEC_KEY = creds['data']['data']['FLASK_API_SEC_KEY']
 vault_token_build_server = creds['data']['data']['APP_VAULTTOKEN']
-vault_addr_build_server = os.getenv('VAULTURL')
+vault_addr_build_server = os.getenv('VAULTURL') #This value is hardcoded in the .env file under python-api-server, but can also be stored in the vault and read in like the vault token if you want to avoid hardcoding it in the .env file
 vault_skip_verify_build_server = "true"
 
 app = Flask(__name__)

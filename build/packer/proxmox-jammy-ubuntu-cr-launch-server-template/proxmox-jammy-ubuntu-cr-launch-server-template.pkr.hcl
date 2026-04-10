@@ -81,7 +81,7 @@ source "proxmox-iso" "launch-crserver41" {
 }
 
 ###########################################################################################
-# This is a Packer build template for the frontend webserver
+# This is a Packer build template for the launchserver webserver
 ###########################################################################################
 source "proxmox-iso" "launch-crserver42" {
   boot_command = [
@@ -213,37 +213,7 @@ source "proxmox-iso" "launch-crserver43" {
 build {
   sources = ["source.proxmox-iso.launch-crserver43","source.proxmox-iso.launch-crserver42","source.proxmox-iso.launch-crserver41"]
 
-  #############################################################################
-  # Using the file provisioner to SCP the root_ca.crt into the system to accept
-  # our signed certs
-  #############################################################################
-
-  provisioner "file" {
-    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
-    destination = "/home/vagrant/root_ca.crt"
-  }
-  
-  #############################################################################
-  # Using the file provisioner to SCP the timer and service file into the
-  # virtual machine so that the service to renew the cert each week takes 
-  # place
-  #############################################################################
-
-  provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/renew-cert.timer"
-    destination = "/home/vagrant/renew-cert.timer"
-  }
-  
-  #############################################################################
-  # Using the file provisioner to SCP the timer and service file into the
-  # virtual machine so that the service to renew the cert each week takes 
-  # place
-  #############################################################################
-
-  provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/renew-cert.service"
-    destination = "/home/vagrant/renew-cert.service"
-  }
+ 
   #############################################################################
   # Using the file provisioner to SCP this file to the instance 
   # Copy the configured config file to the ~/.ssh directory so you can clone 
@@ -267,24 +237,12 @@ build {
   }
 
   ##############################################################################
-  # Using the file provisioner to SCP this file to the instance 
-  # Copy the private key used to SSH into the build server so that when labs
-  # are launched, it can perform a terraform apply using Fabric (python SSH
-  # implementation)
-  #############################################################################
-
-  provisioner "file" {
-    source      = "./id_ed25519_flask_api_to_buildserver_connect_key"
-    destination = "/home/vagrant/id_ed25519_flask_api_to_buildserver_connect_key"
-  }
-
-  ##############################################################################
   # Copying the custom configuration for Alloy to be setup to send systemd logs
   # to Loki
   #############################################################################
 
   provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/config.alloy"
+    source      = "../scripts/proxmox/launch-server/config.alloy"
     destination = "/home/vagrant/config.alloy"
   }
 
@@ -396,25 +354,7 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh"]
-  }
-
-  ########################################################################################################################
-  # Copying the Flask App service file into the VM
-  ########################################################################################################################
- 
-  provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/flask-api.service"
-    destination = "/home/vagrant/"
-  }
-
-  ########################################################################################################################
-  # Copying the celery-workers service file into the VM
-  ########################################################################################################################
- 
-  provisioner "file" {
-    source      = "../scripts/proxmox/api-server/frontend/celery-workers.service"
-    destination = "/home/vagrant/"
+    scripts         = ["../scripts/proxmox/launch-server/clone-team-repo.sh"]
   }
 
   ########################################################################################################################
@@ -423,15 +363,11 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ca.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_ssh_firewall-additions.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_setup_cert_renewal.sh"]
-    environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
-    only             = ["proxmox-iso.frontend-apiserver41", "proxmox-iso.frontend-apiserver42", "proxmox-iso.frontend-apiserver43"]
+    scripts         = ["../scripts/proxmox/launch-server/post_install_prxmx_ubuntu_ssh_firewall-additions.sh",
+                        "../scripts/proxmox/launch-server/terraform-install.sh",
+                        "../scripts/proxmox/launch-server/vault_echo.sh"]
+    #environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
+    #only             = ["proxmox-iso.launch-server41", "proxmox-iso.launch-server42", "proxmox-iso.launch-server43"]
   }
 
   ########################################################################################################################
