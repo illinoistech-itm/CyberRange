@@ -49,6 +49,7 @@ autoinstall:
         ens20:
           dhcp4: true
           dhcp6: false
+          dhcp-identifier: duid
   ssh:
     allow-pw: true
     install-server: true

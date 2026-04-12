@@ -50,6 +50,7 @@ autoinstall:
         ens20:
           dhcp4: true
           dhcp6: false
+          dhcp-identifier: duid
   user-data:
     users:
       - name: cr
