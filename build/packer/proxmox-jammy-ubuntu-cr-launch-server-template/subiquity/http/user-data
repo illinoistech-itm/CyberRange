@@ -60,7 +60,7 @@ autoinstall:
         sudo: "ALL=(ALL) NOPASSWD:ALL"
         shell: /bin/bash
         ssh_authorized_keys:
-          #Add launch server keys(id_ed25519_flask_api_to_launchserver_connect_key.pub) here
+          - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMzJ83I6EcMZICOHrEZdCEVdWeJzTkRLtrc71E1B5DMj than10@buildserver'
   ssh:
     allow-pw: true
     install-server: true
