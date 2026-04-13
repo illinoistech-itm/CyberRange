@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
     <title>Cyber Range Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <link rel="stylesheet" href="/CyberRange/code/python-flask/static/style.css"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}
 </head>
 <body class="dashboard-bkgrd">
   <header class="dashboard-header">
@@ -41,12 +42,13 @@
       <a href="{{ url_for('launch_lab', lab_id='lab_one') }}" class="launch-btn">Launch Lab →</a>
     </div>
 
-    <div class="lab-card">
+    <div class="lab-card not-ready-card">
       <div class="card-header">
         <span class="difficulty-tag-int">INTERMEDIATE</span>
+        <span class="status-tag">COMING SOON</span>
       </div>
       <div class="card-body">
-        <h2 class="lab-id">02</h2>
+        <h2 class="lab-id muted">02</h2>
         <h3 class="lab-title">Network Scans</h3>
         <p class="lab-subtitle">Advanced Scanning Techniques</p>
         <div class="skills-section">
@@ -58,7 +60,7 @@
           </ul>
         </div>
       </div>
-      <a href="{{ url_for('launch_lab', lab_id='lab_two') }}" class="launch-btn">Launch Lab →</a>
+      <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
     </div>
 <!--
     <div class="lab-card not-ready-card">
@@ -82,9 +84,10 @@
       <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
     </div>
   -->
-    <div class="lab-card sandbox-card">
+    <div class="lab-card sandbox-card not-ready-card">
       <div class="card-header">
         <span class="badge sandbox">SANDBOX</span>
+        <span class="status-tag">COMING SOON</span>
       </div>
       <div class="card-body">
         <h3 class="lab-title">Free Practice VM</h3>
@@ -98,7 +101,7 @@
           </ul>
         </div>
       </div>
-      <a href="/sandbox" class="launch-btn sandbox-btn">▶ Open Sandbox</a>
+      <a href="#" class="launch-btn disabled" aria-disabled="true">▶ Open Sandbox</a>
     </div>
 
   </main>
