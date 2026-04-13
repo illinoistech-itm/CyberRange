@@ -222,7 +222,7 @@ build {
 
   provisioner "file" {
     source      = "./config"
-    destination = "/home/vagrant/.ssh/config"
+    destination = "/home/cr/.ssh/config"
   }
 
   #############################################################################
@@ -233,7 +233,7 @@ build {
 
   provisioner "file" {
     source      = "./id_ed25519_github_key"
-    destination = "/home/vagrant/.ssh/id_ed25519_github_key"
+    destination = "/home/cr/.ssh/id_ed25519_github_key"
   }
 
   ##############################################################################
