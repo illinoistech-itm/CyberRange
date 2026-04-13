@@ -2,7 +2,8 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  <link rel="stylesheet" href="/CyberRange/code/python-flask/static/style.css">
   <title>Cyber Range Lab</title>
   <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
   <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
@@ -20,12 +21,13 @@
           <a href="#">Full Screen</a>
         </div>
     </div>
+  </header>
   <main class="lab-content">
     <section class="terminal-container">
       <div id="terminal"></div>
       <script>
         //https://www.eddymens.com/blog/creating-a-browser-based-interactive-terminal-using-xtermjs-and-nodejs.html#frontend-setup
-        const term = new Terminal({ 
+        const term = new Terminal({
           cursorStyle: 'underline',   // makes cursor look like "_"
           cursorBlink: true,
           macOptionIsMeta: true,
@@ -83,14 +85,15 @@
     Now in the template, you can use {{ hostname }} directly. #}
     {# lab steps section #}
     <aside class="lab-instructions">
-      <div class="instructions-titlebar">Steps / Instructions for {{ lab_id }}</div>
+      <div class="instructions-titlebar">Instructions for {{ lab_id }}</div>
         
+      <div class="lab-instructions-content">
         <form action="{{ url_for('grade_lab') }}" method="post">
           <input type="hidden" name="lab_id" value="{{ lab_id }}">
           {% for key, value in loaded_lab_steps["questions"].items() %}
             <div class="lab-form-group">
               <!-- Text input box -->
-              <label for="{{ key }}">{{ value }} :</label>
+              <label for="{{ key }}">{{ value }}:</label>
               <input type="text" id="{{ key }}" name="{{ key }}" required>
             </div>
           {% endfor %}
@@ -104,31 +107,40 @@
             const numQuestions = "{{ noa }}";
             const gradePercent = "{{ grade_percent }}";
 
-            if (gradePercent) { 
-                gradeDiv.innerHTML = 
-                    `<p>Number of Questions: ${numQuestions}</p>` +
-                    `<p>Number of Correct Answers: ${totalCorrect}</p>` +
-                    `<p><strong>Your Grade is: ${gradePercent}%</strong></p>`;
+            if (gradePercent) {
+                gradeDiv.innerHTML =
+                    `<p><strong>Questions</strong></p>` +
+                    `<p>${numQuestions}</p>` +
+                    `<p><strong>Correct Answers</strong></p>` +
+                    `<p>${totalCorrect}</p>` +
+                    `<p><strong>Your Grade</strong></p>` +
+                    `<p style="color: #ffa500; font-size: 1.3rem;">${gradePercent}%</p>`;
             }
           </script>
 
-          <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" class="" id="destroy-link">Destroy Lab and Return to Dashboard</a>
-           
+        <div class="lab-section-title">LAB INSTRUCTIONS</div>
+        <div class="lab-section-content">
+          {{ loaded_lab_steps["instructions"].instructions }}
+        </div>
 
-      </aside>
-      <div name="instructions">
-          {# Section to determine if lab will print out IPs as expected, remove if fails #}
-          Lab Instructions: {{ loaded_lab_steps["instructions"].instructions }}
-          <br />
-          Edge VM: {% for vm in edge_vm %}
-              <code>{{ vm.name }}</code>: <code>{{ vm.ip }} </code>
-              {% endfor %}
-              <br />
-            Lab Node:
-              {% for vm in non_edge_vms %}
-              <code> {{ vm.name }}</code>: <code>{{ vm.ip }}</code>
-              {% endfor %}
-    </div>
+        <div class="lab-section-title">NETWORK TOPOLOGY</div>
+        <div class="lab-section-content">
+          <div class="network-item">
+            <strong>Edge VM:</strong>
+            {% for vm in edge_vm %}
+              <div><code>{{ vm.name }}</code>: <code style="color: #ffa500;">{{ vm.ip }}</code></div>
+            {% endfor %}
+          </div>
+          <div class="network-item">
+            <strong>Lab Node:</strong>
+            {% for vm in non_edge_vms %}
+              <div><code>{{ vm.name }}</code>: <code style="color: #ffa500;">{{ vm.ip }}</code></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" id="destroy-link">Destroy Lab — Return to Dashboard</a></aside>
     </main>
 </body>
 </html>

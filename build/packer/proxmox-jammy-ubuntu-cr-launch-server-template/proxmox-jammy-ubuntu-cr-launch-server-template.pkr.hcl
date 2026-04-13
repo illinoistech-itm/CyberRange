@@ -311,8 +311,7 @@ build {
       "../scripts/proxmox/core-jammy/post_install_prxmx_start-cloud-init.sh",
       "../scripts/proxmox/core-jammy/post_install_prxmx_install_hashicorp_consul.sh",
     "../scripts/proxmox/core-jammy/post_install_prxmx_update_dns_for_consul_service.sh",
-    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh",
-    "../scripts/proxmox/core-jammy/post_install_prxmx_setup_root_crt.sh"]
+    "../scripts/proxmox/core-jammy/post_install_alloy_log_forwarder.sh"]
   }
 
   #############################################################################
