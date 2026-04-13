@@ -364,7 +364,8 @@ build {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../scripts/proxmox/launch-server/post_install_prxmx_ubuntu_ssh_firewall-additions.sh",
                         "../scripts/proxmox/launch-server/terraform-install.sh",
-                        "../scripts/proxmox/launch-server/vault_echo.sh"]
+                        "../scripts/proxmox/launch-server/vault_echo.sh",
+                        "../scripts/proxmox/launch-server/move_config_and_key_file.sh"]
     #environment_vars = ["DBUSER=${local.DBUSER}", "DBPASS=${local.DBPASS}", "DATABASE=${local.DATABASE}", "FQDN=${local.FQDN}","APPVAULT_TOKEN=${local.APP_VAULTTOKEN}","FINGERPRINT=${local.FINGERPRINT}"]
     #only             = ["proxmox-iso.launch-server41", "proxmox-iso.launch-server42", "proxmox-iso.launch-server43"]
   }
