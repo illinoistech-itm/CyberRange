@@ -16,6 +16,6 @@ loki.source.journal "flask_journal" {
 
 loki.write "send_to_loki" {
   endpoint {
-    url = "http://loki-vm0.service.consul:3100/loki/api/v1/push"
+    url = "http://cyberrange-log-vm0.service.consul:3100/loki/api/v1/push"
   }
 }
