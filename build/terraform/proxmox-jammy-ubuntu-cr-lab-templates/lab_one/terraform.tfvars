@@ -15,16 +15,21 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 # This is a variable to append to your cloud instances so they have a unique
 # FQDN -- this is needed for the gossip based DNS to work
 ###############################################################################
-yourinitials                  = "cyberrange-lab-one"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
-numberofvms                   = 1                      # quantity of that template to launch
-desc                          = "Edge Server for Lab one"                     # What is the purpose of the TF template
+yourinitials                     = "cyberrange-lab-one-edge-server"         # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+numberofvms                      = 1                      # quantity of that template to launch
+desc                             = "Edge server for lab one"                     # What is the purpose of the TF
+ln_yourinitials                  = "cyberrange-lab-one-node"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+ln_numberofvms                   = 1                      # quantity of that template to launch
+ln_desc                          = "Lab one node"                     # What is the purpose of the TF template
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy
 # instances from
 ###############################################################################
 template_to_clone = "cyberrange-lab-one-edge-server-template" # The name of the template to clone
-tags = "cr,lab-one" # Tags separated by commas: be,team00
+ln_template_to_clone = "cyberrange-lab-one-node-template" # The name of the template to clone
+ln_tags = "cr,lab-one-node" # Tags separated by commas: be,team00
+tags = "cr,lab-one-edge" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
