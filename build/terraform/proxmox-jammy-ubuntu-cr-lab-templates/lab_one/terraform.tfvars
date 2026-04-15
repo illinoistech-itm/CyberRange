@@ -20,7 +20,7 @@ numberofvms                      = 1                      # quantity of that tem
 desc                             = "Edge server for lab one"                     # What is the purpose of the TF
 ln_yourinitials                  = "cyberrange-lab-one-node"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
 ln_numberofvms                   = 1                      # quantity of that template to launch
-ln_desc                          = "Lab one node"                     # What is the purpose of the TF template
+ln_desc                          = "Node for lab one"                     # What is the purpose of the TF template
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy
@@ -28,8 +28,8 @@ consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the 
 ###############################################################################
 template_to_clone = "cyberrange-lab-one-edge-server-template" # The name of the template to clone
 ln_template_to_clone = "cyberrange-lab-one-node-template" # The name of the template to clone
-ln_tags = "cr,lab-one-node" # Tags separated by commas: be,team00
-tags = "cr,lab-one-edge" # Tags separated by commas: be,team00
+ln_tags = "cr,lab_one" # Tags separated by commas: be,team00
+tags = "cr,lab_one,edge" # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
