@@ -1,25 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Progress</title>
-    <style>
-        /* So newlines in textContent actually show up */
-        #progress {
-            white-space: pre-line;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <link rel="stylesheet" href="/CyberRange/code/python-flask/static/style.css"> -->
 </head>
-<body>
+<body class="progress-page">
+    <header class="progress-topbar">
+        <div class="progress-brand">
+            <div class="progress-brand-badge">CR</div>
+            <span>CYBER RANGE</span>
+        </div>
+        <h1 class="progress-title">Lab Launch</h1>
+        <div class="progress-user">
+            <span>Hi, {{ user_email }}</span>
+            <a href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+    </header>
+
+    <main class="progress-main">
+        <section class="progress-card">
+            <p class="progress-kicker">PROVISIONING ENVIRONMENT</p>
+            <h2 class="progress-lab-title">{{ lab_id }}</h2>
+            <p class="progress-task-id">Task: {{ task_id }}</p>
+
+            <div class="progress-terminal">
+                <div class="progress-terminal-bar">
+                    <span class="progress-terminal-dot red"></span>
+                    <span class="progress-terminal-dot yellow"></span>
+                    <span class="progress-terminal-dot green"></span>
+                    <span class="progress-terminal-label">bash - provision-agent</span>
+                </div>
+
+                <div id="progress" class="progress-log">
+                    $ Connecting to {{ lab_id }} - task {{ task_id }}...<br />
+                    Lab will take 2-3 minutes to launch. Please do not refresh while loading.
+                </div>
+
+                {# Link that will be populated when the lab is ready #}
+                <a id="shelly-link" class="progress-inline-link" target="_blank"></a>
+            </div>
+
+            <div class="progress-meter-row">
+                <span>PROGRESS</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-meter"><span id="progress-meter-fill"></span></div>
+
+            <p class="progress-note" id="progress-note">Launching your lab environment. Do not refresh this page.</p>
+            <p class="progress-subnote" id="progress-subnote">Live status updates will appear above while provisioning completes.</p>
+
+            <a id="shelly-cta" class="progress-cta" target="_blank" style="display:none;">Start Lab</a>
+            <a class="progress-back" href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </section>
+    </main>
+
     {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
-    <h2>Task Progress</h2>
-    <div id="progress">
-        Waiting for updates for {{ lab_id }}... {{ task_id }}, connecting to {{ api_url }}<br />
-        Lab will take 2-3 minutes to launch - don't hit Refresh while loading. A link will appear at the bottom of the screen to begin the lab when ready.  Good luck!    
-    </div>
-
-    {# Link that will be populated when the lab is ready #}
-    <a id="shelly-link" style="display:block; margin-top:1em;"></a>
-
     <script>
         const labID = "{{ lab_id }}";
         const taskId = "{{ task_id }}";
@@ -48,10 +86,31 @@
             const data = JSON.parse(fixedJson.replace(/'/g, '"'));
 
             const progressEl = document.getElementById("progress");
+            const meterFillEl = document.getElementById("progress-meter-fill");
+            const meterTextEl = document.getElementById("progress-percent");
+            const statusProgressMap = {
+                "PENDING": 20,
+                "STARTED": 55,
+                "RUNNING": 75,
+                "SUCCESS": 90,
+                "FINISHED": 100
+            };
+
             progressEl.textContent += `\nStatus: ${data.status} ${data.output}`;
+
+            const mappedProgress = statusProgressMap[data.status] || 35;
+            meterFillEl.style.width = `${mappedProgress}%`;
+            meterTextEl.textContent = `${mappedProgress}%`;
 
             if (data.status === "FINISHED") {
                 progressEl.textContent += "\n✅ Task completed! Ready to enter the Lab...";
+                meterFillEl.style.width = "100%";
+                meterTextEl.textContent = "100%";
+
+                const noteEl = document.getElementById("progress-note");
+                const subnoteEl = document.getElementById("progress-subnote");
+                noteEl.textContent = "Lab is ready. Do not refresh this page.";
+                subnoteEl.textContent = "Use the button below to enter your lab environment.";
 
                 // Build link to Shelly console with launch_id as a query param
                 const baseShelly = "{{ url_for('shelly') }}";
@@ -62,6 +121,10 @@
                 linkEl.href = shellyURL;
                 linkEl.textContent = "Start lab";
                 linkEl.target = "_blank";
+
+                const ctaEl = document.getElementById("shelly-cta");
+                ctaEl.href = shellyURL;
+                ctaEl.style.display = "inline-flex";
 
                 console.log("Shelly URL:", shellyURL);
 
