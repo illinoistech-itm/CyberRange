@@ -28,25 +28,26 @@ body.index-page {
 .logo-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-left: 12px;
+  gap: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .logo-badge {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
+  width: 150px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .logo-badge .logo {
   position: static;
   top: auto;
   left: auto;
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   display: block;
 }
@@ -274,7 +275,8 @@ button:hover {
 .dashboard-header {
   display: flex;
   align-items: center;
-  padding: 6px 20px;
+  padding: 0 20px;
+  height: 150px;
 }
 
 .header-left, .header-right {
@@ -287,8 +289,8 @@ button:hover {
 }
 
 .logo {
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
 }
 
@@ -334,7 +336,7 @@ button:hover {
 .dashboard-header {
   background-color: #d10000;
   color: white;
-  padding: 6px 20px;
+  padding: 0 20px;
 }
 
 .dashboard-title {
