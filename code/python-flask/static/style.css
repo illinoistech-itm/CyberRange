@@ -276,6 +276,10 @@ button:hover {
   display: flex;
   align-items: center;
   padding: 0;
+  background-color: #d10000;
+  color: white;
+  height: 150px;
+  overflow: hidden;
 }
 
 .header-left, .header-right {
@@ -330,12 +334,6 @@ button:hover {
 .dashboard-bkgrd {
   background-color: #f0f2f5;
   background-image: none;
-}
-
-.dashboard-header {
-  background-color: #d10000;
-  color: white;
-  padding: 0;
 }
 
 .dashboard-title {
