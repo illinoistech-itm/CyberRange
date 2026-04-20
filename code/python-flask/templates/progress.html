@@ -1,134 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Progress</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="progress-page">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="progress-page">
     <header class="progress-topbar">
-        <div class="progress-brand">
-            <div class="progress-brand-badge">CR</div>
-            <span>CYBER RANGE</span>
-        </div>
-        <h1 class="progress-title">Lab Launch</h1>
-        <div class="progress-user">
-            <span>Hi, {{ user_email }}</span>
-            <a href="{{ url_for('logout') }}">Log Out</a>
-        </div>
+      <div class="progress-brand">
+        <img src="/logo" alt="Logo" class="logo" />
+      </div>
+      <h1 class="progress-title">Lab Launch</h1>
+      <div class="progress-user">
+        <span>Hi, {{ user_email }}</span>
+        <a href="{{ url_for('logout') }}">Log Out</a>
+      </div>
     </header>
 
     <main class="progress-main">
-        <section class="progress-card">
-            <p class="progress-kicker">PROVISIONING ENVIRONMENT</p>
-            <h2 class="progress-lab-title">{{ lab_id }}</h2>
-            <p class="progress-task-id">Task: {{ task_id }}</p>
+      <section class="progress-card">
+        <p class="progress-kicker">PROVISIONING ENVIRONMENT</p>
+        <h2 class="progress-lab-title">{{ lab_id }}</h2>
+        <p class="progress-task-id">Task: {{ task_id }}</p>
 
-            <div class="progress-terminal">
-                <div class="progress-terminal-bar">
-                    <span class="progress-terminal-dot red"></span>
-                    <span class="progress-terminal-dot yellow"></span>
-                    <span class="progress-terminal-dot green"></span>
-                    <span class="progress-terminal-label">bash - provision-agent</span>
-                </div>
+        <div class="progress-terminal">
+          <div class="progress-terminal-bar">
+            <span class="progress-terminal-dot red"></span>
+            <span class="progress-terminal-dot yellow"></span>
+            <span class="progress-terminal-dot green"></span>
+            <span class="progress-terminal-label">bash - provision-agent</span>
+          </div>
 
-                <div id="progress" class="progress-log">
-                    $ Connecting to {{ lab_id }} - task {{ task_id }}...<br />
-                    Lab will take 2-3 minutes to launch. Please do not refresh while loading.
-                </div>
+          <div id="progress" class="progress-log">
+            $ Connecting to {{ lab_id }} - task {{ task_id }}...<br />
+            Lab will take 2-3 minutes to launch. Please do not refresh while
+            loading.
+          </div>
 
-                {# Link that will be populated when the lab is ready #}
-                <a id="shelly-link" class="progress-inline-link" target="_blank"></a>
-            </div>
+          {# Link that will be populated when the lab is ready #}
+          <a id="shelly-link" class="progress-inline-link" target="_blank"></a>
+        </div>
 
-            <div class="progress-meter-row">
-                <span>PROGRESS</span>
-                <span id="progress-percent">0%</span>
-            </div>
-            <div class="progress-meter"><span id="progress-meter-fill"></span></div>
+        <div class="progress-meter-row">
+          <span>PROGRESS</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-meter"><span id="progress-meter-fill"></span></div>
 
-            <p class="progress-note" id="progress-note">Launching your lab environment. Do not refresh this page.</p>
-            <p class="progress-subnote" id="progress-subnote">Live status updates will appear above while provisioning completes.</p>
+        <p class="progress-note" id="progress-note">
+          Launching your lab environment. Do not refresh this page.
+        </p>
+        <p class="progress-subnote" id="progress-subnote">
+          Live status updates will appear above while provisioning completes.
+        </p>
 
-            <a id="shelly-cta" class="progress-cta" target="_blank" style="display:none;">Start Lab</a>
-        </section>
+        <a
+          id="shelly-cta"
+          class="progress-cta"
+          target="_blank"
+          style="display: none"
+          >Start Lab</a
+        >
+      </section>
     </main>
 
-    {# Link to Copilot code https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
+    {# Link to Copilot code
+    https://copilot.microsoft.com/shares/J7AvsZpX9CV46Js3yXQm4 #}
     <script>
-        const labID = "{{ lab_id }}";
-        const taskId = "{{ task_id }}";
-        const apiUrl = "{{ api_url }}";  // match case
-        const source = new EventSource(`${apiUrl}/stream/${taskId}`);
+      const labID = "{{ lab_id }}";
+      const taskId = "{{ task_id }}";
+      const apiUrl = "{{ api_url }}"; // match case
+      const source = new EventSource(`${apiUrl}/stream/${taskId}`);
 
-        // UUID for this launched lab, passed from Flask
-        const labLaunchUUID = "{{ lab_launch_uuid }}";
+      // UUID for this launched lab, passed from Flask
+      const labLaunchUUID = "{{ lab_launch_uuid }}";
 
-        source.onopen = function () {
-            console.log("SSE connection established");
+      source.onopen = function () {
+        console.log("SSE connection established");
+      };
+
+      source.onerror = function (err) {
+        console.error("SSE connection error", err);
+        // Optional: source.close();
+      };
+
+      source.onmessage = function (event) {
+        console.log("Raw message:", event.data);
+        console.log("Event.data type:", typeof event.data);
+
+        let fixedJson = event.data;
+        // If your backend eventually sends valid JSON, just do:
+        // const data = JSON.parse(event.data);
+        const data = JSON.parse(fixedJson.replace(/'/g, '"'));
+
+        const progressEl = document.getElementById("progress");
+        const meterFillEl = document.getElementById("progress-meter-fill");
+        const meterTextEl = document.getElementById("progress-percent");
+        const statusProgressMap = {
+          PENDING: 20,
+          STARTED: 55,
+          RUNNING: 75,
+          SUCCESS: 90,
+          FINISHED: 100,
         };
 
-        source.onerror = function (err) {
-            console.error("SSE connection error", err);
-            // Optional: source.close();
-        };
+        progressEl.textContent += `\nStatus: ${data.status} ${data.output}`;
 
-        source.onmessage = function (event) {
-            console.log("Raw message:", event.data);
-            console.log("Event.data type:", typeof event.data);
+        const mappedProgress = statusProgressMap[data.status] || 35;
+        meterFillEl.style.width = `${mappedProgress}%`;
+        meterTextEl.textContent = `${mappedProgress}%`;
 
-            let fixedJson = event.data;
-            // If your backend eventually sends valid JSON, just do:
-            // const data = JSON.parse(event.data);
-            const data = JSON.parse(fixedJson.replace(/'/g, '"'));
+        if (data.status === "FINISHED") {
+          progressEl.textContent +=
+            "\n✅ Task completed! Ready to enter the Lab...";
+          meterFillEl.style.width = "100%";
+          meterTextEl.textContent = "100%";
 
-            const progressEl = document.getElementById("progress");
-            const meterFillEl = document.getElementById("progress-meter-fill");
-            const meterTextEl = document.getElementById("progress-percent");
-            const statusProgressMap = {
-                "PENDING": 20,
-                "STARTED": 55,
-                "RUNNING": 75,
-                "SUCCESS": 90,
-                "FINISHED": 100
-            };
+          const noteEl = document.getElementById("progress-note");
+          const subnoteEl = document.getElementById("progress-subnote");
+          noteEl.textContent = "Lab is ready. Do not refresh this page.";
+          subnoteEl.textContent =
+            "Use the button below to enter your lab environment.";
 
-            progressEl.textContent += `\nStatus: ${data.status} ${data.output}`;
+          // Build link to Shelly console with launch_id as a query param
+          const baseShelly = "{{ url_for('shelly') }}";
+          //const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)};
+          const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)}${labLaunchUUID ? `&user_id={{ user_email }}&lab_id={{ lab_id }}` : ""}`;
 
-            const mappedProgress = statusProgressMap[data.status] || 35;
-            meterFillEl.style.width = `${mappedProgress}%`;
-            meterTextEl.textContent = `${mappedProgress}%`;
+          const linkEl = document.getElementById("shelly-link");
+          linkEl.href = shellyURL;
+          linkEl.textContent = "Start lab";
+          linkEl.target = "_blank";
 
-            if (data.status === "FINISHED") {
-                progressEl.textContent += "\n✅ Task completed! Ready to enter the Lab...";
-                meterFillEl.style.width = "100%";
-                meterTextEl.textContent = "100%";
+          const ctaEl = document.getElementById("shelly-cta");
+          ctaEl.href = shellyURL;
+          ctaEl.style.display = "inline-flex";
 
-                const noteEl = document.getElementById("progress-note");
-                const subnoteEl = document.getElementById("progress-subnote");
-                noteEl.textContent = "Lab is ready. Do not refresh this page.";
-                subnoteEl.textContent = "Use the button below to enter your lab environment.";
+          console.log("Shelly URL:", shellyURL);
 
-                // Build link to Shelly console with launch_id as a query param
-                const baseShelly = "{{ url_for('shelly') }}";
-                //const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)};
-                const shellyURL = `${baseShelly}?launch_id=${encodeURIComponent(labLaunchUUID)}${labLaunchUUID ? `&user_id={{ user_email }}&lab_id={{ lab_id }}` : ''}`;
-
-                const linkEl = document.getElementById("shelly-link");
-                linkEl.href = shellyURL;
-                linkEl.textContent = "Start lab";
-                linkEl.target = "_blank";
-
-                const ctaEl = document.getElementById("shelly-cta");
-                ctaEl.href = shellyURL;
-                ctaEl.style.display = "inline-flex";
-
-                console.log("Shelly URL:", shellyURL);
-
-                source.close();
-            }
-        };
+          source.close();
+        }
+      };
     </script>
-</body>
+  </body>
 </html>
