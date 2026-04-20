@@ -18,6 +18,7 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 yourinitials                     = "cyberrange-flask-api"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
 numberofvms                      = 1                      # quantity of that template to launch
 desc                             = "flaskapi server for cyberrange ITMT 430 spring project"                     # What is the purpose of the TF template
+api-macaddr                      = "BC:24:11:00:00:71"                     # Class assigned mac address for a public IP for your lb
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy

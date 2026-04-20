@@ -18,6 +18,8 @@ variable "desc" {}
 
 variable "template_to_clone" {}
 
+variable "api-macaddr" {}
+
 variable "memory" {}
 
 variable "cores" {}
