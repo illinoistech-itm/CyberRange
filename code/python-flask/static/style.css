@@ -3,6 +3,8 @@
 
 :root {
   --brand-logo-width: 120px;
+  --topbar-title-font: 'Roboto', sans-serif;
+  --topbar-title-size: clamp(1.6rem, 2.5vw, 2.2rem);
 }
 
 body {
@@ -320,10 +322,13 @@ button:hover {
     text-align: center; /* This centers the text within the container */
 }
 
-.dashboard-title {
-  font-family: 'Alegreya Sans', sans-serif;
-  font-size: 2.5rem;
+.dashboard-title,
+.progress-title {
   margin: 0;
+  color: #ffffff;
+  font-family: var(--topbar-title-font);
+  font-size: var(--topbar-title-size);
+  font-weight: 700;
   text-align: center;
 }
 
@@ -358,11 +363,6 @@ button:hover {
 .dashboard-bkgrd {
   background-color: #f0f2f5;
   background-image: none;
-}
-
-.dashboard-title {
-  color: white;
-  font-size: 1.8rem;
 }
 
 .labs-grid {
@@ -856,15 +856,6 @@ body.progress-page {
 
 .progress-brand span {
   display: none;
-}
-
-.progress-title {
-  margin: 0;
-  color: #ffffff;
-  font-family: 'Roboto', sans-serif;
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: 700;
-  text-align: center;
 }
 
 .progress-user {
