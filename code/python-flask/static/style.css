@@ -283,7 +283,7 @@ button:hover {
 }
 
 .header-left {
-  flex: 0 0 240px;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -298,12 +298,14 @@ button:hover {
 
 .dashboard-logo {
   display: block;
-  width: 240px;
-  height: 82px;
+  width: 220px;
+  height: 90px;
   margin: 0;
   padding: 0;
   object-fit: cover;
-  object-position: center 50%;
+  object-position: center;
+  transform: scale(1.7);
+  transform-origin: center;
 }
 
 .header-center {
