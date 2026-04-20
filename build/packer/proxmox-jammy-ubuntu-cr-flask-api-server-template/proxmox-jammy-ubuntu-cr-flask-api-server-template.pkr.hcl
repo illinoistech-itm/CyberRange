@@ -406,8 +406,7 @@ build {
 
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh", 
-                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh"]
+    scripts         = ["../scripts/proxmox/api-server/frontend/clone-team-repo.sh", ]
   }
 
   ########################################################################################################################
@@ -434,7 +433,8 @@ build {
   
     provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ca.sh",
+    scripts         = ["../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_create_service_account_for_flask_app.sh", 
+                        "../scripts/proxmox/api-server/frontend/post_install_prxmx_generate_ca.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_firewall-additions.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_move_private_key.sh",
                         "../scripts/proxmox/api-server/frontend/post_install_prxmx_ubuntu_flask_server.sh",
