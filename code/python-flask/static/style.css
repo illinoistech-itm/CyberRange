@@ -283,7 +283,14 @@ button:hover {
 }
 
 .header-left, .header-right {
-  flex: 1; /* This makes the left and right containers grow and push the center item */
+  flex: 1;
+}
+
+.dashboard-logo {
+  display: block;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
 }
 
 .header-center {
