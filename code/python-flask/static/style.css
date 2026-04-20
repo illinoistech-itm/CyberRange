@@ -282,25 +282,28 @@ button:hover {
   overflow: hidden;
 }
 
-.header-left, .header-right {
-  flex: 1;
-}
-
 .header-left {
+  flex: 0 0 240px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   overflow: hidden;
-  padding-left: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.header-right {
+  flex: 1;
 }
 
 .dashboard-logo {
   display: block;
-  width: 160px;
-  height: 160px;
+  width: 240px;
+  height: 82px;
+  margin: 0;
+  padding: 0;
   object-fit: cover;
-  object-position: center;
-  transform: scaleY(1.35);
-  transform-origin: center;
+  object-position: center 50%;
 }
 
 .header-center {
