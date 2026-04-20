@@ -12,4 +12,8 @@ cd /home/vagrant
 ls -l /home/vagrant/.ssh
 sudo -u vagrant git clone git@github.com:illinoistech-itm/CyberRange.git
 
-# Add commands to copy your code out of the team repo and into the correct location to serve code
+# Copy code from repo into the Flask app serving directory
+sudo cp /home/vagrant/CyberRange/code/python-flask/app.py /home/flaskuser/app.py
+sudo cp -r /home/vagrant/CyberRange/code/python-flask/templates/* /home/flaskuser/templates/
+sudo cp -r /home/vagrant/CyberRange/code/python-flask/static/* /home/flaskuser/static/
+sudo cp -r /home/vagrant/CyberRange/code/python-flask/labs/* /home/flaskuser/labs/
