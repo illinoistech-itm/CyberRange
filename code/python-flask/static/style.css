@@ -280,11 +280,13 @@ button:hover {
 .dashboard-header {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 6px 20px;
   background-color: #d10000;
   color: white;
-  height: 150px;
-  overflow: hidden;
+  min-height: 74px;
+  height: auto;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .header-left {
@@ -294,7 +296,7 @@ button:hover {
   justify-content: flex-start;
   overflow: visible;
   margin: 0;
-  padding: 0 0 0 8px;
+  padding: 0;
 }
 
 .header-right {
@@ -834,26 +836,25 @@ body.progress-page {
   justify-self: start;
 }
 
+.progress-brand .logo {
+  width: var(--brand-logo-width);
+  height: auto;
+  display: block;
+}
+
 .progress-brand-badge {
-  width: 38px;
-  height: 38px;
-  border-radius: 7px;
-  background: #920000;
-  border: 1px solid #ff6e57;
-  color: #ffffff;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
+  width: var(--brand-logo-width);
+  aspect-ratio: 385 / 200;
+  border-radius: 0;
+  background: transparent url('/logo') left center / contain no-repeat;
+  border: 0;
+  color: transparent;
+  font-size: 0;
+  display: inline-block;
 }
 
 .progress-brand span {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  display: none;
 }
 
 .progress-title {
