@@ -296,24 +296,21 @@ button:hover {
   flex: 1;
 }
 
-.dashboard-logo {
+.dashboard-header .header-left img.dashboard-logo,
+.dashboard-header .header-left img.logo {
   display: block;
-  width: 220px;
-  height: auto;
-  max-height: 140px;
+  width: auto;
+  height: 120px;
+  max-width: 240px;
   margin: 0;
   padding: 0;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .header-center {
   flex: 1; /* This ensures the center container also has some flexibility */
     text-align: center; /* This centers the text within the container */
-}
-
-.logo {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
 }
 
 .dashboard-title {
