@@ -286,11 +286,21 @@ button:hover {
   flex: 1;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-left: 10px;
+}
+
 .dashboard-logo {
   display: block;
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   object-fit: cover;
+  object-position: center;
+  transform: scaleY(1.35);
+  transform-origin: center;
 }
 
 .header-center {
