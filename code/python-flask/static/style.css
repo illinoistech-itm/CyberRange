@@ -299,13 +299,10 @@ button:hover {
 .dashboard-logo {
   display: block;
   width: 220px;
-  height: 90px;
+  height: auto;
+  max-height: 140px;
   margin: 0;
   padding: 0;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.7);
-  transform-origin: center;
 }
 
 .header-center {
