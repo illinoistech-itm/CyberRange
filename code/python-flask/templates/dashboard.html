@@ -14,7 +14,8 @@
       <h1 class="dashboard-title">Dashboard</h1>
     </div>
     <div class="header-right">
-      Welcome back: {{ email }} : {{ uid }} | <a href="{{ url_for('logout') }}">Log Out</a>
+      <span>Hi, {{ email }}</span>
+      <a href="{{ url_for('logout') }}">Log Out</a>
     </div>
   </header>
 

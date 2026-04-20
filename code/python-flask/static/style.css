@@ -3,6 +3,8 @@
 
 :root {
   --brand-logo-width: 120px;
+  --topbar-title-font: 'Roboto', sans-serif;
+  --topbar-title-size: clamp(1.6rem, 2.5vw, 2.2rem);
 }
 
 body {
@@ -320,36 +322,40 @@ button:hover {
     text-align: center; /* This centers the text within the container */
 }
 
-.dashboard-title {
-  font-family: 'Alegreya Sans', sans-serif;
-  font-size: 2.5rem;
+.dashboard-title,
+.progress-title {
   margin: 0;
+  color: #ffffff;
+  font-family: var(--topbar-title-font);
+  font-size: var(--topbar-title-size);
+  font-weight: 700;
   text-align: center;
 }
 
-.header-right {
-  text-align: right; /* Align the help/sign out links to the right */
+.dashboard-header .header-right {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: #ffd7d7;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 0.95rem;
 }
 
-.header-right a {
-  font-family: 'Raleway', sans-serif;
-  color: #d10000;
-  margin-left: 10px;
+.dashboard-header .header-right a {
+  padding: 3px 10px;
+  border: 1px solid #7a0000;
+  border-radius: 4px;
+  background: #8f0000;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 800;
-  background: #ffffff;
-  border: 1px solid #b80000;
-  border-radius: 6px;
-  padding: 6px 10px;
-  display: inline-block;
-  line-height: 1;
+  font-weight: 700;
 }
 
-.header-right a:hover,
-.header-right a:focus-visible {
-  background: #ffe9e9;
-  color: #9c0000;
+.dashboard-header .header-right a:hover,
+.dashboard-header .header-right a:focus-visible {
+  background: #770000;
 }
 
 /* Dashboard */
@@ -357,11 +363,6 @@ button:hover {
 .dashboard-bkgrd {
   background-color: #f0f2f5;
   background-image: none;
-}
-
-.dashboard-title {
-  color: white;
-  font-size: 1.8rem;
 }
 
 .labs-grid {
@@ -855,15 +856,6 @@ body.progress-page {
 
 .progress-brand span {
   display: none;
-}
-
-.progress-title {
-  margin: 0;
-  color: #ffffff;
-  font-family: 'Roboto', sans-serif;
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: 700;
-  text-align: center;
 }
 
 .progress-user {
