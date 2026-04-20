@@ -275,8 +275,7 @@ button:hover {
 .dashboard-header {
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  height: 150px;
+  padding: 0;
 }
 
 .header-left, .header-right {
@@ -336,7 +335,7 @@ button:hover {
 .dashboard-header {
   background-color: #d10000;
   color: white;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .dashboard-title {
