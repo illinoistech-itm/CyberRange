@@ -45,8 +45,8 @@ body.index-page {
   position: static;
   top: auto;
   left: auto;
-  width: 150px;
-  height: 150px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
   display: block;
 }
@@ -274,7 +274,7 @@ button:hover {
 .dashboard-header {
   display: flex;
   align-items: center;
-  padding: 10px 40px;
+  padding: 6px 20px;
 }
 
 .header-left, .header-right {
@@ -287,8 +287,8 @@ button:hover {
 }
 
 .logo {
-  width: 150px;
-  height: 150px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
 }
 
