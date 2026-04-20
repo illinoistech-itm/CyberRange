@@ -264,6 +264,19 @@ def logo():
     obj = minio_client.get_object(MINIO_BUCKET, 'logo.png')
     return Response(obj.read(), mimetype='image/png')
 
+@app.route('/favicon.ico')
+def favicon():
+    http_client = urllib3.PoolManager(cert_reqs='CERT_NONE', assert_hostname=False)
+    minio_client = Minio(
+        MINIO_ENDPOINT,
+        access_key=MINIO_ACCESS_KEY,
+        secret_key=MINIO_SECRET_KEY,
+        secure=True,
+        http_client=http_client,
+    )
+    obj = minio_client.get_object(MINIO_BUCKET, 'logo.png')
+    return Response(obj.read(), mimetype='image/png')
+
 @app.route("/test")
 @login_required
 def hello_world():
