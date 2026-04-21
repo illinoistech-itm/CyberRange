@@ -62,6 +62,8 @@ autoinstall:
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPIvr0CJ62x9Tmj3F8XdZ7UBDY8fPOKnPmHwFLfmShMg hajek@newyorkphilharmonic'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMsZ30XMyVXaYfTueYnOKqZ3t5NTDbzw2K1BJwQ5I6+H hajek@newyorkphilharmonic'
       - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGPCYXZl31MqQrCa07xxzwVKoRIi8N+EDqZr1trmVFQI cr@newyorkphilharmonic'
+      # Key needed for terraform to remote-exec into lab node 
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJEhVPOt9aCl8uAkUkR3hGjmvG4jpBZRZYWu6aLpKF/G cr@cyberrange-launch-server-vm0'
   late-commands:
     - sed -i 's/^#*\(send dhcp-client-identifier\).*$/\1 = hardware;/' /target/etc/dhcp/dhclient.conf
     - "echo 'Defaults:vagrant !requiretty' > /target/etc/sudoers.d/vagrant"
