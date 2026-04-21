@@ -1030,7 +1030,7 @@ body.progress-page {
   font-weight: 800;
   font-size: 2rem;
   text-decoration: none;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s ease;

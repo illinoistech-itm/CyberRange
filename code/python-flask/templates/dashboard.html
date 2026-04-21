@@ -1,66 +1,75 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Cyber Range Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="dashboard-bkgrd">
-  <header class="dashboard-header">
-    <div class="header-left">
-      <img src="/logo" alt="Logo" class="dashboard-logo">
-    </div>
-    <div class="header-center">
-      <h1 class="dashboard-title">Dashboard</h1>
-    </div>
-    <div class="header-right">
-      <span>Hi, {{ email }}</span>
-      <a href="{{ url_for('logout') }}">Log Out</a>
-    </div>
-  </header>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="dashboard-bkgrd">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <img src="/logo" alt="Logo" class="dashboard-logo" />
+      </div>
+      <div class="header-center">
+        <h1 class="dashboard-title">Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <span>Hi, {{ email }}</span>
+        <a href="{{ url_for('logout') }}">Log Out</a>
+      </div>
+    </header>
 
-  <main class="dashboard-main labs-grid">
-    <div class="lab-card">
-      <div class="card-header">
-        <span class="difficulty-tag-beginner">BEGINNER</span>
-      </div>
-      <div class="card-body">
-        <h2 class="lab-id">01</h2>
-        <h3 class="lab-title">Nmap Scan</h3>
-        <p class="lab-subtitle">Network Reconnaissance</p>
-        <div class="skills-section">
-          <p>SKILLS</p>
-          <ul>
-            <li>Port Scanning</li>
-            <li>Service Enumeration</li>
-            <li>OS Detection</li>
-          </ul>
+    <main class="dashboard-main labs-grid">
+      <div class="lab-card">
+        <div class="card-header">
+          <span class="difficulty-tag-beginner">BEGINNER</span>
         </div>
+        <div class="card-body">
+          <h2 class="lab-id">01</h2>
+          <h3 class="lab-title">Nmap Scan</h3>
+          <p class="lab-subtitle">Network Reconnaissance</p>
+          <div class="skills-section">
+            <p>SKILLS</p>
+            <ul>
+              <li>Port Scanning</li>
+              <li>Service Enumeration</li>
+              <li>OS Detection</li>
+            </ul>
+          </div>
+        </div>
+        <a
+          href="{{ url_for('launch_lab', lab_id='lab_one') }}"
+          class="launch-btn"
+          >Launch Lab →</a
+        >
       </div>
-      <a href="{{ url_for('launch_lab', lab_id='lab_one') }}" class="launch-btn">Launch Lab →</a>
-    </div>
 
-    <div class="lab-card not-ready-card">
-      <div class="card-header">
-        <span class="difficulty-tag-int">INTERMEDIATE</span>
-        <span class="status-tag">COMING SOON</span>
-      </div>
-      <div class="card-body">
-        <h2 class="lab-id muted">02</h2>
-        <h3 class="lab-title">Network Scans</h3>
-        <p class="lab-subtitle">Advanced Scanning Techniques</p>
-        <div class="skills-section">
-          <p>SKILLS</p>
-          <ul>
-            <li>Scripting Engine (NSE)</li>
-            <li>Firewall / IDS Evasion</li>
-            <li>Output & Reporting</li>
-          </ul>
+      <div class="lab-card not-ready-card">
+        <div class="card-header">
+          <span class="difficulty-tag-int">INTERMEDIATE</span>
+          <span class="status-tag">COMING SOON</span>
         </div>
+        <div class="card-body">
+          <h2 class="lab-id muted">02</h2>
+          <h3 class="lab-title">Network Scans</h3>
+          <p class="lab-subtitle">Advanced Scanning Techniques</p>
+          <div class="skills-section">
+            <p>SKILLS</p>
+            <ul>
+              <li>Scripting Engine (NSE)</li>
+              <li>Firewall / IDS Evasion</li>
+              <li>Output & Reporting</li>
+            </ul>
+          </div>
+        </div>
+        <a href="#" class="launch-btn disabled" aria-disabled="true"
+          >Launch Lab →</a
+        >
       </div>
-      <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
-    </div>
-<!--
+      <!--
     <div class="lab-card not-ready-card">
       <div class="card-header">
         <span class="difficulty-tag-int">INTERMEDIATE</span>
@@ -82,93 +91,185 @@
       <a href="#" class="launch-btn disabled" aria-disabled="true">Launch Lab →</a>
     </div>
   -->
-    <div class="lab-card sandbox-card not-ready-card">
-      <div class="card-header">
-        <span class="badge sandbox">SANDBOX</span>
-        <span class="status-tag">COMING SOON</span>
+      <div class="lab-card sandbox-card not-ready-card">
+        <div class="card-header">
+          <span class="badge sandbox">SANDBOX</span>
+          <span class="status-tag">COMING SOON</span>
+        </div>
+        <div class="card-body">
+          <h3 class="lab-title">Free Practice VM</h3>
+          <p class="lab-subtitle">Isolated VM · No grades · No time limit</p>
+          <div class="skills-section">
+            <p>FEATURES</p>
+            <ul>
+              <li>Experiment freely — no grade impact</li>
+              <li>Same tooling as the graded labs</li>
+              <li>Session persists until you destroy it</li>
+            </ul>
+          </div>
+        </div>
+        <a href="#" class="launch-btn disabled" aria-disabled="true"
+          >▶ Open Sandbox</a
+        >
       </div>
-      <div class="card-body">
-        <h3 class="lab-title">Free Practice VM</h3>
-        <p class="lab-subtitle">Isolated VM · No grades · No time limit</p>
-        <div class="skills-section">
-          <p>FEATURES</p>
-          <ul>
-            <li>Experiment freely — no grade impact</li>
-            <li>Same tooling as the graded labs</li>
-            <li>Session persists until you destroy it</li>
-          </ul>
+    </main>
+
+    <!-- Tutorial Modal -->
+    <div
+      id="tutorial-overlay"
+      class="tutorial-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tutorial-title"
+    >
+      <div class="tutorial-modal">
+        <div class="tutorial-vpn-notice">
+          <strong>&#9888; Before you begin:</strong> You must first connect to
+          the <strong>school VPN</strong> using
+          <strong>Cisco Secure Client</strong>. Use your Canvas (school)
+          credentials to authenticate.
+        </div>
+        <div class="tutorial-header">
+          <h2 id="tutorial-title">
+            Getting Started - Install the Root Certificate
+          </h2>
+          <button
+            class="tutorial-close"
+            onclick="closeTutorial()"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+        <p class="tutorial-intro">
+          To launch labs and have your browser trust the lab environment, you
+          need to install the
+          <strong>CyberRange root CA certificate</strong> on your machine.
+          Select your operating system below.
+        </p>
+        <div class="tutorial-tabs">
+          <button
+            class="tutorial-tab active"
+            onclick="switchTab('windows', this)"
+          >
+            &#x1F5A5; Windows
+          </button>
+          <button class="tutorial-tab" onclick="switchTab('macos', this)">
+            &#xF8FF; macOS
+          </button>
+        </div>
+
+        <!-- Windows steps -->
+        <div id="tutorial-windows" class="tutorial-tab-content">
+          <ol class="tutorial-steps">
+            <li>Download <code>root_ca.crt</code> using the button below.</li>
+            <li>
+              Press <kbd>Win + R</kbd>, type <code>mmc</code>, and press
+              <strong>Enter</strong>.
+            </li>
+            <li>
+              Go to <strong>File &rsaquo; Add/Remove Snap-in</strong>, select
+              <strong>Certificates</strong>, click <strong>Add</strong>.
+            </li>
+            <li>
+              Choose <strong>Computer account</strong> &rarr;
+              <strong>Local Computer</strong>, click
+              <strong>Finish</strong> then <strong>OK</strong>.
+            </li>
+            <li>
+              Expand
+              <strong
+                >Certificates (Local Computer) &rsaquo; Trusted Root
+                Certification Authorities &rsaquo; Certificates</strong
+              >.
+            </li>
+            <li>
+              Right-click the <em>Certificates</em> folder &rarr;
+              <strong>All Tasks &rsaquo; Import</strong>.
+            </li>
+            <li>
+              In the wizard, browse to the downloaded <code>root_ca.crt</code>,
+              confirm the store is
+              <em>Trusted Root Certification Authorities</em>, and click
+              <strong>Finish</strong>.
+            </li>
+            <li>
+              Click <strong>Yes</strong> on the security warning, then
+              <strong>OK</strong>. Restart your browser.
+            </li>
+          </ol>
+        </div>
+
+        <!-- macOS steps -->
+        <div
+          id="tutorial-macos"
+          class="tutorial-tab-content"
+          style="display: none"
+        >
+          <p class="tutorial-method-label">
+            Method 1 &mdash; Keychain Access (GUI)
+          </p>
+          <ol class="tutorial-steps">
+            <li>Download <code>root_ca.crt</code> using the button below.</li>
+            <li>
+              Press <kbd>Cmd + Space</kbd>, type
+              <strong>Keychain Access</strong>, press <strong>Enter</strong>.
+            </li>
+            <li>
+              Select the <strong>System</strong> keychain (applies to all users
+              on this Mac).
+            </li>
+            <li>
+              Go to <strong>File &rsaquo; Import Items</strong> and select the
+              downloaded <code>root_ca.crt</code>.
+            </li>
+            <li>
+              Double-click the imported certificate, expand the
+              <strong>Trust</strong> section, and set
+              <em>When using this certificate</em> to
+              <strong>Always Trust</strong>.
+            </li>
+            <li>
+              Close the window and enter your admin password when prompted.
+              Restart your browser.
+            </li>
+          </ol>
+          <p class="tutorial-method-label">Method 2 &mdash; Terminal</p>
+          <pre class="tutorial-code">
+sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain \
+  ~/Downloads/root_ca.crt</pre
+          >
+        </div>
+
+        <div class="tutorial-footer">
+          <a
+            href="{{ url_for('static', filename='root_ca.crt') }}"
+            class="tutorial-download-btn"
+            download="root_ca.crt"
+            >&#8659; Download root_ca.crt</a
+          >
+          <button class="tutorial-got-it" onclick="closeTutorial()">
+            Got it
+          </button>
         </div>
       </div>
-      <a href="#" class="launch-btn disabled" aria-disabled="true">▶ Open Sandbox</a>
     </div>
 
-  </main>
+    <!-- Help button (always visible) -->
+    <button
+      class="tutorial-help-btn"
+      onclick="openTutorial()"
+      aria-label="Open setup tutorial"
+    >
+      ?
+    </button>
 
-  <!-- Tutorial Modal -->
-  <div id="tutorial-overlay" class="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-    <div class="tutorial-modal">
-      <div class="tutorial-vpn-notice">
-        <strong>&#9888; Before you begin:</strong> You must first connect to the <strong>school VPN</strong> using <strong>Cisco Secure Client</strong>. Use your Canvas (school) credentials to authenticate.
-      </div>
-      <div class="tutorial-header">
-        <h2 id="tutorial-title">Getting Started — Install the Root Certificate</h2>
-        <button class="tutorial-close" onclick="closeTutorial()" aria-label="Close">&times;</button>
-      </div>
-      <p class="tutorial-intro">
-        To launch labs and have your browser trust the lab environment, you need to install the
-        <strong>CyberRange root CA certificate</strong> on your machine. Select your operating system below.
-      </p>
-      <div class="tutorial-tabs">
-        <button class="tutorial-tab active" onclick="switchTab('windows', this)">&#x1F5A5; Windows</button>
-        <button class="tutorial-tab" onclick="switchTab('macos', this)">&#xF8FF; macOS</button>
-      </div>
-
-      <!-- Windows steps -->
-      <div id="tutorial-windows" class="tutorial-tab-content">
-        <ol class="tutorial-steps">
-          <li>Download <code>root_ca.crt</code> using the button below.</li>
-          <li>Press <kbd>Win + R</kbd>, type <code>mmc</code>, and press <strong>Enter</strong>.</li>
-          <li>Go to <strong>File &rsaquo; Add/Remove Snap-in</strong>, select <strong>Certificates</strong>, click <strong>Add</strong>.</li>
-          <li>Choose <strong>Computer account</strong> &rarr; <strong>Local Computer</strong>, click <strong>Finish</strong> then <strong>OK</strong>.</li>
-          <li>Expand <strong>Certificates (Local Computer) &rsaquo; Trusted Root Certification Authorities &rsaquo; Certificates</strong>.</li>
-          <li>Right-click the <em>Certificates</em> folder &rarr; <strong>All Tasks &rsaquo; Import</strong>.</li>
-          <li>In the wizard, browse to the downloaded <code>root_ca.crt</code>, confirm the store is <em>Trusted Root Certification Authorities</em>, and click <strong>Finish</strong>.</li>
-          <li>Click <strong>Yes</strong> on the security warning, then <strong>OK</strong>. Restart your browser.</li>
-        </ol>
-      </div>
-
-      <!-- macOS steps -->
-      <div id="tutorial-macos" class="tutorial-tab-content" style="display:none">
-        <p class="tutorial-method-label">Method 1 &mdash; Keychain Access (GUI)</p>
-        <ol class="tutorial-steps">
-          <li>Download <code>root_ca.crt</code> using the button below.</li>
-          <li>Press <kbd>Cmd + Space</kbd>, type <strong>Keychain Access</strong>, press <strong>Enter</strong>.</li>
-          <li>Select the <strong>System</strong> keychain (applies to all users on this Mac).</li>
-          <li>Go to <strong>File &rsaquo; Import Items</strong> and select the downloaded <code>root_ca.crt</code>.</li>
-          <li>Double-click the imported certificate, expand the <strong>Trust</strong> section, and set <em>When using this certificate</em> to <strong>Always Trust</strong>.</li>
-          <li>Close the window and enter your admin password when prompted. Restart your browser.</li>
-        </ol>
-        <p class="tutorial-method-label">Method 2 &mdash; Terminal</p>
-        <pre class="tutorial-code">sudo security add-trusted-cert -d -r trustRoot \
-  -k /Library/Keychains/System.keychain \
-  ~/Downloads/root_ca.crt</pre>
-      </div>
-
-      <div class="tutorial-footer">
-        <a href="{{ url_for('static', filename='root_ca.crt') }}" class="tutorial-download-btn" download="root_ca.crt">&#8659; Download root_ca.crt</a>
-        <button class="tutorial-got-it" onclick="closeTutorial()">Got it</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Help button (always visible) -->
-  <button class="tutorial-help-btn" onclick="openTutorial()" aria-label="Open setup tutorial">?</button>
-
-  <script src="{{ url_for('static', filename='tutorial.js') }}"></script>
-  <script>
-    if (!localStorage.getItem('cyberrange_tutorial_seen')) {
-      openTutorial();
-    }
-  </script>
-</body>
+    <script src="{{ url_for('static', filename='tutorial.js') }}"></script>
+    <script>
+      if (!localStorage.getItem("cyberrange_tutorial_seen")) {
+        openTutorial();
+      }
+    </script>
+  </body>
 </html>
