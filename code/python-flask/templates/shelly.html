@@ -1,106 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
-  <!-- <link rel="stylesheet" href="/CyberRange/code/python-flask/static/style.css"> -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <title>Cyber Range Lab</title>
-  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
-  <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
-  <!-- Include Mermaid.js via CDN -->
-  <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body class="lab-page">
-  {# section for the toolbar at the top of the page #}
-  <header class="lab-toolbar">
-    <div class="dropdown">
-      <button class="dropbtn">View</button>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css"
+    />
+    <!-- <link rel="stylesheet" href="/CyberRange/code/python-flask/static/style.css"> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>Cyber Range Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <!-- Include Mermaid.js via CDN -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+  </head>
+  <body class="lab-page">
+    {# section for the toolbar at the top of the page #}
+    <header class="lab-toolbar">
+      <div class="dropdown">
+        <button class="dropbtn">View</button>
         <div class="dropdown-content">
           <a href="#">Zoom In</a>
           <a href="#">Zoom Out</a>
           <a href="#">Full Screen</a>
         </div>
-    </div>
-  </header>
-  <main class="lab-content">
-    <section class="terminal-container">
-      <div id="terminal"></div>
-      <script>
-        //https://www.eddymens.com/blog/creating-a-browser-based-interactive-terminal-using-xtermjs-and-nodejs.html#frontend-setup
-        const term = new Terminal({
-          cursorStyle: 'underline',   // makes cursor look like "_"
-          cursorBlink: true,
-          macOptionIsMeta: true,
-          scrollback: true,
-        });
-        term.open(document.getElementById('terminal'));
-        //const socket = io();
-        // Connect via https as each edge node is proxying an internal connection on 5000 via 443
-        const url = "https://" + "{{ edge_node_ip }}";
-        console.log("Connecting to websocket on: " + url+ "...")
-        const socket = io(url);
-        const status = document.getElementById("status");
-            
-        // Handle connection
-        socket.on("connect", () => {
-          console.log("Connected to server, id: ", socket.id);
-          console.log("For Debugging: Lab ID is: " + "{{ lab_id }}");
-          term.write("Welcome to {{ lab_id }}... Execute your commands in this terminal...\r\n");
-          term.write("Answer the questions in the textarea to the right...\r\n");
-          term.write("Press the Enter Key to start...\r\n");
-        });
-        // Receive terminal output from server
-        //socket.on("pty-output", (data) => {
-        //  term.write(data);
-        //});
-        socket.on("pty-output", function (data) {
-        console.log("New output received from server:", data.output);
-        term.write(data.output);
-        });
-        // Send terminal input to server
-        term.onData((data) => {
-          console.log("Typing a command... " + data)
-          socket.emit("pty-input", data);
-        });
-        // Handle disconnect
-        socket.on("disconnect", () => {
-          console.log("Disconnected from pyxtermjs server...");
-        });
-        // Handle errors
-        socket.on("connect_error", (err) => {
-          console.error("Connection error:", err.message);
-        });
-        // Catch-all listener for any incoming event -- used for debugging to 
-        // see if data is being sent back
-        socket.onAny((event, ...args) => {
-          console.group(`📡 Event received: ${event}`);
-          console.log("Payload:", args);
-          console.groupEnd();
-        });
+      </div>
+    </header>
+    <main class="lab-content">
+      <section class="terminal-container">
+        <div id="terminal"></div>
+        <script>
+          //https://www.eddymens.com/blog/creating-a-browser-based-interactive-terminal-using-xtermjs-and-nodejs.html#frontend-setup
+          const term = new Terminal({
+            cursorStyle: "underline", // makes cursor look like "_"
+            cursorBlink: true,
+            macOptionIsMeta: true,
+            scrollback: true,
+          });
+          term.open(document.getElementById("terminal"));
+          //const socket = io();
+          // Connect via https as each edge node is proxying an internal connection on 5000 via 443
+          const url = "https://" + "{{ edge_node_ip }}";
+          console.log("Connecting to websocket on: " + url + "...");
+          const socket = io(url);
+          const status = document.getElementById("status");
 
-      </script>
-    </section>
-    {# f you want to avoid accessing keys via info.key, you can unpack the dict:
-    return render_template("index.html", **data)
-    Now in the template, you can use {{ hostname }} directly. #}
-    {# lab steps section #}
-    <aside class="lab-instructions">
-      <div class="instructions-titlebar">Instructions for {{ lab_id }}</div>
-        
-      <div class="lab-instructions-content">
-        <form action="{{ url_for('grade_lab') }}" method="post">
-          <input type="hidden" name="lab_id" value="{{ lab_id }}">
-          {% for key, value in loaded_lab_steps["questions"].items() %}
+          // Handle connection
+          socket.on("connect", () => {
+            console.log("Connected to server, id: ", socket.id);
+            console.log("For Debugging: Lab ID is: " + "{{ lab_id }}");
+            term.write(
+              "Welcome to {{ lab_id }}... Execute your commands in this terminal...\r\n",
+            );
+            term.write(
+              "Answer the questions in the textarea to the right...\r\n",
+            );
+            term.write("Press the Enter Key to start...\r\n");
+          });
+          // Receive terminal output from server
+          //socket.on("pty-output", (data) => {
+          //  term.write(data);
+          //});
+          socket.on("pty-output", function (data) {
+            console.log("New output received from server:", data.output);
+            term.write(data.output);
+          });
+          // Send terminal input to server
+          term.onData((data) => {
+            console.log("Typing a command... " + data);
+            socket.emit("pty-input", data);
+          });
+          // Handle disconnect
+          socket.on("disconnect", () => {
+            console.log("Disconnected from pyxtermjs server...");
+          });
+          // Handle errors
+          socket.on("connect_error", (err) => {
+            console.error("Connection error:", err.message);
+          });
+          // Catch-all listener for any incoming event -- used for debugging to
+          // see if data is being sent back
+          socket.onAny((event, ...args) => {
+            console.group(`📡 Event received: ${event}`);
+            console.log("Payload:", args);
+            console.groupEnd();
+          });
+        </script>
+      </section>
+      {# f you want to avoid accessing keys via info.key, you can unpack the
+      dict: return render_template("index.html", **data) Now in the template,
+      you can use {{ hostname }} directly. #} {# lab steps section #}
+      <aside class="lab-instructions">
+        <div class="instructions-titlebar">Instructions for {{ lab_id }}</div>
+
+        <div class="lab-instructions-content">
+          <form action="{{ url_for('grade_lab') }}" method="post">
+            <input type="hidden" name="lab_id" value="{{ lab_id }}" />
+            {% for key, value in loaded_lab_steps["questions"].items() %}
             <div class="lab-form-group">
               <!-- Text input box -->
               <label for="{{ key }}">{{ value }}:</label>
-              <input type="text" id="{{ key }}" name="{{ key }}" required>
+              <input type="text" id="{{ key }}" name="{{ key }}" required />
             </div>
-          {% endfor %}
+            {% endfor %}
             <!-- Submit button -->
-          <button type="submit">Grade Lab</button>
-        </form>
-        <div id="grade"></div>
+            <button type="submit">Grade Lab</button>
+          </form>
+          <div id="grade"></div>
           <script>
             const gradeDiv = document.getElementById("grade");
             const totalCorrect = "{{ t }}";
@@ -108,39 +116,196 @@
             const gradePercent = "{{ grade_percent }}";
 
             if (gradePercent) {
-                gradeDiv.innerHTML =
-                    `<p><strong>Questions</strong></p>` +
-                    `<p>${numQuestions}</p>` +
-                    `<p><strong>Correct Answers</strong></p>` +
-                    `<p>${totalCorrect}</p>` +
-                    `<p><strong>Your Grade</strong></p>` +
-                    `<p style="color: #ffa500; font-size: 1.3rem;">${gradePercent}%</p>`;
+              gradeDiv.innerHTML =
+                `<p><strong>Questions</strong></p>` +
+                `<p>${numQuestions}</p>` +
+                `<p><strong>Correct Answers</strong></p>` +
+                `<p>${totalCorrect}</p>` +
+                `<p><strong>Your Grade</strong></p>` +
+                `<p style="color: #ffa500; font-size: 1.3rem;">${gradePercent}%</p>`;
             }
           </script>
 
-        <div class="lab-section-title">LAB INSTRUCTIONS</div>
-        <div class="lab-section-content">
-          {{ loaded_lab_steps["instructions"].instructions }}
+          <div class="lab-section-title">LAB INSTRUCTIONS</div>
+          <div class="lab-section-content">
+            {{ loaded_lab_steps["instructions"].instructions }}
+          </div>
+
+          <div class="lab-section-title">NETWORK TOPOLOGY</div>
+          <div class="lab-section-content">
+            <div class="network-item">
+              <strong>Edge VM:</strong>
+              {% for vm in edge_vm %}
+              <div>
+                <code>{{ vm.name }}</code>:
+                <code style="color: #ffa500">{{ vm.ip }}</code>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="network-item">
+              <strong>Lab Node:</strong>
+              {% for vm in non_edge_vms %}
+              <div>
+                <code>{{ vm.name }}</code>:
+                <code style="color: #ffa500">{{ vm.ip }}</code>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
         </div>
 
-        <div class="lab-section-title">NETWORK TOPOLOGY</div>
-        <div class="lab-section-content">
-          <div class="network-item">
-            <strong>Edge VM:</strong>
-            {% for vm in edge_vm %}
-              <div><code>{{ vm.name }}</code>: <code style="color: #ffa500;">{{ vm.ip }}</code></div>
-            {% endfor %}
-          </div>
-          <div class="network-item">
-            <strong>Lab Node:</strong>
-            {% for vm in non_edge_vms %}
-              <div><code>{{ vm.name }}</code>: <code style="color: #ffa500;">{{ vm.ip }}</code></div>
-            {% endfor %}
-          </div>
+        <a
+          href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}"
+          id="destroy-link"
+          >Destroy Lab — Return to Dashboard</a
+        >
+      </aside>
+    </main>
+
+    <!-- Tutorial Modal -->
+    <div
+      id="tutorial-overlay"
+      class="tutorial-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tutorial-title"
+    >
+      <div class="tutorial-modal">
+        <div class="tutorial-vpn-notice">
+          <strong>&#9888; Before you begin:</strong> You must first connect to
+          the <strong>school VPN</strong> using
+          <strong>Cisco Secure Client</strong>. Use your Canvas (school)
+          credentials to authenticate.
+        </div>
+        <div class="tutorial-header">
+          <h2 id="tutorial-title">
+            Getting Started - Install the Root Certificate
+          </h2>
+          <button
+            class="tutorial-close"
+            onclick="closeTutorial()"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+        <p class="tutorial-intro">
+          To launch labs and have your browser trust the lab environment, you
+          need to install the
+          <strong>CyberRange root CA certificate</strong> on your machine.
+          Select your operating system below.
+        </p>
+        <div class="tutorial-tabs">
+          <button
+            class="tutorial-tab active"
+            onclick="switchTab('windows', this)"
+          >
+            &#x1F5A5; Windows
+          </button>
+          <button class="tutorial-tab" onclick="switchTab('macos', this)">
+            &#xF8FF; macOS
+          </button>
+        </div>
+        <div id="tutorial-windows" class="tutorial-tab-content">
+          <ol class="tutorial-steps">
+            <li>Download <code>root_ca.crt</code> using the button below.</li>
+            <li>
+              Press <kbd>Win + R</kbd>, type <code>mmc</code>, and press
+              <strong>Enter</strong>.
+            </li>
+            <li>
+              Go to <strong>File &rsaquo; Add/Remove Snap-in</strong>, select
+              <strong>Certificates</strong>, click <strong>Add</strong>.
+            </li>
+            <li>
+              Choose <strong>Computer account</strong> &rarr;
+              <strong>Local Computer</strong>, click
+              <strong>Finish</strong> then <strong>OK</strong>.
+            </li>
+            <li>
+              Expand
+              <strong
+                >Certificates (Local Computer) &rsaquo; Trusted Root
+                Certification Authorities &rsaquo; Certificates</strong
+              >.
+            </li>
+            <li>
+              Right-click the <em>Certificates</em> folder &rarr;
+              <strong>All Tasks &rsaquo; Import</strong>.
+            </li>
+            <li>
+              In the wizard, browse to the downloaded <code>root_ca.crt</code>,
+              confirm the store is
+              <em>Trusted Root Certification Authorities</em>, and click
+              <strong>Finish</strong>.
+            </li>
+            <li>
+              Click <strong>Yes</strong> on the security warning, then
+              <strong>OK</strong>. Restart your browser.
+            </li>
+          </ol>
+        </div>
+        <div
+          id="tutorial-macos"
+          class="tutorial-tab-content"
+          style="display: none"
+        >
+          <p class="tutorial-method-label">
+            Method 1 &mdash; Keychain Access (GUI)
+          </p>
+          <ol class="tutorial-steps">
+            <li>Download <code>root_ca.crt</code> using the button below.</li>
+            <li>
+              Press <kbd>Cmd + Space</kbd>, type
+              <strong>Keychain Access</strong>, press <strong>Enter</strong>.
+            </li>
+            <li>
+              Select the <strong>System</strong> keychain (applies to all users
+              on this Mac).
+            </li>
+            <li>
+              Go to <strong>File &rsaquo; Import Items</strong> and select the
+              downloaded <code>root_ca.crt</code>.
+            </li>
+            <li>
+              Double-click the imported certificate, expand the
+              <strong>Trust</strong> section, and set
+              <em>When using this certificate</em> to
+              <strong>Always Trust</strong>.
+            </li>
+            <li>
+              Close the window and enter your admin password when prompted.
+              Restart your browser.
+            </li>
+          </ol>
+          <p class="tutorial-method-label">Method 2 &mdash; Terminal</p>
+          <pre class="tutorial-code">
+sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain \
+  ~/Downloads/root_ca.crt</pre
+          >
+        </div>
+        <div class="tutorial-footer">
+          <a
+            href="{{ url_for('static', filename='root_ca.crt') }}"
+            class="tutorial-download-btn"
+            download="root_ca.crt"
+            >&#8659; Download root_ca.crt</a
+          >
+          <button class="tutorial-got-it" onclick="closeTutorial()">
+            Got it
+          </button>
         </div>
       </div>
+    </div>
 
-      <a href="{{ url_for('destroy_lab', lab_id=lab_id, launch_id=launch_id ) }}" id="destroy-link">Destroy Lab — Return to Dashboard</a></aside>
-    </main>
-</body>
+    <button
+      class="tutorial-help-btn"
+      onclick="openTutorial()"
+      aria-label="Open setup tutorial"
+    >
+      ?
+    </button>
+    <script src="{{ url_for('static', filename='tutorial.js') }}"></script>
+  </body>
 </html>
