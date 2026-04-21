@@ -524,7 +524,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/pyxtermjs.service"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41","proxmox-iso.lab_one_edge_server_43"]  
     }
 
   ########################################################################################################################
@@ -534,7 +534,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/nginx/default"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41","proxmox-iso.lab_one_edge_server_43"]  
     }
 
   ########################################################################################################################
@@ -544,7 +544,7 @@ build {
   provisioner "file" {
     source      = "../../scripts/proxmox/labs/core/nginx/signed.conf"
     destination = "/home/vagrant/"
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]  
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41","proxmox-iso.lab_one_edge_server_43"]  
     }
 
   ########################################################################################################################
@@ -554,7 +554,7 @@ build {
   provisioner "shell" {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/core/post_install_prxmx_generate_ca.sh"]
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41","proxmox-iso.lab_one_edge_server_43"]
   }
 
 
@@ -571,7 +571,7 @@ build {
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nmap.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
-    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41"]
+    only=["proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_41","proxmox-iso.lab_one_edge_server_43"]
   }
 
   #############################################################################
@@ -582,7 +582,7 @@ build {
     execute_command = "echo 'vagrant' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     scripts         = ["../../scripts/proxmox/labs/lab_one/install-lab-elements.sh",
     "../../scripts/proxmox/labs/lab_one/post_install_prxmx_lab_node-open-ports.sh"]
-    only=["proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41"]
+    only=["proxmox-iso.lab_one_node_42","proxmox-iso.lab_one_node_41","proxmox-iso.lab_one_node_43"]
   }
 
 }
