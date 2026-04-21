@@ -146,5 +146,60 @@
         }
       };
     </script>
+
+  <!-- Tutorial Modal -->
+  <div id="tutorial-overlay" class="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+    <div class="tutorial-modal">
+      <div class="tutorial-vpn-notice">
+        <strong>&#9888; Before you begin:</strong> You must first connect to the <strong>school VPN</strong> using <strong>Cisco Secure Client</strong>. Use your Canvas (school) credentials to authenticate.
+      </div>
+      <div class="tutorial-header">
+        <h2 id="tutorial-title">Getting Started — Install the Root Certificate</h2>
+        <button class="tutorial-close" onclick="closeTutorial()" aria-label="Close">&times;</button>
+      </div>
+      <p class="tutorial-intro">
+        To launch labs and have your browser trust the lab environment, you need to install the
+        <strong>CyberRange root CA certificate</strong> on your machine. Select your operating system below.
+      </p>
+      <div class="tutorial-tabs">
+        <button class="tutorial-tab active" onclick="switchTab('windows', this)">&#x1F5A5; Windows</button>
+        <button class="tutorial-tab" onclick="switchTab('macos', this)">&#xF8FF; macOS</button>
+      </div>
+      <div id="tutorial-windows" class="tutorial-tab-content">
+        <ol class="tutorial-steps">
+          <li>Download <code>root_ca.crt</code> using the button below.</li>
+          <li>Press <kbd>Win + R</kbd>, type <code>mmc</code>, and press <strong>Enter</strong>.</li>
+          <li>Go to <strong>File &rsaquo; Add/Remove Snap-in</strong>, select <strong>Certificates</strong>, click <strong>Add</strong>.</li>
+          <li>Choose <strong>Computer account</strong> &rarr; <strong>Local Computer</strong>, click <strong>Finish</strong> then <strong>OK</strong>.</li>
+          <li>Expand <strong>Certificates (Local Computer) &rsaquo; Trusted Root Certification Authorities &rsaquo; Certificates</strong>.</li>
+          <li>Right-click the <em>Certificates</em> folder &rarr; <strong>All Tasks &rsaquo; Import</strong>.</li>
+          <li>In the wizard, browse to the downloaded <code>root_ca.crt</code>, confirm the store is <em>Trusted Root Certification Authorities</em>, and click <strong>Finish</strong>.</li>
+          <li>Click <strong>Yes</strong> on the security warning, then <strong>OK</strong>. Restart your browser.</li>
+        </ol>
+      </div>
+      <div id="tutorial-macos" class="tutorial-tab-content" style="display:none">
+        <p class="tutorial-method-label">Method 1 &mdash; Keychain Access (GUI)</p>
+        <ol class="tutorial-steps">
+          <li>Download <code>root_ca.crt</code> using the button below.</li>
+          <li>Press <kbd>Cmd + Space</kbd>, type <strong>Keychain Access</strong>, press <strong>Enter</strong>.</li>
+          <li>Select the <strong>System</strong> keychain (applies to all users on this Mac).</li>
+          <li>Go to <strong>File &rsaquo; Import Items</strong> and select the downloaded <code>root_ca.crt</code>.</li>
+          <li>Double-click the imported certificate, expand the <strong>Trust</strong> section, and set <em>When using this certificate</em> to <strong>Always Trust</strong>.</li>
+          <li>Close the window and enter your admin password when prompted. Restart your browser.</li>
+        </ol>
+        <p class="tutorial-method-label">Method 2 &mdash; Terminal</p>
+        <pre class="tutorial-code">sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain \
+  ~/Downloads/root_ca.crt</pre>
+      </div>
+      <div class="tutorial-footer">
+        <a href="{{ url_for('static', filename='root_ca.crt') }}" class="tutorial-download-btn" download="root_ca.crt">&#8659; Download root_ca.crt</a>
+        <button class="tutorial-got-it" onclick="closeTutorial()">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="tutorial-help-btn" onclick="openTutorial()" aria-label="Open setup tutorial">?</button>
+  <script src="{{ url_for('static', filename='tutorial.js') }}"></script>
   </body>
 </html>
