@@ -563,7 +563,7 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found84 = True
                             logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
@@ -577,7 +577,7 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             found83 = True
                             logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
@@ -591,7 +591,7 @@ def run_getip(launch_id):
                     runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
                     for x in range(len(runningwithtagsvms)):
                             for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "192.168.172" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                                     found82 = True
                                     logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                     return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
