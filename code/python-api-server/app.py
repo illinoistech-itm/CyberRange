@@ -95,10 +95,11 @@ def prepare_command():
     dest_after_copy = "/tmp/" + uid + "/" + lab_number
     t = uid + ";" + username + ";" + lab_number + ";" + "cr" + ";" + "edge"
     ln = uid + ";" + username + ";" + lab_number + ";" + "cr"
+    edgeuid = uid + "edge"
     # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     vars = {
         "tags": t,
-        "yourinitials": uid,
+        "yourinitials": edgeuid,
         "ln_yourinitials": uid,
         "ln_tags": ln
     }
@@ -159,10 +160,11 @@ def prepare_destroy_command():
     dest_after_copy = "/tmp/" + uid + "/" + lab_number
     t = uid + ";" + username + ";" + lab_number + ";" + "cr" + ";" + "edge"
     ln = uid + ";" + username + ";" + lab_number + ";" + "cr"
+    edgeuid = uid + "edge"
     # Gather all of the runtime terraform vars we will be assigning at terraform apply time
     vars = {
         "tags": t,
-        "yourinitials": uid,
+        "yourinitials": edgeuid,
         "ln_yourinitials": uid,
         "ln_tags": ln
     }
