@@ -1,7 +1,6 @@
 # /etc/systemd/system/renew-cert.timer
 [Unit]
-Description=Run renew-cert.service at 4 AM on a Tuesday
-
+Description=Run renew-cert.service every 4 hours
 [Timer]
 OnUnitActiveSec=4h
 Persistent=true
