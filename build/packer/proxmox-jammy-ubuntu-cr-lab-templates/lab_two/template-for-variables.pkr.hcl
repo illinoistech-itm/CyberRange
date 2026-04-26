@@ -5,11 +5,19 @@
 
 # This is the name of the node in the Cloud Cluster where to deploy the virtual instances
 locals {
-  NODENAME = vault("/secret/data/NODENAME","SYSTEM41")
+  NODENAME = vault("/secret/data/NODENAME","NODENAME1")
 }
 
 locals {
-  NODENAME2 = vault("/secret/data/NODENAME","SYSTEM42")
+  NODENAME2 = vault("/secret/data/NODENAME","NODENAME2")
+}
+
+locals {
+  NODENAME3 = vault("/secret/data/NODENAME","NODENAME3")
+}
+
+locals {
+  NODENAME4 = vault("/secret/data/NODENAME","NODENAME4")
 }
 
 locals {
@@ -21,7 +29,7 @@ locals {
 }
 
 locals {
-  URL = vault("/secret/data/URL","S41")
+  URL = vault("/secret/data/URL","NODE1")
 }
 
 locals {
@@ -64,13 +72,13 @@ variable "NUMBEROFCORES" {
 # This is the name of the Virtual Machine Template you want to create
 variable "VMNAME" {
   type    = string
-  default = ""
+  default = "cyber-range-lab-two-edge-server-template"
 }
 
 # This is the name of the Virtual Machine Template you want to create
 variable "LN-VMNAME" {
   type    = string
-  default = ""
+  default = "cyber-range-lab-two-node-template"
 }
 
 variable "iso_checksum" {
@@ -91,4 +99,10 @@ variable "local_iso_name" {
 variable "TAGS" {
   type = string
   default  = "lab_two;cr"
+}
+
+# This is the IP address that the Packer HTTP server will bind to when serving the autoinstall config to the VM during the build process
+variable "BIND_ADDRESS" {
+  type    = string
+  default = "10.110.0.98"
 }
