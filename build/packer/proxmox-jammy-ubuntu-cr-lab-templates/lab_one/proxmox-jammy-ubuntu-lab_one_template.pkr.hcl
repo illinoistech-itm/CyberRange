@@ -592,7 +592,7 @@ build {
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
-                      "../../scripts/proxmox/labs/core/post_install_prxmx_setup_cert_renewal.sh"
+                      "../../scripts/proxmox/labs/core/post_install_prxmx_setup_cert_renewal.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nmap.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
