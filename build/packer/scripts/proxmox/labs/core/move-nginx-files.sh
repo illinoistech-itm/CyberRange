@@ -5,7 +5,7 @@
 # to allow the load balancing to take place
 # Change team00 to your team repo
 
-# This overrides the default nginx conf file enabling loadbalacning and 443 TLS only
+# This overrides the default nginx conf file enabling loadbalancing and 443 TLS only
 sudo cp -v /home/vagrant/default /etc/nginx/sites-available/
 # This connects the TLS certs built in this script with the instances
 sudo cp -v /home/vagrant/signed.conf /etc/nginx/snippets/

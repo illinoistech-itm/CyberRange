@@ -2,7 +2,7 @@
 [Unit]
 Description=Run renew-cert.service every 4 hours
 [Timer]
-OnUnitActiveSec=4h
+OnCalendar=*-*-* 00,06,12,18:00:00
 Persistent=true
 
 
