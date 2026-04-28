@@ -7,20 +7,13 @@ resource "random_id" "id" {
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle#example-usage
 resource "random_shuffle" "datadisk" {
-  input        = ["datadisk2", "datadisk3", "datadisk4"]
+  input        = ["datadisk1","datadisk2", "datadisk3", "datadisk4"]
   result_count = 1
 }
 # data.vault_generic_secret.target_node.data
 resource "random_shuffle" "nodename" {
   input        = [data.vault_generic_secret.target_node.data["NODENAME1"], data.vault_generic_secret.target_node.data["NODENAME2"], data.vault_generic_secret.target_node.data["NODENAME3"]]
   result_count = 1
-}
-
-# Set static Mac address so the gossip network always gets the same IPs -- this will help with Consul 
-# getting confused on rebuilds
-variable "mac_addresses" {
-  type    = list(string)
-  default = ["bc:24:11:88:00:01", "bc:24:11:88:00:02", "bc:24:11:88:00:03", "bc:24:11:88:00:04", "bc:24:11:88:00:05", "bc:24:11:88:00:06", "bc:24:11:88:00:08"]
 }
 
 ##############################################################################
@@ -90,10 +83,10 @@ resource "proxmox_vm_qemu" "load-balancer" {
   }
 
   network {
-    id     = 2
-    model  = "virtio"
-    bridge = "vmbr2"
-    macaddr = var.mac_addresses[5]
+    id      = 2
+    model   = "virtio"
+    bridge  = "vmbr2"
+    macaddr = var.lb-consul-macaddr-list[0]
   }
 
   disks {
@@ -103,7 +96,7 @@ resource "proxmox_vm_qemu" "load-balancer" {
           iothread = true
           storage  = random_shuffle.datadisk.result[0]
           #storage  = "cyberrange"
-          size     = var.lb-disk_size
+          size = var.lb-disk_size
         }
       }
     }
@@ -137,7 +130,7 @@ resource "proxmox_vm_qemu" "load-balancer" {
       "sudo systemctl restart nginx",
       "sudo sed -i 's/REPLACE/${var.lb-yourinitials}-vm${count.index}/' /etc/alloy/config.alloy",
       "sudo sed -i 's/flask-app.service/nginx.service/' /etc/alloy/config.alloy",
-      "sudo systemctl restart alloy.service",      
+      "sudo systemctl restart alloy.service",
       "sudo growpart /dev/vda 3",
       "sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv",
       "sudo resize2fs /dev/ubuntu-vg/ubuntu-lv",
@@ -199,10 +192,10 @@ resource "proxmox_vm_qemu" "frontend-webserver" {
   }
 
   network {
-    id     = 2
-    model  = "virtio"
-    bridge = "vmbr2"
-    macaddr = var.mac_addresses[count.index]
+    id      = 2
+    model   = "virtio"
+    bridge  = "vmbr2"
+    macaddr = var.fe-consul-macaddr-list[count.index]
   }
 
   disks {
@@ -212,7 +205,7 @@ resource "proxmox_vm_qemu" "frontend-webserver" {
           iothread = true
           storage  = random_shuffle.datadisk.result[0]
           #storage  = "cyberrange"
-          size     = var.frontend-disk_size
+          size = var.frontend-disk_size
         }
       }
     }
@@ -300,10 +293,10 @@ resource "proxmox_vm_qemu" "log-server" {
   }
 
   network {
-    id     = 2
-    model  = "virtio"
-    bridge = "vmbr2"
-    macaddr = var.mac_addresses[6]
+    id      = 2
+    model   = "virtio"
+    bridge  = "vmbr2"
+    macaddr = var.log-consul-macaddr-list[0]
   }
 
   disks {
@@ -400,10 +393,10 @@ resource "proxmox_vm_qemu" "backend-database" {
   }
 
   network {
-    id     = 2
-    model  = "virtio"
-    bridge = "vmbr2"
-    macaddr = var.mac_addresses[4]
+    id      = 2
+    model   = "virtio"
+    bridge  = "vmbr2"
+    macaddr = var.be-consul-macaddr-list[count.index]
   }
 
   disks {
@@ -444,7 +437,7 @@ resource "proxmox_vm_qemu" "backend-database" {
       "sudo systemctl restart mariadb.service",
       "sudo sed -i 's/REPLACE/${var.backend-yourinitials}-vm${count.index}/' /etc/alloy/config.alloy",
       "sudo sed -i 's/flask-app.service/mariadb.service/' /etc/alloy/config.alloy",
-      "sudo systemctl restart alloy.service",      
+      "sudo systemctl restart alloy.service",
       "sudo growpart /dev/vda 3",
       "sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv",
       "sudo resize2fs /dev/ubuntu-vg/ubuntu-lv",

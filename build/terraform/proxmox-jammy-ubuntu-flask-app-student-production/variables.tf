@@ -22,6 +22,13 @@ variable "backend-desc" {}
 variable "lb-desc" {}
 variable "logserver-desc" {}
 variable "lb-macaddr" {}
+# Setting the Mac Addresses for the 10.110.0.0/16 network 
+variable "fe-consul-macaddr-list" {}
+variable "be-consul-macaddr-list" {}
+variable "lb-consul-macaddr-list" {}
+variable "api-consul-macaddr-list" {}
+variable "log-consul-macaddr-list" {}
+
 
 variable "frontend-template_to_clone" {}
 variable "backend-template_to_clone" {}
