@@ -414,10 +414,10 @@ build {
   #############################################################################
 
   provisioner "file" {
-    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
+    source      = "../../scripts/proxmox/jammy-services/root_ca.crt"
     destination = "/home/vagrant/root_ca.crt"
     only = ["proxmox-iso.lab_one_edge_server_41", "proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_43"]
-    
+
   }
 
   #############################################################################
