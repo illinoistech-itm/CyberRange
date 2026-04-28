@@ -415,7 +415,7 @@ build {
   #############################################################################
 
   provisioner "file" {
-    source      = "../../scripts/proxmox/labs/core/frontend/renew-cert.timer"
+    source      = "../../scripts/proxmox/labs/core/renew-cert.timer"
     destination = "/home/vagrant/renew-cert.timer"
     only = ["proxmox-iso.lab_one_edge_server_41", "proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_43"]
   }
