@@ -416,7 +416,7 @@ def shelly():
     # Set session variable for launch_id so we don't have to pass it around via POST
     session['launch_id']=launch_id
     session['edge_node_ip']=ip
-
+    '''
     #Adds IPs to session variable for use in the shelly.html template
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
@@ -438,16 +438,16 @@ def shelly():
 
     session['subnet_hits'] = subnet_hits
     session['subnet_edge_hits'] = subnet_edge_hits
-
+    '''
     return render_template('shelly.html',
                             lab_id=lab_id,
                             launch_id=launch_id,
                             loaded_lab_steps=loaded_lab_steps,
                             edge_node_ip=ip,
-                            user_email=user_id,
-                            edge_vm=subnet_edge_hits,
-                            non_edge_vms=subnet_hits,
-                            subnet=SUBNET_WANTED)
+                            user_email=user_id)
+                            #edge_vm=subnet_edge_hits,
+                            #non_edge_vms=subnet_hits,
+                            #subnet=SUBNET_WANTED)
 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN
@@ -543,9 +543,6 @@ def run_getip(launch_id):
     prxmx83 = proxmox.nodes("system22h083").qemu.get()
     prxmx82 = proxmox.nodes("system22h082").qemu.get()
 
-    found84 = False
-    found83 = False
-    found82 = False
     # This replaces the '-' in the launch_id, we removed them when we added them
     # as a tag in Terraform. Terraform doesn't support '-' 
     launch_id=launch_id.replace("-","")
@@ -556,47 +553,42 @@ def run_getip(launch_id):
     # "running" and that have the tag of the launch_id for the vm
     # and that they have the tag 'edge', meaning they are the edge node
     logging.info("Searching for the IP for the Launch ID of: %s", launch_id)
-    if found84 == False:
-        for vm in prxmx84:
-            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-                runningvms.append(vm)
+    
+    for vm in prxmx84:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+            runningvms.append(vm)
 
-                for vm in runningvms:
-                    runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                    for x in range(len(runningwithtagsvms)):
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+    
+    for vm in prxmx83:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+            runningvms.append(vm)
+
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
+                    for y in range(len(runningwithtagsvms[x]['result'])):
+                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+    
+    for vm in prxmx82:
+        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+            runningvms.append(vm)
+
+            for vm in runningvms:
+                runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                for x in range(len(runningwithtagsvms)):
                         for y in range(len(runningwithtagsvms[x]['result'])):
                             if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                found84 = True
                                 logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                 return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-    
-    if found83 == False:
-        for vm in prxmx83:
-            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-                runningvms.append(vm)
-
-                for vm in runningvms:
-                    runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                    for x in range(len(runningwithtagsvms)):
-                        for y in range(len(runningwithtagsvms[x]['result'])):
-                            if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                found83 = True
-                                logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                                return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-    
-    if found82 == False:
-        for vm in prxmx82:
-            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-                runningvms.append(vm)
-
-                for vm in runningvms:
-                    runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                    for x in range(len(runningwithtagsvms)):
-                            for y in range(len(runningwithtagsvms[x]['result'])):
-                                if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                    found82 = True
-                                    logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                                    return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
 ##############################################################################
