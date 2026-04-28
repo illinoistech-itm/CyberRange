@@ -1,0 +1,13 @@
+# /etc/systemd/system/renew-cert.timer
+[Unit]
+Description=Run renew-cert.service every 4 hours
+
+[Timer]
+# Trick to run cert renewl at everyboot
+OnBootSec=0
+OnUnitActiveSec=4h
+Persistent=true
+
+
+[Install]
+WantedBy=timers.target

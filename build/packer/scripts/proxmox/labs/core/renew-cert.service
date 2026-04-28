@@ -5,7 +5,4 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/myscript.sh
-
-[Install]
-WantedBy=multi-user.target
+ExecStart=/usr/bin/step ca renew /etc/ssl/certs/nginx-signed.crt /etc/ssl/private/nginx-signed.key --ca-url https://system22h134.itm.iit.edu --root /root/.step/certs/root_ca.crt --force

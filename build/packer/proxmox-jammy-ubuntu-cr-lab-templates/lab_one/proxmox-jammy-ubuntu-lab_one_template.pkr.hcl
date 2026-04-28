@@ -408,6 +408,30 @@ source "proxmox-iso" "lab_one_node_43" {
 build {
   sources = ["source.proxmox-iso.lab_one_edge_server_42","source.proxmox-iso.lab_one_edge_server_41","source.proxmox-iso.lab_one_node_42","source.proxmox-iso.lab_one_node_41", "source.proxmox-iso.lab_one_edge_server_43","source.proxmox-iso.lab_one_node_43"]
 
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/core/frontend/renew-cert.timer"
+    destination = "/home/vagrant/renew-cert.timer"
+    only = ["proxmox-iso.lab_one_edge_server_41", "proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_43"]
+  }
+  
+  #############################################################################
+  # Using the file provisioner to SCP the timer and service file into the
+  # virtual machine so that the service to renew the cert each week takes 
+  # place
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../../scripts/proxmox/labs/core/renew-cert.service"
+    destination = "/home/vagrant/renew-cert.service"
+    only = ["proxmox-iso.lab_one_edge_server_41", "proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_43"]
+  }
+
   ##############################################################################
   # Copying the custom configuration for Alloy to be setup to send systemd logs
   # to Loki
@@ -568,6 +592,7 @@ build {
                       "../../scripts/proxmox/labs/core/move-pyxtermjs-service.sh",
                       "../../scripts/proxmox/labs/core/install-nginx.sh",
                       "../../scripts/proxmox/labs/core/move-nginx-files.sh",
+                      "../../scripts/proxmox/labs/core/post_install_prxmx_setup_cert_renewal.sh"
                       "../../scripts/proxmox/labs/core/post_install_prxms_install_pyxtermjs.sh",
                       "../../scripts/proxmox/labs/core/install-nmap.sh",
                       "../../scripts/proxmox/labs/core/post_install_prxmx_lab_node-firewall-open-ports.sh"]
