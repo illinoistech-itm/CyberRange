@@ -19,6 +19,9 @@ variable "desc" {}
 variable "template_to_clone" {}
 
 variable "api-macaddr" {}
+# Set static Mac address so the gossip network always gets the same IPs -- this will help with Consul 
+# getting confused on rebuilds
+variable "api-consul-macaddr-list" {}
 
 variable "memory" {}
 

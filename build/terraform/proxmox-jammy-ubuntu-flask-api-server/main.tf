@@ -7,7 +7,7 @@ resource "random_id" "id" {
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle#example-usage
 resource "random_shuffle" "datadisk" {
-  input        = ["datadisk2", "datadisk3", "datadisk4"]
+  input = ["datadisk1", "datadisk2", "datadisk3", "datadisk4"]
   #input        = ["cyberrange"]
   result_count = 1
 }
@@ -15,13 +15,6 @@ resource "random_shuffle" "datadisk" {
 resource "random_shuffle" "nodename" {
   input        = [data.vault_generic_secret.target_node.data["NODENAME1"], data.vault_generic_secret.target_node.data["NODENAME2"], data.vault_generic_secret.target_node.data["NODENAME3"]]
   result_count = 1
-}
-
-# Set static Mac address so the gossip network always gets the same IPs -- this will help with Consul 
-# getting confused on rebuilds
-variable "mac_addresses" {
-  type    = list(string)
-  default = ["bc:24:11:88:00:07"]
 }
 
 ##############################################################################
@@ -75,9 +68,9 @@ resource "proxmox_vm_qemu" "apiserver" {
   #ipconfig3 = "ip=dhcp"
 
   network {
-    id     = 0
-    model  = "virtio"
-    bridge = "vmbr0"
+    id      = 0
+    model   = "virtio"
+    bridge  = "vmbr0"
     macaddr = var.api-macaddr
   }
 
@@ -88,10 +81,10 @@ resource "proxmox_vm_qemu" "apiserver" {
   }
 
   network {
-    id     = 2
-    model  = "virtio"
-    bridge = "vmbr2"
-    macaddr = var.mac_addresses[0]
+    id      = 2
+    model   = "virtio"
+    bridge  = "vmbr2"
+    macaddr = var.api-consul-macaddr-list[0]
   }
 
   disks {

@@ -15,21 +15,24 @@ pm_log_file   = "terraform-plugin-proxmox.log" # (Optional; defaults to terrafor
 # This is a variable to append to your cloud instances so they have a unique
 # FQDN -- this is needed for the gossip based DNS to work
 ###############################################################################
-yourinitials                     = "cyberrange-flask-api"                     # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
-numberofvms                      = 1                      # quantity of that template to launch
-desc                             = "flaskapi server for cyberrange ITMT 430 spring project"                     # What is the purpose of the TF template
-api-macaddr                      = "BC:24:11:00:00:71"                     # Class assigned mac address for a public IP for your lb
+yourinitials = "cyberrange-flask-api"                                   # Value needs to match the root URL of the FLASK_API_SERVER value you set in Vault
+numberofvms  = 1                                                        # quantity of that template to launch
+desc         = "flaskapi server for cyberrange ITMT 430 spring project" # What is the purpose of the TF template
+api-macaddr  = "BC:24:11:00:00:71"
+# Set static Mac address so the gossip network always gets the same IPs -- this will help with Consul 
+# getting confused on rebuilds
+api-consul-macaddr-list          = ["bc:24:11:88:00:07"]  # Class assigned mac address for a public IP for your lb
 consul-service-tag-contact-email = "your-hawk-email-here" # Used as part of the consul service definition as a tag that can be queried
 ###############################################################################
 # Name the template your created via Packer for Terraform to use to deploy
 # instances from
 ###############################################################################
 template_to_clone = "cyberrange-flask-api-template" # The name of the template to clone
-tags              = "cr,flaskapi" # Tags separated by commas: be,team00
+tags              = "cr,flaskapi"                   # Tags separated by commas: be,team00
 ###############################################################################
 # Customize instance hardware settings
 ###############################################################################
-memory    = 32768  # Memory size of a VM
+memory    = 32768 # Memory size of a VM
 cores     = 1     # vCPU = cores * sockets
 sockets   = 1     # vCPU = cores * sockets
 disk_size = "30G" # Disk size of a VM - min size must equal to the disk size of your clone image
