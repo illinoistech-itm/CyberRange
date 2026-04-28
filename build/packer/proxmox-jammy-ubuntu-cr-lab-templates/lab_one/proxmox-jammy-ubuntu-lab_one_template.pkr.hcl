@@ -409,6 +409,18 @@ build {
   sources = ["source.proxmox-iso.lab_one_edge_server_42","source.proxmox-iso.lab_one_edge_server_41","source.proxmox-iso.lab_one_node_42","source.proxmox-iso.lab_one_node_41", "source.proxmox-iso.lab_one_edge_server_43","source.proxmox-iso.lab_one_node_43"]
 
   #############################################################################
+  # Using the file provisioner to SCP the root_ca.crt into the system to accept
+  # our signed certs
+  #############################################################################
+
+  provisioner "file" {
+    source      = "../scripts/proxmox/jammy-services/root_ca.crt"
+    destination = "/home/vagrant/root_ca.crt"
+    only = ["proxmox-iso.lab_one_edge_server_41", "proxmox-iso.lab_one_edge_server_42","proxmox-iso.lab_one_edge_server_43"]
+    
+  }
+
+  #############################################################################
   # Using the file provisioner to SCP the timer and service file into the
   # virtual machine so that the service to renew the cert each week takes 
   # place
