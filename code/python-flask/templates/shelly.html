@@ -135,7 +135,7 @@
           <div class="lab-section-content">
             <div class="network-item">
               <strong>Edge VM:</strong>
-              {% for vm in edge_vm %}
+              {% for vm in edge_node_public_ip %}
               <div>
                 <code>{{ vm.name }}</code>:
                 <code style="color: #ffa500">{{ vm.ip }}</code>
@@ -144,7 +144,7 @@
             </div>
             <div class="network-item">
               <strong>Lab Node:</strong>
-              {% for vm in non_edge_vms %}
+              {% for vm in lab_node_consul_ips %}
               <div>
                 <code>{{ vm.name }}</code>:
                 <code style="color: #ffa500">{{ vm.ip }}</code>

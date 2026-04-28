@@ -406,49 +406,28 @@ def load_answer_steps(lab_id: str):
 @app.route('/shelly', methods=['GET', 'POST'])
 @login_required
 def shelly():
+    # Defined values for our SUBNETs
+    PUBLIC_SUBNET = "192.168"
+    CONSUL_SUBNET = "10.110"
     launch_id = request.args.get('launch_id')
     user_id = request.args.get('user_id')
     lab_id = request.args.get('lab_id')
-    ip=run_getip(launch_id)
+    edge_node_public_ip=run_getip(launch_id,PUBLIC_SUBNET)
+    lab_node_consul_ips=run_getip(launch_id,CONSUL_SUBNET)
     # Returns .toml file as a dictionary
     loaded_lab_steps = load_lab_steps(lab_id)
     #steps = loaded_lab_steps.get("questions")
     # Set session variable for launch_id so we don't have to pass it around via POST
     session['launch_id']=launch_id
-    session['edge_node_ip']=ip
-    '''
-    #Adds IPs to session variable for use in the shelly.html template
-    TOKEN = CR_TOKEN_ID.split('!')
-    FQDN = CR_PROXMOX_URL.replace("https://", "")
-    proxmox = ProxmoxAPI(
-        FQDN,
-        user=TOKEN[0],
-        token_name=TOKEN[1],
-        token_value=CR_TOKEN_VALUE,
-        verify_ssl=False
-    )
-    
-    # Get all VMs in the lab's subnet
-    results, subnet_hits, subnet_edge_hits  = get_ips_by_role(
-        proxmox,
-        tag_filter=launch_id.replace("-",""),  # Filter by this lab's launch_id
-        want_subnet_prefix="10.110.",
-        do_reverse_dns=True
-    )
-
-    session['subnet_hits'] = subnet_hits
-    session['subnet_edge_hits'] = subnet_edge_hits
-    '''
+    session['edge_node_ip']=edge_node_public_ip
     return render_template('shelly.html',
                             lab_id=lab_id,
                             launch_id=launch_id,
                             loaded_lab_steps=loaded_lab_steps,
-                            edge_node_ip=ip,
+                            edge_node_public_ip=edge_node_public_ip,
+                            lab_node_consul_ips=lab_node_consul_ips,
                             user_email=user_id)
-                            #edge_vm=subnet_edge_hits,
-                            #non_edge_vms=subnet_hits,
-                            #subnet=SUBNET_WANTED)
-
+ 
 ##############################################################################
 # Helper function to take the returned IP and turn it into an FQDN
 ##############################################################################
@@ -534,7 +513,7 @@ def grade_lab():
 # a lab -- need to take the launch_uuid and search the tags for the VM with
 # with that value along with the edge_node tag
 ##############################################################################
-def run_getip(launch_id):
+def run_getip(launch_id, SUBNET):
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -562,8 +541,8 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
     
     for vm in prxmx83:
@@ -574,8 +553,8 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                     for y in range(len(runningwithtagsvms[x]['result'])):
-                        if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                            logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                             return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
     
     for vm in prxmx82:
@@ -586,8 +565,8 @@ def run_getip(launch_id):
                 runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
                 for x in range(len(runningwithtagsvms)):
                         for y in range(len(runningwithtagsvms[x]['result'])):
-                            if "192.168" in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                                logging.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                            if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                 return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
