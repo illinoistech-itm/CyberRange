@@ -409,10 +409,12 @@ def shelly():
     # Defined values for our SUBNETs
     PUBLIC_SUBNET = "192.168"
     CONSUL_SUBNET = "10.110"
+    EDGE="edge"
     launch_id = request.args.get('launch_id')
     user_id = request.args.get('user_id')
     lab_id = request.args.get('lab_id')
     edge_node_public_ip=run_getip(launch_id,PUBLIC_SUBNET)
+    lab_node_consul_edge_ip=run_getip(launch_id,CONSUL_SUBNET,EDGE)
     lab_node_consul_ips=run_getip(launch_id,CONSUL_SUBNET)
     # Returns .toml file as a dictionary
     loaded_lab_steps = load_lab_steps(lab_id)
@@ -420,11 +422,13 @@ def shelly():
     # Set session variable for launch_id so we don't have to pass it around via POST
     session['launch_id']=launch_id
     session['edge_node_ip']=edge_node_public_ip
+    session['lab_node_consul_ips']=lab_node_consul_ips
     return render_template('shelly.html',
                             lab_id=lab_id,
                             launch_id=launch_id,
                             loaded_lab_steps=loaded_lab_steps,
                             edge_node_public_ip=edge_node_public_ip,
+                            lab_node_consul_edge_ip=lab_node_consul_edge_ip,
                             lab_node_consul_ips=lab_node_consul_ips,
                             user_email=user_id)
  
@@ -501,11 +505,10 @@ def grade_lab():
         grade_percent=grade_percentage,
         loaded_lab_steps=loaded_lab_steps,
         user_email=session['email'],
-        edge_node_ip=session['edge_node_ip'],
         launch_id=session['launch_id'],
-        edge_vm=session['subnet_edge_hits'],
-        non_edge_vms=session['subnet_hits'],
-
+        lab_node_consul_edge_ip=session['lab_node_consul_edge_ip'],
+        edge_node_public_ip=session['edge_node_public_ip'],
+        lab_node_consul_ips=session['lab_node_consul_ips']
     )
 
 ##############################################################################
@@ -513,7 +516,7 @@ def grade_lab():
 # a lab -- need to take the launch_uuid and search the tags for the VM with
 # with that value along with the edge_node tag
 ##############################################################################
-def run_getip(launch_id, SUBNET):
+def run_getip(launch_id, SUBNET,EDGE="node"):
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -533,41 +536,79 @@ def run_getip(launch_id, SUBNET):
     # and that they have the tag 'edge', meaning they are the edge node
     logging.info("Searching for the IP for the Launch ID of: %s", launch_id)
     
-    for vm in prxmx84:
-        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-            runningvms.append(vm)
+    if EDGE=="edge":
+        for vm in prxmx84:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
 
-            for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                for x in range(len(runningwithtagsvms)):
-                    for y in range(len(runningwithtagsvms[x]['result'])):
-                        if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-    
-    for vm in prxmx83:
-        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-            runningvms.append(vm)
-
-            for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                for x in range(len(runningwithtagsvms)):
-                    for y in range(len(runningwithtagsvms[x]['result'])):
-                        if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
-                            logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-    
-    for vm in prxmx82:
-        if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
-            runningvms.append(vm)
-
-            for vm in runningvms:
-                runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
-                for x in range(len(runningwithtagsvms)):
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
                         for y in range(len(runningwithtagsvms[x]['result'])):
                             if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                                 logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                                 return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+        
+        for vm in prxmx83:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                        for y in range(len(runningwithtagsvms[x]['result'])):
+                            if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                                return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+        
+        for vm in prxmx82:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                            for y in range(len(runningwithtagsvms[x]['result'])):
+                                if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                                    return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+
+    if EDGE=="node":
+        for vm in prxmx84:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h084").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                        for y in range(len(runningwithtagsvms[x]['result'])):
+                            if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                                return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+        
+        for vm in prxmx83:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h083").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                        for y in range(len(runningwithtagsvms[x]['result'])):
+                            if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                                return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+        
+        for vm in prxmx82:
+            if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
+                runningvms.append(vm)
+
+                for vm in runningvms:
+                    runningwithtagsvms.append(proxmox.nodes("system22h082").qemu(vm['vmid']).agent("network-get-interfaces").get())
+                    for x in range(len(runningwithtagsvms)):
+                            for y in range(len(runningwithtagsvms[x]['result'])):
+                                if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
+                                    logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                                    return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
 
     return None
 ##############################################################################
