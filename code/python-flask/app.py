@@ -517,7 +517,7 @@ def grade_lab():
 # a lab -- need to take the launch_uuid and search the tags for the VM with
 # with that value along with the edge_node tag
 ##############################################################################
-def run_getip(launch_id, SUBNET,TYPE):
+def run_getip(launch_id, SUBNET, TYPE):
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -532,6 +532,7 @@ def run_getip(launch_id, SUBNET,TYPE):
 
     runningvms = []
     runningwithtagsvms = []
+    CONSUL_SUBNET="10.110"
  
     logger.info("Searching for the IP for the Launch ID of: %s", launch_id)
     logger.info("TYPE value is: %s", TYPE)
@@ -562,6 +563,10 @@ def run_getip(launch_id, SUBNET,TYPE):
                            fqdn = getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                            logger.info("FQDN found: %s", fqdn)
                            return fqdn
+                        elif TYPE=="edge" and SUBNET=="CONSUL_SUBNET":
+                           edge_consul_ip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                           logger.info("Edge consul IP found: %s", edge_consul_ip)
+                           return edge_consul_ip
                         else:
                            nodeip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
                            logger.info("NodeIP found: %s", nodeip)
@@ -587,6 +592,10 @@ def run_getip(launch_id, SUBNET,TYPE):
                            fqdn = getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                            logger.info("FQDN found: %s", fqdn)
                            return fqdn
+                        elif TYPE=="edge" and SUBNET=="CONSUL_SUBNET":
+                           edge_consul_ip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                           logger.info("Edge consul IP found: %s", edge_consul_ip)
+                           return edge_consul_ip
                         else:
                            nodeip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
                            logger.info("NodeIP found: %s", nodeip)
@@ -612,6 +621,10 @@ def run_getip(launch_id, SUBNET,TYPE):
                            fqdn = getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
                            logger.info("FQDN found: %s", fqdn)
                            return fqdn
+                        elif TYPE=="edge" and SUBNET=="CONSUL_SUBNET":
+                           edge_consul_ip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+                           logger.info("Edge consul IP found: %s", edge_consul_ip)
+                           return edge_consul_ip
                         else:
                            nodeip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
                            logger.info("NodeIP found: %s", nodeip)
