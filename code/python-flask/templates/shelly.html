@@ -134,8 +134,8 @@
           <div class="lab-section-title">NETWORK TOPOLOGY</div>
           <div class="lab-section-content">
             <div class="network-item">
-              <strong>Edge VM:</strong>
-              {% for vm in edge_node_public_ip %}
+              <strong>Edge VM IP:</strong>
+              {% for vm in lab_node_consul_edge_ip %}
               <div>
                 <code>{{ vm.name }}</code>:
                 <code style="color: #ffa500">{{ vm.ip }}</code>
