@@ -592,7 +592,8 @@ def run_getip(launch_id, SUBNET,TYPE):
                         else:
                            nodeip = runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
                            logger.info("NodeIP found: %s", nodeip)
-                           return nodeip    
+                           return nodeip
+                        
     for vm in prxmx82:
         if TYPE=="edge":
             logger.info("TYPE value is: %s", TYPE)
