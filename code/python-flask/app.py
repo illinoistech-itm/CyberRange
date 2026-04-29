@@ -556,8 +556,13 @@ def run_getip(launch_id, SUBNET,TYPE):
                 for y in range(len(runningwithtagsvms[x]['result'])):
                     if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                         logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                        return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-    
+                        if TYPE=="edge":
+                           # This logic only works with the lab having only single node, this will need to be addressed
+                           # once we have more complex labs with multiple nodes
+                           return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        else:
+                           return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
+
     for vm in prxmx83:
         if TYPE=="edge":
             logger.info("TYPE value is: %s", TYPE)
@@ -574,7 +579,12 @@ def run_getip(launch_id, SUBNET,TYPE):
                 for y in range(len(runningwithtagsvms[x]['result'])):
                     if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                         logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                        return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        if TYPE=="edge":
+                           # This logic only works with the lab having only single node, this will need to be addressed
+                           # once we have more complex labs with multiple nodes
+                           return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        else:
+                           return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
     
     for vm in prxmx82:
         if TYPE=="edge":
@@ -592,7 +602,12 @@ def run_getip(launch_id, SUBNET,TYPE):
                     for y in range(len(runningwithtagsvms[x]['result'])):
                         if SUBNET in runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']:
                             logger.info("IP found: %s", runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
-                            return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        if TYPE=="edge":
+                           # This logic only works with the lab having only single node, this will need to be addressed
+                           # once we have more complex labs with multiple nodes
+                           return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
+                        else:
+                           return runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address']
 
     return None
 ##############################################################################
