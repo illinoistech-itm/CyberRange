@@ -410,12 +410,13 @@ def shelly():
     PUBLIC_SUBNET = "192.168"
     CONSUL_SUBNET = "10.110"
     EDGE="edge"
+    NODE="node"
     launch_id = request.args.get('launch_id')
     user_id = request.args.get('user_id')
     lab_id = request.args.get('lab_id')
-    edge_node_public_ip=run_getip(launch_id,PUBLIC_SUBNET)
+    edge_node_public_ip=run_getip(launch_id,PUBLIC_SUBNET,EDGE)
     lab_node_consul_edge_ip=run_getip(launch_id,CONSUL_SUBNET,EDGE)
-    lab_node_consul_ips=run_getip(launch_id,CONSUL_SUBNET)
+    lab_node_consul_ips=run_getip(launch_id,CONSUL_SUBNET,NODE)
     # Returns .toml file as a dictionary
     loaded_lab_steps = load_lab_steps(lab_id)
     #steps = loaded_lab_steps.get("questions")
@@ -516,7 +517,7 @@ def grade_lab():
 # a lab -- need to take the launch_uuid and search the tags for the VM with
 # with that value along with the edge_node tag
 ##############################################################################
-def run_getip(launch_id, SUBNET,EDGE="node"):
+def run_getip(launch_id, SUBNET,TYPE):
     TOKEN = CR_TOKEN_ID.split('!')
     FQDN = CR_PROXMOX_URL.replace("https://", "")
     proxmox = ProxmoxAPI(FQDN, user=TOKEN[0], token_name=TOKEN[1], token_value=CR_TOKEN_VALUE, verify_ssl=False)
@@ -540,12 +541,12 @@ def run_getip(launch_id, SUBNET,EDGE="node"):
     # nodes or otherwise lab nodes...    
     ##########################################################################
     for vm in prxmx84:
-        if EDGE=="edge":
-            logger.info("EDGE value is: %s", EDGE)
+        if TYPE=="edge":
+            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("EDGE value is: %s", EDGE)
+              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
@@ -558,12 +559,12 @@ def run_getip(launch_id, SUBNET,EDGE="node"):
                         return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
     
     for vm in prxmx83:
-        if EDGE=="edge":
-            logger.info("EDGE value is: %s", EDGE)
+        if TYPE=="edge":
+            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("EDGE value is: %s", EDGE)
+              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
@@ -576,12 +577,12 @@ def run_getip(launch_id, SUBNET,EDGE="node"):
                         return getFqdn(runningwithtagsvms[x]['result'][y]['ip-addresses'][0]['ip-address'])
     
     for vm in prxmx82:
-        if EDGE=="edge":
-            logger.info("EDGE value is: %s", EDGE)
+        if TYPE=="edge":
+            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("EDGE value is: %s", EDGE)
+              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
