@@ -534,6 +534,8 @@ def run_getip(launch_id, SUBNET,TYPE):
     runningwithtagsvms = []
  
     logger.info("Searching for the IP for the Launch ID of: %s", launch_id)
+    logger.info("TYPE value is: %s", TYPE)
+    logger.info("Requested SUBNET is: %s", SUBNET)
     ##########################################################################
     # Begin the process to loop through the first node to get all of the vms 
     # # that are of status: "running" and that have the tag of the launch_id 
@@ -542,11 +544,9 @@ def run_getip(launch_id, SUBNET,TYPE):
     ##########################################################################
     for vm in prxmx84:
         if TYPE=="edge":
-            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
@@ -569,11 +569,9 @@ def run_getip(launch_id, SUBNET,TYPE):
 
     for vm in prxmx83:
         if TYPE=="edge":
-            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
@@ -596,11 +594,9 @@ def run_getip(launch_id, SUBNET,TYPE):
                         
     for vm in prxmx82:
         if TYPE=="edge":
-            logger.info("TYPE value is: %s", TYPE)
             if vm['status'] == 'running' and str(launch_id) in vm['tags'] and 'edge' in vm['tags']:
                 runningvms.append(vm)
             else:
-              logger.info("TYPE value is: %s", TYPE)
               if vm['status'] == 'running' and str(launch_id) in vm['tags']:
                 runningvms.append(vm)
 
